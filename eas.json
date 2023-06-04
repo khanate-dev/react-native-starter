@@ -1,0 +1,36 @@
+{
+	"build": {
+		"development": {
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk",
+				"gradleCommand": ":app:assembleDebug"
+			},
+			"env": {
+				"ENV": "development"
+			}
+		},
+		"preview": {
+			"android": {
+				"buildType": "apk",
+				"gradleCommand": ":app:assembleRelease"
+			}
+		},
+		"production": {
+			"distribution": "store"
+		}
+	},
+	"cli": {
+		"version": ">= 0.52.0",
+		"requireCommit": true
+	},
+	"submit": {
+		"production": {
+			"android": {
+				"serviceAccountKeyPath": "./android-key.json",
+				"track": "internal",
+				"releaseStatus": "draft"
+			}
+		}
+	}
+}
