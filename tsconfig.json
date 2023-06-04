@@ -1,6 +1,47 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "strict": true
-  }
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"allowJs": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-native",
+		"checkJs": true,
+		"downlevelIteration": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		"noUncheckedIndexedAccess": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictPropertyInitialization": true,
+		"baseUrl": ".",
+		"paths": {
+			"assets": ["assets/*"],
+			"config": ["src/config/"],
+			"mocks": ["src/mocks/"],
+			"components/*": ["src/components/*"],
+			"contexts/*": ["src/contexts/*"],
+			"errors/*": ["src/errors/*"],
+			"helpers/*": ["src/helpers/*"],
+			"hooks/*": ["src/hooks/*"],
+			"media/*": ["src/media/*"],
+			"navigation/*": ["src/navigation/*"],
+			"screens/*": ["src/screens/*"],
+			"styles/*": ["src/styles/*"],
+			"types/*": ["src/types/*"],
+			"schemas/*": ["src/schemas/*"],
+			"endpoints/*": ["src/endpoints/*"]
+		}
+	},
+	"exclude": ["node_modules/**/*", "cache/**/*"]
 }
