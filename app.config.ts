@@ -3,25 +3,64 @@ import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { z } from 'zod';
 
-import { environmentSchema, Environment, parseEnvironment } from 'env';
+import { Environment } from 'types/env';
 
-const environment = (
-	process.env.ENV === 'development'
-		? 'development'
-		: 'production'
-);
+export const environmentSchema = z.object({
+	ENV: z.preprocess(
+		(value) => (value === 'development' ? 'development' : 'production'),
+		z.enum(['development', 'production'])
+	),
+	BACKEND_API_PATH: z.string().url(),
+	GOGGLE_MAPS_API_KEY: z.string(),
+	SENTRY_ORG: z.string(),
+	SENTRY_PROJECT: z.string(),
+	SENTRY_AUTH_TOKEN: z.string(),
+	SENTRY_DSN: z.string(),
+});
+
+const environment =
+	process.env.ENV === 'development' ? 'development' : 'production';
 
 const config = dotenv.config({
 	path: `./.env.${environment}`,
 });
 dotenvExpand.expand(config);
 
+export const parseEnvironment = (input: unknown): Environment => {
+	try {
+		const {
+			ENV,
+			BACKEND_API_PATH,
+			GOGGLE_MAPS_API_KEY,
+			SENTRY_ORG,
+			SENTRY_PROJECT,
+			SENTRY_AUTH_TOKEN,
+			SENTRY_DSN,
+		} = environmentSchema.parse(input);
+
+		return {
+			environment: ENV,
+			sentry: {
+				organization: SENTRY_ORG,
+				authToken: SENTRY_AUTH_TOKEN,
+				dsn: SENTRY_DSN,
+				project: SENTRY_PROJECT,
+			},
+			googleMapsApiKey: GOGGLE_MAPS_API_KEY,
+			backendApiEndpoint: BACKEND_API_PATH,
+		};
+	} catch (error: any) {
+		throw new Error(
+			`Invalid Environment:\n${JSON.parse(error.message)
+				?.map?.((error: any) => `'${error.path[0]}': ${error.message}`)
+				.join('\n')}`
+		);
+	}
+};
+
 const extra = parseEnvironment(process.env);
 
-const {
-	sentry,
-	googleMapsApiKey,
-} = extra;
+const { sentry, googleMapsApiKey } = extra;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
@@ -39,10 +78,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		},
 	},
 	githubUrl: 'https://github.com/wimetrixdev/compass-poultry-app',
-	platforms: [
-		'android',
-		'ios',
-	],
+	platforms: ['android', 'ios'],
 	primaryColor: '#B591DE',
 	splash: {
 		image: './assets/splash.png',
@@ -53,9 +89,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		enabled: true,
 		fallbackToCacheTimeout: 0,
 	},
-	assetBundlePatterns: [
-		'**/*',
-	],
+	assetBundlePatterns: ['**/*'],
 	androidStatusBar: {
 		barStyle: 'light-content',
 	},
@@ -64,7 +98,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		buildNumber: '1.0.1',
 		supportsTablet: true,
 		infoPlist: {
-			NSLocationWhenInUseUsageDescription: 'Your location will be used by the application to refocus the map to your vicinity',
+			NSLocationWhenInUseUsageDescription:
+				'Your location will be used by the application to refocus the map to your vicinity',
 		},
 	},
 	android: {
@@ -85,9 +120,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			'FOREGROUND_SERVICE',
 		],
 	},
-	plugins: [
-		'sentry-expo',
-	],
+	plugins: ['sentry-expo'],
 	hooks: {
 		postPublish: [
 			{
