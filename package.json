@@ -1,23 +1,25 @@
 {
-  "name": "react-native-starter",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "expo": "~48.0.15",
-    "expo-status-bar": "~1.4.4",
-    "react": "18.2.0",
-    "react-native": "0.71.8"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@types/react": "~18.0.14",
-    "typescript": "^4.9.4"
-  },
-  "private": true
+	"name": "react-native-starter",
+	"version": "1.0.0",
+	"main": "node_modules/expo/AppEntry.js",
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"web": "expo start --web",
+		"update-deps": "pnpm update -Li && pnpm expo install --fix && pnpm dlx expo-doctor"
+	},
+	"dependencies": {
+		"expo": "~48.0.19",
+		"expo-status-bar": "~1.4.4",
+		"react": "18.2.0",
+		"react-native": "0.71.8"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.22.1",
+		"@types/react": "~18.0.38",
+		"eas-cli": "^3.13.2",
+		"typescript": "^4.9.5"
+	},
+	"private": true
 }
