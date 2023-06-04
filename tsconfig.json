@@ -26,10 +26,9 @@
 		"strictPropertyInitialization": true,
 		"baseUrl": ".",
 		"paths": {
-			"config": ["src/config/"],
-			"env": ["src/env"],
-			"errors": ["src/errors"],
-			"assets": ["assets/*"],
+			"config/*": ["src/config/*"],
+			"constants": ["src/constants/"],
+			"errors": ["src/errors/"],
 			"mocks": ["src/mocks/"],
 			"components/*": ["src/components/*"],
 			"contexts/*": ["src/contexts/*"],
