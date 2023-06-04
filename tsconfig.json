@@ -40,7 +40,8 @@
 			"styles/*": ["src/styles/*"],
 			"types/*": ["src/types/*"],
 			"schemas/*": ["src/schemas/*"],
-			"endpoints/*": ["src/endpoints/*"]
+			"endpoints/*": ["src/endpoints/*"],
+			"env": ["src/env"]
 		}
 	},
 	"exclude": ["node_modules/**/*", "cache/**/*"]
