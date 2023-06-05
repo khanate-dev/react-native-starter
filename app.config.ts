@@ -5,19 +5,6 @@ import { z } from 'zod';
 
 import { Environment } from 'types/env';
 
-export const environmentSchema = z.object({
-	ENV: z.preprocess(
-		(value) => (value === 'development' ? 'development' : 'production'),
-		z.enum(['development', 'production'])
-	),
-	BACKEND_API_PATH: z.string().url(),
-	GOGGLE_MAPS_API_KEY: z.string(),
-	SENTRY_ORG: z.string(),
-	SENTRY_PROJECT: z.string(),
-	SENTRY_AUTH_TOKEN: z.string(),
-	SENTRY_DSN: z.string(),
-});
-
 const environment =
 	process.env.ENV === 'development' ? 'development' : 'production';
 
@@ -28,27 +15,32 @@ dotenvExpand.expand(config);
 
 export const parseEnvironment = (input: unknown): Environment => {
 	try {
-		const {
-			ENV,
-			BACKEND_API_PATH,
-			GOGGLE_MAPS_API_KEY,
-			SENTRY_ORG,
-			SENTRY_PROJECT,
-			SENTRY_AUTH_TOKEN,
-			SENTRY_DSN,
-		} = environmentSchema.parse(input);
-
-		return {
-			environment: ENV,
-			sentry: {
-				organization: SENTRY_ORG,
-				authToken: SENTRY_AUTH_TOKEN,
-				dsn: SENTRY_DSN,
-				project: SENTRY_PROJECT,
-			},
-			googleMapsApiKey: GOGGLE_MAPS_API_KEY,
-			backendApiEndpoint: BACKEND_API_PATH,
-		};
+		const environmentSchema = z
+			.object({
+				ENV: z.preprocess(
+					(value) =>
+						value === 'development' ? 'development' : 'production',
+					z.enum(['development', 'production'])
+				),
+				BACKEND_API_PATH: z.string().url(),
+				GOGGLE_MAPS_API_KEY: z.string(),
+				SENTRY_ORG: z.string(),
+				SENTRY_PROJECT: z.string(),
+				SENTRY_AUTH_TOKEN: z.string(),
+				SENTRY_DSN: z.string(),
+			})
+			.transform((parsed) => ({
+				environment: parsed.ENV,
+				sentry: {
+					organization: parsed.SENTRY_ORG,
+					authToken: parsed.SENTRY_AUTH_TOKEN,
+					dsn: parsed.SENTRY_DSN,
+					project: parsed.SENTRY_PROJECT,
+				},
+				googleMapsApiKey: parsed.GOGGLE_MAPS_API_KEY,
+				backendApiEndpoint: parsed.BACKEND_API_PATH,
+			}));
+		return environmentSchema.parse(input);
 	} catch (error: any) {
 		throw new Error(
 			`Invalid Environment:\n${JSON.parse(error.message)
