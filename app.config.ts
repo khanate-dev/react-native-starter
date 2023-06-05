@@ -3,8 +3,6 @@ import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { z } from 'zod';
 
-import { Environment } from 'types/env';
-
 const environment =
 	process.env.ENV === 'development' ? 'development' : 'production';
 
@@ -13,34 +11,33 @@ const config = dotenv.config({
 });
 dotenvExpand.expand(config);
 
-export const parseEnvironment = (input: unknown): Environment => {
+export const parseEnvironment = (input: unknown) => {
 	try {
-		const environmentSchema = z
-			.object({
-				ENV: z.preprocess(
-					(value) =>
-						value === 'development' ? 'development' : 'production',
-					z.enum(['development', 'production'])
-				),
-				BACKEND_API_PATH: z.string().url(),
-				GOGGLE_MAPS_API_KEY: z.string(),
-				SENTRY_ORG: z.string(),
-				SENTRY_PROJECT: z.string(),
-				SENTRY_AUTH_TOKEN: z.string(),
-				SENTRY_DSN: z.string(),
-			})
-			.transform((parsed) => ({
-				environment: parsed.ENV,
-				sentry: {
-					organization: parsed.SENTRY_ORG,
-					authToken: parsed.SENTRY_AUTH_TOKEN,
-					dsn: parsed.SENTRY_DSN,
-					project: parsed.SENTRY_PROJECT,
-				},
-				googleMapsApiKey: parsed.GOGGLE_MAPS_API_KEY,
-				backendApiEndpoint: parsed.BACKEND_API_PATH,
-			}));
-		return environmentSchema.parse(input);
+		const environmentSchema = z.object({
+			ENV: z.preprocess(
+				(value) =>
+					value === 'development' ? 'development' : 'production',
+				z.enum(['development', 'production'])
+			),
+			BACKEND_API_PATH: z.string().url(),
+			GOGGLE_MAPS_API_KEY: z.string(),
+			SENTRY_ORG: z.string(),
+			SENTRY_PROJECT: z.string(),
+			SENTRY_AUTH_TOKEN: z.string(),
+			SENTRY_DSN: z.string(),
+		});
+		const parsed = environmentSchema.parse(input);
+		return {
+			environment: parsed.ENV,
+			sentry: {
+				organization: parsed.SENTRY_ORG,
+				authToken: parsed.SENTRY_AUTH_TOKEN,
+				dsn: parsed.SENTRY_DSN,
+				project: parsed.SENTRY_PROJECT,
+			},
+			googleMapsApiKey: parsed.GOGGLE_MAPS_API_KEY,
+			backendApiEndpoint: parsed.BACKEND_API_PATH,
+		};
 	} catch (error: any) {
 		throw new Error(
 			`Invalid Environment:\n${JSON.parse(error.message)
@@ -51,6 +48,8 @@ export const parseEnvironment = (input: unknown): Environment => {
 };
 
 const extra = parseEnvironment(process.env);
+
+export type Environment = typeof extra;
 
 const { sentry, googleMapsApiKey } = extra;
 
