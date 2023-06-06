@@ -2,7 +2,7 @@ import { Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import * as Sentry from 'sentry-expo';
 
-import { Environment } from 'types/env';
+import type { Environment } from 'types/env';
 
 const { environment, backendApiEndpoint, sentry } = Constants.manifest
 	?.extra as Environment;
@@ -31,11 +31,3 @@ const isFetchMockedConfig: Record<typeof environment, boolean> = {
 export const isFetchMocked: boolean = isFetchMockedConfig[environment];
 
 export const isSmallerScreen = Dimensions.get('screen').width <= 400;
-
-const shouldAutoFillConfig: Record<typeof environment, boolean> = {
-	development: false,
-	production: false,
-};
-
-/** should the app auto fill inputs with default values? */
-export const shouldAutoFill: boolean = shouldAutoFillConfig[environment];
