@@ -1,22 +1,22 @@
-import { ExpoConfig, ConfigContext } from '@expo/config';
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { z } from 'zod';
 
+import type { ExpoConfig, ConfigContext } from '@expo/config';
+
 const environment =
 	process.env.ENV === 'development' ? 'development' : 'production';
 
-const config = dotenv.config({
+const dotenvConfig = dotenv.config({
 	path: `./.env.${environment}`,
 });
-dotenvExpand.expand(config);
+dotenvExpand.expand(dotenvConfig);
 
 export const parseEnvironment = (input: unknown) => {
 	try {
 		const environmentSchema = z.object({
 			ENV: z.preprocess(
-				(value) =>
-					value === 'development' ? 'development' : 'production',
+				(value) => (value === 'development' ? 'development' : 'production'),
 				z.enum(['development', 'production'])
 			),
 			BACKEND_API_PATH: z.string().url(),
@@ -41,7 +41,7 @@ export const parseEnvironment = (input: unknown) => {
 	} catch (error: any) {
 		throw new Error(
 			`Invalid Environment:\n${JSON.parse(error.message)
-				?.map?.((error: any) => `'${error.path[0]}': ${error.message}`)
+				?.map?.((err: any) => `'${err.path[0]}': ${err.message}`)
 				.join('\n')}`
 		);
 	}
@@ -53,6 +53,7 @@ export type Environment = typeof extra;
 
 const { sentry, googleMapsApiKey } = extra;
 
+// eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: 'Compass Poultry App',

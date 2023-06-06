@@ -1,8 +1,9 @@
-import { environment } from 'config/react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import { environment } from 'config/react';
+
+const App = () => {
 	return (
 		<View style={styles.container}>
 			<Text>Open up App.tsx to start working on your app!</Text>
@@ -10,7 +11,7 @@ export default function App() {
 			<StatusBar style='auto' />
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -20,3 +21,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 });
+
+// eslint-disable-next-line import/no-default-export
+export default App;
