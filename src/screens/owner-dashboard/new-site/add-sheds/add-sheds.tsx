@@ -6,11 +6,12 @@ import {
 	updateForm,
 } from 'helpers/form';
 import { getDefaultFormState } from 'helpers/defaults';
-
 import { shedFields as fields, shedFormSchema } from 'schemas/shed';
 import { addShed } from 'endpoints/shed';
-import { FormInput } from 'components/form/FormInput';
 import { Chip } from 'components/data/Chip';
+
+import { FormInput } from 'components/form/FormInput';
+import { getCatchMessage } from 'errors/errors';
 
 import { NewSiteWrapper } from '../wrapper';
 
@@ -81,8 +82,8 @@ export const AddSheds = ({
 			setTimeout(() => {
 				navigation.navigate('add-supervisor', { owner, site });
 			}, 1000);
-		} catch (error: any) {
-			setStatus(error.message ?? error);
+		} catch (error) {
+			setStatus(getCatchMessage(error));
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -154,10 +155,10 @@ export const AddSheds = ({
 				value={form.Name}
 				error={errors.Name}
 				label='Shed Name *'
+				onChange={(value) => updateForm(setForm, 'Name', value)}
 				onSubmitEditing={() =>
 					handleInputSubmitEditing(formRefs, 0, handleSubmit)
 				}
-				onChange={(value) => updateForm(setForm, 'Name', value)}
 			/>
 
 			<FormInput
@@ -169,10 +170,10 @@ export const AddSheds = ({
 				value={form.Type}
 				error={errors.Type}
 				label='Shed Type *'
+				onChange={(value) => updateForm(setForm, 'Type', value)}
 				onSubmitEditing={() =>
 					handleInputSubmitEditing(formRefs, 1, handleSubmit)
 				}
-				onChange={(value) => updateForm(setForm, 'Type', value)}
 			/>
 
 			<View style={styles.rowFlex}>
@@ -186,10 +187,10 @@ export const AddSheds = ({
 					value={form.Length}
 					error={errors.Length}
 					label='Length(feet) *'
+					onChange={(value) => updateForm(setForm, 'Length', value)}
 					onSubmitEditing={() =>
 						handleInputSubmitEditing(formRefs, 2, handleSubmit)
 					}
-					onChange={(value) => updateForm(setForm, 'Length', value)}
 				/>
 
 				<FormInput
@@ -202,10 +203,10 @@ export const AddSheds = ({
 					error={errors.Width}
 					label='Height(feet) *'
 					style={[styles.rowFlexChild, styles.rowFlexChildNotFirst]}
+					onChange={(value) => updateForm(setForm, 'Width', value)}
 					onSubmitEditing={() =>
 						handleInputSubmitEditing(formRefs, 3, handleSubmit)
 					}
-					onChange={(value) => updateForm(setForm, 'Width', value)}
 				/>
 
 				<FormInput
@@ -219,10 +220,10 @@ export const AddSheds = ({
 					label='Width(feet) *'
 					isLast={!isShowingAdditional}
 					style={[styles.rowFlexChild, styles.rowFlexChildNotFirst]}
+					onChange={(value) => updateForm(setForm, 'Height', value)}
 					onSubmitEditing={() =>
 						handleInputSubmitEditing(formRefs, 4, handleSubmit)
 					}
-					onChange={(value) => updateForm(setForm, 'Height', value)}
 				/>
 			</View>
 
@@ -239,10 +240,10 @@ export const AddSheds = ({
 							value={form.TunnelFans}
 							error={errors.TunnelFans}
 							label='Tunnel Fans'
+							onChange={(value) => updateForm(setForm, 'TunnelFans', value)}
 							onSubmitEditing={() =>
 								handleInputSubmitEditing(formRefs, 5, handleSubmit)
 							}
-							onChange={(value) => updateForm(setForm, 'TunnelFans', value)}
 						/>
 
 						<FormInput
@@ -255,10 +256,10 @@ export const AddSheds = ({
 							error={errors.SideFans}
 							label='Side Fans'
 							style={[styles.rowFlexChild, styles.rowFlexChildNotFirst]}
+							onChange={(value) => updateForm(setForm, 'SideFans', value)}
 							onSubmitEditing={() =>
 								handleInputSubmitEditing(formRefs, 6, handleSubmit)
 							}
-							onChange={(value) => updateForm(setForm, 'SideFans', value)}
 						/>
 					</View>
 
@@ -292,10 +293,10 @@ export const AddSheds = ({
 							label='Pad Length'
 							style={[styles.rowFlexChild, styles.rowFlexChildNotFirst]}
 							isLast
+							onChange={(value) => updateForm(setForm, 'PadLength', value)}
 							onSubmitEditing={() =>
 								handleInputSubmitEditing(formRefs, 8, handleSubmit)
 							}
-							onChange={(value) => updateForm(setForm, 'PadLength', value)}
 						/>
 					</View>
 				</>

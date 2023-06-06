@@ -39,11 +39,14 @@ export const parseEnvironment = (input: unknown) => {
 			backendApiEndpoint: parsed.BACKEND_API_PATH,
 		};
 	} catch (error: any) {
-		throw new Error(
-			`Invalid Environment:\n${JSON.parse(error.message)
-				?.map?.((err: any) => `'${err.path[0]}': ${err.message}`)
-				.join('\n')}`
-		);
+		if (error instanceof z.ZodError) {
+			throw new Error(
+				`Invalid Environment:\n${error.errors
+					.map((err) => `'${String(err.path[0])}': ${err.message}`)
+					.join('\n')}`
+			);
+		}
+		throw new Error(`Invalid Environment: ${error.message ?? error}`);
 	}
 };
 
