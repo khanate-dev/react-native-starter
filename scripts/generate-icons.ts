@@ -23,9 +23,13 @@ const config: Config = {
 	expandProps: 'end',
 	typescript: true,
 	jsxRuntime: 'automatic',
+	native: true,
 	template: ({ props, jsx, componentName }, { tpl }) => {
 		return tpl`
-			import type { SVGProps } from 'react';
+			import { Svg, Path, Circle } from 'react-native-svg';
+
+			import type { SvgProps } from 'react-native-svg';
+
 			export const ${componentName} = (${props}) => (${jsx});
 		`;
 	},
@@ -107,11 +111,11 @@ const generateIcons = async (folder?: string) => {
 		console.info(
 			`${colors.blue}Linting generated components...${colors.reset}`
 		);
-		spawnSync('pnpm', ['eslint', '--fix', targetFolder]);
+		spawnSync('npm', ['run', 'eslint', '--', '--fix', targetFolder]);
 		console.info(
 			`${colors.blue}Prettifying generated components...${colors.reset}`
 		);
-		spawnSync('pnpm', ['prettier', '--write', targetFolder]);
+		spawnSync('npm', ['run', 'prettier', '--', '--write', targetFolder]);
 	});
 };
 
