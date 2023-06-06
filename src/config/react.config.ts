@@ -31,3 +31,11 @@ const isFetchMockedConfig: Record<typeof environment, boolean> = {
 export const isFetchMocked: boolean = isFetchMockedConfig[environment];
 
 export const isSmallerScreen = Dimensions.get('screen').width <= 400;
+
+const disableAuthConfig: Record<typeof environment, boolean> = {
+	development: true,
+	production: true,
+};
+
+/** should fetch authentication be disabled? */
+export const disableAuth: boolean = disableAuthConfig[environment];
