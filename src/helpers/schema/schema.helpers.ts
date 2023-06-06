@@ -1,16 +1,23 @@
 import { z } from 'zod';
 import { isDayjs } from 'dayjs';
-import { isValidElement } from 'react';
 
-import { omit } from 'helpers/object';
-import { dayjsFormatPatterns, dayjsUtc } from 'helpers/date';
+import { CNIC_REGEX, JWT_REGEX, PHONE_REGEX } from 'config';
+import { dayjsUtc } from 'helpers/date';
+import { objectEntries } from 'helpers/object';
 
-import type { GeneralTableColumn } from 'components/tables/general-table';
-import type { BulkResponse } from 'helpers/api';
+import type { SchemaField } from 'types/form';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbKey');
 
 export type ZodDbId = typeof dbIdSchema;
+
+export type DbId = z.infer<ZodDbId>;
+
+export const jwtSchema = z.string().regex(JWT_REGEX);
+
+export const phoneSchema = z.string().regex(PHONE_REGEX);
+
+export const cnicSchema = z.string().regex(CNIC_REGEX);
 
 export const dayjsSchema = z.instanceof(
 	dayjsUtc as unknown as typeof dayjsUtc.Dayjs
@@ -25,21 +32,6 @@ export const datetimeSchema = z.preprocess((value) => {
 }, dayjsSchema);
 
 export type ZodDatetime = typeof datetimeSchema;
-
-export const imageUpdatedAtSchema = datetimeSchema.nullable();
-
-export const timestampSchema = z.strictObject({
-	createdAt: datetimeSchema,
-	updatedAt: datetimeSchema,
-});
-
-export const stringSelectionSchema = z.string().brand('SelectionString');
-export type ZodStringSelection = typeof stringSelectionSchema;
-export type StringSelection = z.infer<ZodStringSelection>;
-
-export const numberSelectionSchema = z.number().brand('SelectionNumber');
-export type ZodNumberSelection = typeof numberSelectionSchema;
-export type NumberSelection = z.infer<ZodNumberSelection>;
 
 type OptionalGroup<T extends Record<string, unknown>> =
 	| T
@@ -63,90 +55,61 @@ export const createGroupedOptionalSchema = <
 	);
 };
 
-export type DefaultBulkResponseObj = z.ZodObject<
-	{},
-	'strip',
-	z.ZodUnknown,
-	z.objectOutputType<{}, z.ZodUnknown, 'strip'>
->;
+export const dbMetaSchema = z.strictObject({
+	id: dbIdSchema,
+	created_at: datetimeSchema,
+	updated_at: datetimeSchema,
+});
 
-export const createBulkResponseSchema = <
-	Schema extends z.ZodObject<any, any, any, any> = DefaultBulkResponseObj
+export type DbMeta = z.infer<typeof dbMetaSchema>;
+
+export const createSchema = <
+	Keys extends string,
+	Input extends Record<Keys, z.ZodTypeAny>
 >(
-	input?: Schema
-): z.Schema<BulkResponse<z.infer<Schema>>> => {
-	const schema = input ?? z.object({}).catchall(z.unknown());
-	const errorSchema = schema.extend({ error: z.string() });
-	const bulkSchema = z.strictObject({
-		successful: z.array(schema),
-		failed: z.array(errorSchema),
+	input: Input
+) => {
+	const schema = z.strictObject(input);
+	const modelSchema = z.strictObject({
+		...dbMetaSchema.shape,
+		...schema.shape,
 	});
-	return bulkSchema as z.Schema<BulkResponse<z.infer<Schema>>>;
+
+	return [schema, modelSchema] as const;
 };
 
-export const dbDataSorter = <Type extends z.infer<typeof timestampSchema>>(
-	a: Type,
-	b: Type
-): number => b.createdAt.diff(a.createdAt);
-
-export const createZodDbSchema = <
-	Schema extends Record<string, z.ZodTypeAny>,
-	Key extends keyof Schema
+export const createSchemaFields = <
+	Schema extends z.AnyZodObject,
+	SchemaKeys extends keyof z.infer<Schema>,
+	InputFields extends {
+		[Key in SchemaKeys]?: SchemaField<SchemaKeys>;
+	},
+	Fields extends {
+		[Key in keyof InputFields]: SchemaField<keyof InputFields>;
+	}
 >(
 	schema: Schema,
-	key: Key
+	input: InputFields
 ) => {
-	const sansKeySchema = omit(schema, key);
-	const sansMetaZodSchema = z.strictObject(sansKeySchema);
-	const zodSchema = z.strictObject({
-		...schema,
-		...timestampSchema.shape,
-	});
-	return [sansMetaZodSchema, zodSchema] as const;
-};
+	const formSchema = z.strictObject(
+		objectEntries(schema.shape as Record<string, z.ZodAny>).reduce(
+			(object, [name, current]) => ({
+				...object,
+				[name]: z.preprocess(
+					(value) =>
+						current.isNullable() && value !== 0 && !value
+							? null
+							: ['int', 'float'].includes(
+									input[name as keyof InputFields]?.type ?? 'string'
+							  )
+							? Number(value)
+							: value,
+					current
+				),
+			}),
+			{}
+		)
+	) as Schema;
 
-type Field = {
-	name: string;
-	label: string;
-	type:
-		| 'string'
-		| 'readonly'
-		| 'int'
-		| 'float'
-		| 'date'
-		| 'time'
-		| 'datetime'
-		| 'selection'
-		| 'boolean';
-	zod: z.ZodSchema;
-};
-
-export const schemaToGeneralTableColumns = <T extends Record<string, Field>>(
-	fields: T,
-	lists?: {
-		[K in keyof T as T[K]['type'] extends 'selection'
-			? K
-			: never]: App.DropdownOption<z.infer<T[K]['zod']>>[];
-	}
-) => {
-	return Object.values(fields).map<
-		GeneralTableColumn<Record<keyof T, unknown>>
-	>((field) => ({
-		id: field.name,
-		headerContent: field.label,
-		getBodyContent: (row) => {
-			const value = row[field.name];
-			if (isDayjs(value)) {
-				if (!['date', 'time', 'datetime'].includes(field.type)) return '';
-				return value.format(
-					dayjsFormatPatterns[field.type as keyof typeof dayjsFormatPatterns]
-				);
-			}
-			if (isValidElement(value)) return value;
-			if (field.type !== 'selection') return String(value ?? '');
-			const list = lists?.[field.name as keyof typeof lists] ?? [];
-			return list.find((curr) => curr.value === value)?.label ?? '';
-		},
-		isSchemaField: true,
-	}));
+	return [input as unknown as Fields, formSchema] as const;
 };

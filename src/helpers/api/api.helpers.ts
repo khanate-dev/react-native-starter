@@ -1,6 +1,6 @@
 import { z } from 'zod';
+import { disableAuth, isFetchMocked } from 'src/config';
 
-import { disableAuth, isFetchMocked } from 'config';
 import { ApiError, AuthError, ConnectionError, getCatchMessage } from 'errors';
 import { logout } from 'contexts/user';
 import { getSetting } from 'helpers/settings';

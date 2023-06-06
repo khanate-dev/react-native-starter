@@ -1,4 +1,4 @@
-import { IMAGE_EXTENSIONS, essentialsApiPath } from 'config';
+import { IMAGE_EXTENSIONS, essentialsApiPath } from 'src/config';
 
 import type { Dayjs } from 'dayjs';
 import type { Utils } from 'types/utils';
