@@ -25,8 +25,7 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"paths": {
-			"config/*": ["src/config/*"],
-			"constants": ["src/constants/"],
+			"config": ["src/config/"],
 			"errors": ["src/errors/"],
 			"mocks": ["src/mocks/"],
 			"components/*": ["src/components/*"],
@@ -34,7 +33,7 @@
 			"errors/*": ["src/errors/*"],
 			"helpers/*": ["src/helpers/*"],
 			"hooks/*": ["src/hooks/*"],
-			"media/*": ["src/media/*"],
+			"assets/*": ["src/assets/*"],
 			"navigation/*": ["src/navigation/*"],
 			"screens/*": ["src/screens/*"],
 			"styles/*": ["src/styles/*"],
@@ -56,7 +55,8 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
-		"verbatimModuleSyntax": true,
+		// "verbatimModuleSyntax": true,
+		"importsNotUsedAsValues": "error",
 
 		// language and environment
 		"jsx": "react-native",
@@ -69,5 +69,5 @@
 		// completeness
 		"skipLibCheck": true
 	},
-	"exclude": ["node_modules", "public", "cache", "coverage"]
+	"exclude": ["node_modules", "cache", "coverage"]
 }

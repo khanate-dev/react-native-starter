@@ -4,14 +4,14 @@ React Native Starter using Typescript and Expo
 
 ## Technologies
 
--   `React`
--   `React Native`
--   `Expo` (Managed Workflow)
--   `Typescript`
--   `React Native Paper`en for theming and components
--   `Sentry` for logging and error reporting
--   `npm` for package management
--   `dotenv-vault` to share environment variables
+- `React`
+- `React Native`
+- `Expo` (Managed Workflow)
+- `Typescript`
+- `React Native Paper`en for theming and components
+- `Sentry` for logging and error reporting
+- `npm` for package management
+- `dotenv-vault` to share environment variables
 
 ---
 

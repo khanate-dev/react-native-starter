@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { environment } from 'config/react';
+import { environment } from 'config';
 
 const App = () => {
 	return (
