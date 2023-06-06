@@ -1,24 +1,29 @@
-import { GenericObject } from 'types/general';
+import type { GenericObject } from 'types/general';
 
-export interface FetchBaseOptions extends Omit<RequestInit, 'body'> {
-	method?: 'GET' | 'PUT' | 'PATCH' | 'DELETE' | 'POST',
+export type FetchBaseOptions = {
+	method?: 'GET' | 'PUT' | 'PATCH' | 'DELETE' | 'POST';
 	/** should the authorization headers be sent? */
-	noAuth?: boolean,
-	body?: GenericObject | GenericObject[] | FormData,
-}
+	noAuth?: boolean;
+	body?: GenericObject | GenericObject[] | FormData;
+} & Omit<RequestInit, 'body'>;
 
-export interface FetchNoBodyOptions extends FetchBaseOptions {
-	method?: 'GET' | 'DELETE',
-	body?: undefined,
-}
+export type FetchNoBodyOptions = {
+	method?: 'GET' | 'DELETE';
+	body?: undefined;
+} & FetchBaseOptions;
 
-export interface FetchBodyOptions extends FetchBaseOptions {
-	method: 'PUT' | 'PATCH' | 'POST',
-	body: FetchBaseOptions['body'],
-}
+export type FetchBodyOptions = {
+	method: 'PUT' | 'PATCH' | 'POST';
+	body: FetchBaseOptions['body'];
+} & FetchBaseOptions;
 
 export type FetchOptions = FetchNoBodyOptions | FetchBodyOptions;
 
 export type FetchResponse = GenericObject | GenericObject[];
 
-export type ApiErrorType = 'ApiAuthError' | 'ApiResponseError' | 'ApiError' | 'ApiConnectionError' | 'InternetConnectionError';
+export type ApiErrorType =
+	| 'ApiAuthError'
+	| 'ApiResponseError'
+	| 'ApiError'
+	| 'ApiConnectionError'
+	| 'InternetConnectionError';

@@ -1,1 +1,1 @@
-export { Environment } from '../../app.config';
+export type { Environment } from '../../app.config';

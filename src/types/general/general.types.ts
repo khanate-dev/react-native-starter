@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { User } from 'schemas/user';
+import type { User } from 'schemas/user';
 
-export type ReadableTypeOf = (
+export type ReadableTypeOf =
 	| 'undefined'
 	| 'boolean'
 	| 'number'
@@ -12,18 +12,17 @@ export type ReadableTypeOf = (
 	| 'function'
 	| 'array'
 	| 'null'
-	| 'object'
-);
+	| 'object';
 
-export interface RepeatedTuple<L extends number, T extends any> extends Array<T> {
-	0: T,
-	length: L,
-}
+export type RepeatedTuple<L extends number, T extends any> = {
+	0: T;
+	length: L;
+} & T[];
 
 export type DistributedArray<T> = T extends infer I ? I[] : never;
 
 export type GenericObject<Key extends string = string> = {
-	[x in Key]: (
+	[x in Key]:
 		| string
 		| number
 		| boolean
@@ -31,32 +30,31 @@ export type GenericObject<Key extends string = string> = {
 		| null
 		| undefined
 		| any[]
-		| GenericObject
-	);
+		| GenericObject;
 };
 
-export type AlertStatus = null | string | {
-	type: 'danger' | 'success' | 'info' | 'warning',
-	text: string,
+export type AlertStatus =
+	| null
+	| string
+	| {
+			type: 'danger' | 'success' | 'info' | 'warning';
+			text: string;
+	  };
+
+export type Settings = {
+	user: User;
 };
 
-export interface Settings {
-	user: User,
-}
-
-export type ThemeColors = (
+export type ThemeColors =
 	| 'primary'
 	| 'basic'
 	| 'control'
 	| 'success'
 	| 'danger'
 	| 'info'
-	| 'warning'
-);
+	| 'warning';
 
-export type AssertFunction<Type> = (
-	value: any
-) => asserts value is Type;
+export type AssertFunction<Type> = (value: any) => asserts value is Type;
 
 export type AssertArrayFunction<Type> = (
 	value: any,

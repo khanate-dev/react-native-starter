@@ -1,10 +1,10 @@
 declare module '@material-ui/core/styles/createPalette' {
-	interface PaletteOptions {
-		wimetrixPrimary: PaletteColorOptions,
-		wimetrixSecondary: PaletteColorOptions,
-	}
-	interface Palette {
-		wimetrixPrimary: PaletteColor,
-		wimetrixSecondary: PaletteColor,
-	}
+	type PaletteOptions = {
+		wimetrixPrimary: PaletteColorOptions;
+		wimetrixSecondary: PaletteColorOptions;
+	};
+	type Palette = {
+		wimetrixPrimary: PaletteColor;
+		wimetrixSecondary: PaletteColor;
+	};
 }
