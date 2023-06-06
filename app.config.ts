@@ -120,7 +120,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				config: {
 					organization: sentry.organization,
 					project: sentry.project,
-					authToken: sentry.authToken,
 					setCommits: true,
 				},
 			},
