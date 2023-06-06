@@ -24,7 +24,6 @@
 		"module": "esnext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"types": ["vitest/globals"],
 		"paths": {
 			"config/*": ["src/config/*"],
 			"constants": ["src/constants/"],
@@ -70,5 +69,5 @@
 		// completeness
 		"skipLibCheck": true
 	},
-	"exclude": ["node_modules", "public", "cache"]
+	"exclude": ["node_modules", "public", "cache", "coverage"]
 }

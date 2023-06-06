@@ -31,3 +31,5 @@ web-build/
 !.env.example
 .flaskenv*
 android-key.json
+
+coverage/
