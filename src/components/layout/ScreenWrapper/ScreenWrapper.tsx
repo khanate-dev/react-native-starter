@@ -9,7 +9,7 @@ import {
 } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
-import { useUser, invalidateUser } from 'contexts/user';
+import { useUser, logout } from 'contexts/user';
 import { IconButton } from 'components/form/IconButton';
 import { Background } from 'components/media/Background';
 
@@ -91,7 +91,7 @@ export const ScreenWrapper = ({
 									size={30}
 									type='danger'
 									appearance='outline'
-									onPress={invalidateUser}
+									onPress={logout}
 								/>
 								<Icon
 									style={styles.userIcon}

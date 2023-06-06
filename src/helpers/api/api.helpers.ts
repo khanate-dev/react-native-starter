@@ -1,12 +1,11 @@
 import { z } from 'zod';
-import { disableAuth, isFetchMocked } from 'src/config';
+import { getNetworkStateAsync } from 'expo-network';
 
+import { disableAuth, isFetchMocked } from 'src/config';
 import { ApiError, AuthError, ConnectionError, getCatchMessage } from 'errors';
 import { logout } from 'contexts/user';
 import { getSetting } from 'helpers/settings';
-import { dbDataSorter } from 'helpers/schema';
 
-import type { timestampSchema } from 'helpers/schema';
 import type { Utils } from 'types/utils';
 
 const responseSchema = z.strictObject({
@@ -29,8 +28,11 @@ const apiRequest = async <Response = unknown>(
 	isPublic: boolean = false
 ): Promise<Response> => {
 	try {
-		if (!isFetchMocked && !navigator.onLine)
-			throw new ConnectionError('not connected to the internet!');
+		if (!isFetchMocked) {
+			const { isInternetReachable } = await getNetworkStateAsync();
+			if (!isInternetReachable)
+				throw new ConnectionError('not connected to the internet!');
+		}
 
 		const options: Omit<RequestInit, 'headers'> & {
 			headers: Record<string, any>;
@@ -79,20 +81,14 @@ export const getRequest = async <Schema extends z.ZodSchema = z.ZodUnknown>(
 	options?: {
 		schema?: Schema;
 		isPublic?: boolean;
-		shouldSort?: z.infer<Schema> extends z.infer<typeof timestampSchema>[]
-			? boolean
-			: undefined;
 	}
 ): Promise<z.infer<Schema>> => {
 	const response = apiRequest(apiPath, 'GET', undefined, options?.isPublic);
 	if (!options?.schema) return response;
 	return response.then(async (data) => {
-		const parsed = (
-			options.schema ? options.schema.parse(data) : data
-		) as Promise<z.infer<Schema>>;
-		return options.shouldSort && Array.isArray(parsed)
-			? parsed.sort(dbDataSorter as never)
-			: parsed;
+		return (options.schema ? options.schema.parse(data) : data) as Promise<
+			z.infer<Schema>
+		>;
 	});
 };
 
