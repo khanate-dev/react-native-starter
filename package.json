@@ -58,6 +58,7 @@
 		"@svgr/plugin-svgo": "^8.0.1",
 		"@testing-library/jest-native": "^5.4.2",
 		"@testing-library/react-native": "^12.1.2",
+		"@total-typescript/ts-reset": "^0.4.2",
 		"@types/babel__core": "^7.20.1",
 		"@types/eslint": "^8.40.0",
 		"@types/jest": "^29.5.2",
