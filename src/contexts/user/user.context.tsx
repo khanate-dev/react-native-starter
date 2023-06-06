@@ -7,7 +7,7 @@ import {
 	setUserSetting,
 } from 'helpers/settings';
 
-import type { OwnerUser, SupervisorUser, User  } from 'schemas/user';
+import type { User } from 'schemas/user';
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export type UserProviderProps = {
@@ -51,7 +51,7 @@ export const UserProvider = ({
 };
 
 /** fires the invalidate-user event to force logout on authentication errors */
-export const invalidateUser = () => {
+export const logout = () => {
 	DeviceEventEmitter.emit('invalidate-user');
 };
 
@@ -62,38 +62,9 @@ export const setUser = (user: User) => {
 
 export const useUser = (): null | User => {
 	const user = useContext(UserContext);
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (user === undefined)
 		throw new Error('useUser must be used within a UserProvider');
 
-	return user;
-};
-
-export const useOwnerUser = (): OwnerUser => {
-	const user = useContext(UserContext);
-	if (user === undefined)
-		throw new Error('useOwnerUser must be used within a UserProvider');
-
-	if (user === null || user.type === 'supervisor') {
-		const error =
-			user === null
-				? 'Must be logged in to call useOwnerUser!'
-				: 'Can not use useOwnerUser while logged in as supervisor';
-		throw new Error(error);
-	}
-	return user;
-};
-
-export const useSupervisorUser = (): SupervisorUser => {
-	const user = useContext(UserContext);
-	if (user === undefined)
-		throw new Error('useSupervisorUser must be used within a UserProvider');
-
-	if (user === null || user.type === 'owner') {
-		const error =
-			user === null
-				? 'Must be logged in to call useSupervisorUser!'
-				: 'Can not use useSupervisorUser while logged in as owner';
-		throw new Error(error);
-	}
 	return user;
 };
