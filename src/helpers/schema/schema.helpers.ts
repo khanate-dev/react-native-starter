@@ -33,6 +33,10 @@ export const datetimeSchema = z.preprocess((value) => {
 
 export type ZodDatetime = typeof datetimeSchema;
 
+export const gradientSchema = z.tuple([z.string(), z.string()]);
+
+export type Gradient = z.infer<typeof gradientSchema>;
+
 type OptionalGroup<T extends Record<string, unknown>> =
 	| T
 	| { [K in keyof T]?: never };
