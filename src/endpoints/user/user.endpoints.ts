@@ -7,12 +7,7 @@ import {
 	putRequest,
 	deleteRequest,
 } from 'helpers/api';
-import {
-	mockedAdd,
-	mockedDelete,
-	mockedGet,
-	mockedUpdate,
-} from 'endpoints/mocks';
+import { mockedAdd, mockedDelete, mockedGet, mockedUpdate } from 'mocks';
 
 import type { User, Login, UserSansMeta, LoggedInUser } from 'schemas/user';
 import type { DbId } from 'helpers/schema';
