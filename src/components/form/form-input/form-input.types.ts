@@ -1,7 +1,7 @@
 import type { InputProps } from '@ui-kitten/components';
-import type { StyleProp, ViewStyle } from 'react-native';
 import type { ThemeColors } from 'types/general';
 import type { FormButtonProps } from '../form-button';
+import type { App } from 'types/app';
 
 type FormInputType =
 	| 'string'
@@ -13,8 +13,7 @@ type FormInputType =
 	| 'search'
 	| 'date';
 
-export type FormInputProps = {
-	controlStyle?: StyleProp<ViewStyle>;
+export type FormInputProps = App.PropsWithStyle<{
 	type: FormInputType;
 	value: string;
 	error?: string;
@@ -28,4 +27,5 @@ export type FormInputProps = {
 	noMargin?: boolean;
 	isLast?: boolean;
 	disabled?: InputProps['disabled'] | ((value: string) => boolean);
-} & Omit<InputProps, 'onChange' | 'status' | 'disabled'>;
+}> &
+	Omit<InputProps, 'onChange' | 'status' | 'disabled'>;

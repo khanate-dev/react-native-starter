@@ -11,28 +11,27 @@ import { isSmallerScreen } from 'src/config';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 
 import type { PropsWithChildren } from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { App } from 'types/app';
 
-export type ScreenWrapperProps = PropsWithChildren<{
-	/** the styles to apply to the container */
-	containerStyle?: StyleProp<ViewStyle>;
+export type ScreenWrapperProps = PropsWithChildren<
+	App.PropsWithStyle<{
+		/** the title to show on the page header */
+		title?: string;
 
-	/** the title to show on the page header */
-	title?: string;
+		/**
+		 * the function to call when the header back button is pressed
+		 * back button is not rendered if excluded
+		 */
+		onBack?: () => void;
 
-	/**
-	 * the function to call when the header back button is pressed
-	 * back button is not rendered if excluded
-	 */
-	onBack?: () => void;
-
-	/** should the screen render a plain white background instead of the gradient? */
-	hasPlainBackground?: boolean;
-}>;
+		/** should the screen render a plain white background instead of the gradient? */
+		hasPlainBackground?: boolean;
+	}>
+>;
 
 export const ScreenWrapper = ({
 	children,
-	containerStyle,
+	style,
 	title,
 	onBack,
 	hasPlainBackground,
@@ -140,7 +139,7 @@ export const ScreenWrapper = ({
 			<Animated.View
 				entering={SlideInLeft.springify()}
 				exiting={SlideOutRight.springify()}
-				style={[containerStyle, { flex: 1 }]}
+				style={[style, { flex: 1 }]}
 			>
 				{children}
 			</Animated.View>

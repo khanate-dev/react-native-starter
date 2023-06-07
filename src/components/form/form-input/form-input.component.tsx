@@ -37,7 +37,7 @@ export const FormInput = forwardRef<Input, FormInputProps>(
 	(
 		{
 			style,
-			controlStyle,
+			style: controlStyle,
 			type,
 			value,
 			error,

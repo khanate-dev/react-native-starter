@@ -25,7 +25,7 @@ export const ErrorPage = ({
 	return (
 		<ScreenWrapper
 			title={title ?? 'Error'}
-			containerStyle={{
+			style={{
 				flex: 1,
 				justifyContent: 'center',
 				alignItems: 'center',

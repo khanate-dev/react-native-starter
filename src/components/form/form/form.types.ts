@@ -1,14 +1,11 @@
-import type { StyleProp, ViewStyle } from 'react-native';
 import type { FormButtonProps } from 'components/form/form-button';
 import type { FormState, SchemaField, SchemaFields } from 'types/form';
+import type { App } from 'types/app';
 
 export type FormProps<
 	Keys extends string,
 	Fields extends SchemaFields<Keys>
-> = {
-	/** the styles to apply to the form container */
-	style?: StyleProp<ViewStyle>;
-
+> = App.PropsWithStyle<{
 	/** the input fields object to use for the form */
 	fields: Fields;
 
@@ -47,4 +44,4 @@ export type FormProps<
 
 	/** should the form submission be disabled? */
 	disabled?: boolean | ((state: FormState<keyof Fields>) => boolean);
-};
+}>;
