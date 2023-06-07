@@ -68,7 +68,7 @@ const config = {
 					},
 					{
 						group: ['@expo/vector-icons/*'],
-						message: "Use 'components/media/material-icon' instead.",
+						message: "Use 'components/media/app-icon' instead.",
 					},
 				],
 			},

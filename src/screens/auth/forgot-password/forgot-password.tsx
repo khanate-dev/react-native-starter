@@ -5,7 +5,7 @@ import { wait } from 'helpers/time';
 
 import { forgotPasswordFields as fields } from 'schemas/user';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Form } from 'components/form/form';
+import { Form } from 'components/controls/form';
 
 import { forgotPasswordStyles } from './forgot-password.styles';
 

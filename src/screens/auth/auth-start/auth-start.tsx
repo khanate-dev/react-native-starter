@@ -2,7 +2,7 @@ import { Text, useStyleSheet } from '@ui-kitten/components';
 import { ImageBackground, View } from 'react-native';
 
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { FormButton } from 'components/form/form-button';
+import { FormButton } from 'components/controls/form-button';
 import { AppLogo } from 'components/media/app-logo';
 
 import { authStartStyles } from './auth-start.styles';

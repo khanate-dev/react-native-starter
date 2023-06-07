@@ -5,8 +5,8 @@ import { isSmallerScreen } from 'src/config';
 import { ownerFields as fields, ownerFormSchema } from 'schemas/owner';
 import { addOwner } from 'endpoints/owner';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Form } from 'components/form/form';
-import { IconButton } from 'components/form/icon-button';
+import { Form } from 'components/controls/form';
+import { IconButton } from 'components/controls/icon-button';
 
 import { registerStyles as styles } from './register.styles';
 

@@ -1,63 +1,50 @@
-import { Image } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Text, useTheme } from '@ui-kitten/components';
-import { isSmallerScreen } from 'src/config';
-import { getHeadingGradientProps } from 'helpers/color';
+import { Surface, Text } from 'react-native-paper';
 
+import { isSmallerScreen } from 'src/config';
 import { loginFields as fields, loginFormSchema } from 'schemas/user';
-import { login } from 'endpoints/user';
+import { endpoints } from 'endpoints';
 import { setUser } from 'contexts/user';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Form } from 'components/form/form';
-import { IconButton } from 'components/form/icon-button';
-import { FormButton } from 'components/form/form-button';
+import { Form } from 'components/controls/form';
+import { IconButton } from 'components/controls/icon-button';
+import { FormButton } from 'components/controls/form-button';
 
 import { loginStyles as styles } from './login.styles';
 
 import type { AuthPageProps } from '../auth.types';
-import type { ImageStyle } from 'react-native';
 
 export const Login = ({ navigation, route }: AuthPageProps<'login'>) => {
-	const theme = useTheme();
-
 	return (
 		<ScreenWrapper hasPlainBackground>
-			<LinearGradient
-				{...getHeadingGradientProps(theme)}
+			<Surface
+				elevation={5}
 				style={styles.header}
 			>
 				<IconButton
-					name='arrow-back'
+					icon='arrow-back'
 					style={styles.back}
 					size={40}
-					type='basic'
 					onPress={() => navigation.goBack()}
-				/>
-
-				<Image
-					style={styles.headerImage as ImageStyle}
-					resizeMode='contain'
-					source={require('media/images/login-header.png')}
 				/>
 
 				<Text
 					style={styles.headerText}
-					category='h2'
+					variant='headlineMedium'
 				>
 					Hi, {'\n'}Please {'\n'}Login
 				</Text>
-			</LinearGradient>
+			</Surface>
 
 			<Form
 				style={styles.form}
 				fields={fields}
+				defaultValues={route.params}
 				submitLabel={(isSubmitting) =>
 					isSubmitting ? 'Logging In...' : 'Login'
 				}
-				defaultValues={route.params}
 				onSubmit={async (state) => {
 					const body = loginFormSchema.parse(state);
-					const user = await login(body);
+					const user = await endpoints.user.login(body);
 					setTimeout(() => setUser(user), 1000);
 					return 'Logged In! Redirecting...';
 				}}

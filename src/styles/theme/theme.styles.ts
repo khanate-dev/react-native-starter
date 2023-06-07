@@ -3,6 +3,7 @@ import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { formatToken } from 'helpers/string';
 
 import type { MD3Theme } from 'react-native-paper';
+import type { AppIconName } from 'components/media/app-icon';
 
 export const lightTheme: MD3Theme = {
 	...MD3LightTheme,
@@ -105,6 +106,14 @@ const themeColorMap = {
 } as const;
 
 export type ThemeColor = keyof typeof themeColorMap;
+
+export const themeColorIcons: Record<ThemeColor, AppIconName> = {
+	primary: 'notifications',
+	secondary: 'notifications',
+	success: 'success-circle',
+	error: 'error-circle',
+	warning: 'error-circle',
+};
 
 export const getThemeColor = (
 	theme: MD3Theme,
