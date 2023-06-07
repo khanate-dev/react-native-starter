@@ -5,8 +5,8 @@ import Constants from 'expo-constants';
 
 import { useUser, logout } from 'contexts/user';
 import { Background } from 'components/media/background';
-import { IconButton } from 'components/form/icon-button';
-import { MaterialIcon } from 'components/media/material-icon';
+import { IconButton } from 'components/controls/icon-button';
+import { AppIcon } from 'components/media/app-icon';
 import { isSmallerScreen } from 'src/config';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 
@@ -106,14 +106,14 @@ export const ScreenWrapper = ({
 							<>
 								<IconButton
 									style={{ padding: 5, borderRadius: 5 }}
-									icon='power-settings-new'
+									icon='logout'
 									size={30}
 									iconColor={theme.colors.error}
 									mode='outlined'
 									onPress={logout}
 								/>
-								<MaterialIcon
-									name='account-circle'
+								<AppIcon
+									name='user-account'
 									color={theme.colors.primary}
 									style={{
 										marginLeft,
@@ -129,7 +129,7 @@ export const ScreenWrapper = ({
 
 						<IconButton
 							style={{ marginLeft, padding: 5, borderRadius: 5 }}
-							icon={isDarkMode ? 'wb-sunny' : 'nightlight-round'}
+							icon={isDarkMode ? 'dark-mode' : 'light-mode'}
 							onPress={toggleDarkMode}
 						/>
 					</View>
