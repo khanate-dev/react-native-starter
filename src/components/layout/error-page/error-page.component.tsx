@@ -1,9 +1,9 @@
 import { Text, useTheme } from 'react-native-paper';
 
-import { FormButton } from 'components/form/form-button';
+import { FormButton } from 'components/controls/form-button';
 import { isSmallerScreen } from 'src/config';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { MaterialIcon } from 'components/media/material-icon';
+import { AppIcon } from 'components/media/app-icon';
 
 export type ErrorPageProps = {
 	title?: string;
@@ -32,8 +32,8 @@ export const ErrorPage = ({
 			}}
 			onBack={onBack}
 		>
-			<MaterialIcon
-				name='report-problem'
+			<AppIcon
+				name='error-triangle'
 				size={isSmallerScreen ? 130 : 150}
 				color={theme.colors.error}
 			/>
