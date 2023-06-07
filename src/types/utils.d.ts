@@ -18,7 +18,7 @@ export namespace Utils {
 		: [...T];
 
 	/** global type helper to repeat a type `N` times in a tuple */
-	export type repeatedTuple<T, N extends number> = N extends N
+	export type repeatedTuple<N extends number, T> = N extends N
 		? number extends N
 			? T[]
 			: _repeatedTuple<T, N, []>

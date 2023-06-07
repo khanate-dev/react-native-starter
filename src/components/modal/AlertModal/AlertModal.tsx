@@ -7,7 +7,6 @@ import { FormButton } from 'components/form/FormButton';
 
 import { getAlertModalStyles as getStyles } from './AlertModal.styles';
 
-import type { ModalProps } from 'react-native-paper';
 import type { ThemeColors } from 'types/general';
 import type { FormButtonProps } from 'components/form/FormButton';
 
@@ -19,11 +18,9 @@ export type AlertModalProps = {
 	actions?: FormButtonProps[];
 	onClose?: () => void;
 	noIcon?: boolean;
-} & Pick<ModalProps, 'style' | 'backdropStyle'>;
+};
 
 export const AlertModal = ({
-	style,
-	backdropStyle,
 	title: passedTitle,
 	text,
 	type = 'danger',

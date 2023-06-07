@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { createSchema, createSchemaFields } from 'helpers/schema';
+import { createSchema, createSchemaFields, jwtSchema } from 'helpers/schema';
 
 const passwordSchema = z
 	.string()
@@ -20,6 +20,12 @@ export const loginSchema = userSchema.pick({
 	email: true,
 	password: true,
 });
+
+export const loggedInUserSchema = userSchema.extend({
+	token: jwtSchema,
+});
+
+export type LoggedInUser = z.infer<typeof loggedInUserSchema>;
 
 export type Login = z.infer<typeof loginSchema>;
 

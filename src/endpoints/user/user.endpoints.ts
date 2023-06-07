@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { userSchema } from 'schemas/user';
+import { loggedInUserSchema, userSchema } from 'schemas/user';
 import {
 	postRequest,
 	getRequest,
@@ -14,13 +14,13 @@ import {
 	mockedUpdate,
 } from 'endpoints/mocks';
 
-import type { User, Login, UserSansMeta } from 'schemas/user';
+import type { User, Login, UserSansMeta, LoggedInUser } from 'schemas/user';
 import type { DbId } from 'helpers/schema';
 
 export const userEndpoints = {
-	login: async (body: Login): Promise<User> => {
+	login: async (body: Login): Promise<LoggedInUser> => {
 		const response = await postRequest('user/login', body, true);
-		return userSchema.parse(response);
+		return loggedInUserSchema.parse(response);
 	},
 	add: async (body: UserSansMeta): Promise<User> => {
 		const response = await postRequest('user', body, true);
@@ -49,7 +49,7 @@ export const userMocks: typeof userEndpoints = {
 		);
 		if (!user) throw new Error('user not found');
 		if (user.password !== password) throw new Error('incorrect password');
-		return user;
+		return { ...user, token: '123456789' };
 	},
 	get: async () => mockedGet('user'),
 	getById: async (id) => mockedGet('user', id),
