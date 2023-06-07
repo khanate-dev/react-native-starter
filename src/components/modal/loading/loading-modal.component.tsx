@@ -1,34 +1,29 @@
-import { Modal, ActivityIndicator, useStyleSheet } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
-
-const loadingModalStyles = StyleSheet.create({
-	backdrop: {
-		backgroundColor: 'color-primary-900',
-		opacity: 0.7,
-	},
-	modal: {
-		padding: 10,
-		borderRadius: 100,
-		backgroundColor: 'color-primary-100',
-		opacity: 0.6,
-		shadowRadius: 6.27,
-	},
-});
+import { Modal, ActivityIndicator, Portal, useTheme } from 'react-native-paper';
 
 export const LoadingModal = () => {
-	const styles = useStyleSheet(loadingModalStyles);
-
+	const theme = useTheme();
 	return (
-		<Modal
-			style={styles.modal}
-			backdropStyle={styles.backdrop}
-			focusable={false}
-			visible
-		>
-			<ActivityIndicator
-				status='control'
-				size='giant'
-			/>
-		</Modal>
+		<Portal>
+			<Modal
+				dismissable={false}
+				style={{
+					backgroundColor: theme.colors.primaryContainer,
+					opacity: 0.7,
+				}}
+				contentContainerStyle={{
+					padding: 10,
+					borderRadius: 100,
+					backgroundColor: theme.colors.inversePrimary,
+					opacity: 0.6,
+					shadowRadius: 6.27,
+				}}
+				visible
+			>
+				<ActivityIndicator
+					color={theme.colors.primary}
+					size='large'
+				/>
+			</Modal>
+		</Portal>
 	);
 };
