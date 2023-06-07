@@ -1,87 +1,79 @@
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 
-import type { StyleProp, ViewStyle } from 'react-native';
+import { getThemeColor } from 'styles/theme';
 
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'row',
-		alignItems: 'stretch',
-		justifyContent: 'space-between',
-	},
-	step: {
-		flex: 1,
-		padding: 5,
-		opacity: 0.8,
-	},
-	label: {
-		color: 'color-basic-600',
-		textTransform: 'capitalize',
-	},
-	underline: {
-		backgroundColor: 'color-basic-600',
-		height: 3,
-	},
-	labelComplete: {
-		color: 'color-success-500',
-	},
-	labelActive: {
-		color: 'color-primary-500',
-	},
-	underlineComplete: {
-		backgroundColor: 'color-success-500',
-	},
-	underlineActive: {
-		backgroundColor: 'color-primary-500',
-	},
-});
+import type { App } from 'types/app';
 
-export type StepperProps = {
-	style?: StyleProp<ViewStyle>;
-	steps: string[];
-	currentStep: string;
+export type StepperProps<T extends readonly string[]> = App.PropsWithStyle<{
+	/** the list of step names */
+	steps: T;
+
+	/** the name of the current step */
+	currentStep: T[number];
+
+	/** remove this prefix from all step labels */
 	removePrefix?: string;
-};
+}>;
 
-export const Stepper = ({
+// TODO AFTER UPDATING TO SDK 49: use const here
+export const Stepper = <T extends readonly string[]>({
 	style,
 	steps,
 	currentStep,
 	removePrefix,
-}: StepperProps) => {
+}: StepperProps<T>) => {
 	const theme = useTheme();
 
 	return (
-		<View style={[style, styles.container]}>
+		<View
+			style={[
+				{
+					flexDirection: 'row',
+					alignItems: 'stretch',
+					justifyContent: 'space-between',
+				},
+				style,
+			]}
+		>
 			{steps.map((step, index) => (
 				<View
 					key={step}
-					style={styles.step}
+					style={{ flex: 1, padding: 5, opacity: 0.8 }}
 				>
 					<Text
-						category='c2'
-						appearance='hint'
-						style={[
-							styles.label,
-							steps.indexOf(currentStep) > index && styles.labelComplete,
-							step === currentStep && styles.labelActive,
-						]}
-						status={
-							steps.indexOf(currentStep) > index
-								? 'success'
-								: step === currentStep
-								? 'primary'
-								: 'basic'
-						}
+						variant='headlineMedium'
+						style={{
+							textTransform: 'capitalize',
+							opacity: 0.5,
+							color: getThemeColor(
+								theme,
+								step === currentStep
+									? 'primary'
+									: steps.indexOf(currentStep) > index
+									? 'success'
+									: 'error'
+							),
+						}}
 					>
 						{removePrefix ? step.replace(removePrefix, '') : step}
 					</Text>
 
 					<View
 						style={[
-							styles.underline,
-							steps.indexOf(currentStep) > index && styles.underlineComplete,
-							step === currentStep && styles.underlineActive,
+							{
+								height: 3,
+								opacity: 0.5,
+								backgroundColor: getThemeColor(
+									theme,
+									step === currentStep
+										? 'primary'
+										: steps.indexOf(currentStep) > index
+										? 'success'
+										: 'error',
+									'container'
+								),
+							},
 						]}
 					/>
 				</View>
