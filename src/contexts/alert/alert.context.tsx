@@ -1,14 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 
-import { AlertModal } from 'components/modal/AlertModal';
+import { AlertModal } from 'components/modal/alert';
 
-import type { Dispatch, SetStateAction, ReactNode } from 'react';
-import type { AlertModalProps } from 'components/modal/AlertModal';
-
-export type AlertProviderProps = {
-	children: ReactNode;
-};
+import type { Dispatch, SetStateAction, PropsWithChildren } from 'react';
+import type { AlertModalProps } from 'components/modal/alert';
 
 const AlertContext = createContext<
 	Dispatch<SetStateAction<null | AlertModalProps>>
@@ -16,7 +12,7 @@ const AlertContext = createContext<
 
 type AddAlertInput = string | Error | AlertModalProps;
 
-export const AlertProvider = ({ children }: AlertProviderProps) => {
+export const AlertProvider = ({ children }: PropsWithChildren) => {
 	const [alert, setAlert] = useState<null | AlertModalProps>(null);
 
 	useEffect(() => {
@@ -25,7 +21,7 @@ export const AlertProvider = ({ children }: AlertProviderProps) => {
 				typeof data === 'string'
 					? { text: data }
 					: data instanceof Error
-					? { text: data.message ?? JSON.stringify(data) }
+					? { text: data.message }
 					: data
 			);
 		});

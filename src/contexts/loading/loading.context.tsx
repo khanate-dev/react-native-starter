@@ -1,17 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 
-import { LoadingModal } from 'components/modal/LoadingModal';
+import { LoadingModal } from 'components/modal/loading';
 
-import type { SetStateAction , ReactNode } from 'react';
-
-export type LoadingProviderProps = {
-	children: ReactNode;
-};
+import type { SetStateAction, PropsWithChildren } from 'react';
 
 const LoadingContext = createContext<boolean>(false);
 
-export const LoadingProvider = ({ children }: LoadingProviderProps) => {
+export const LoadingProvider = ({ children }: PropsWithChildren) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
@@ -37,6 +33,7 @@ export const LoadingProvider = ({ children }: LoadingProviderProps) => {
 
 export const useLoading = () => {
 	const isLoading = useContext(LoadingContext);
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (isLoading === undefined)
 		throw new Error('useLoading must be used within an LoadingProvider');
 

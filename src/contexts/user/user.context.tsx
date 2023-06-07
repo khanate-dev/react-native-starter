@@ -4,13 +4,16 @@ import { DeviceEventEmitter } from 'react-native';
 import { getSetting, removeSetting, setSetting } from 'helpers/settings';
 
 import type { LoggedInUser, User } from 'schemas/user';
-import type { Dispatch, ReactNode, SetStateAction } from 'react';
+import type {
+	Dispatch,
+	SetStateAction,
+	PropsWithChildren,
+} from 'react';
 
-export type UserProviderProps = {
+export type UserProviderProps = PropsWithChildren<{
 	user: null | LoggedInUser;
 	setUser: Dispatch<SetStateAction<null | LoggedInUser>>;
-	children: ReactNode;
-};
+}>;
 
 const UserContext = createContext<null | User>(null);
 
