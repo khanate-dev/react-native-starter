@@ -1,26 +1,17 @@
 import { SafeAreaView, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import {
-	Icon,
-	Layout,
-	Text,
-	useStyleSheet,
-	useTheme,
-} from 'react-native-paper';
+import { Surface, Text, useTheme } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
-import { IconButton } from 'components/form/icon-button';
+import Constants from 'expo-constants';
 
 import { useUser, logout } from 'contexts/user';
 import { Background } from 'components/media/background';
-
-import { screenWrapperStyles } from './screen-wrapper.styles';
+import { IconButton } from 'components/form/icon-button';
+import { MaterialIcon } from 'components/media/material-icon';
+import { isSmallerScreen } from 'src/config';
+import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 
 import type { PropsWithChildren } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-
-export type ScreenWrapperUserControlsProps = {
-	styles: typeof screenWrapperStyles;
-};
 
 export type ScreenWrapperProps = PropsWithChildren<{
 	/** the styles to apply to the container */
@@ -35,9 +26,6 @@ export type ScreenWrapperProps = PropsWithChildren<{
 	 */
 	onBack?: () => void;
 
-	/** should the background be dark? */
-	darkBackground?: boolean;
-
 	/** should the screen render a plain white background instead of the gradient? */
 	hasPlainBackground?: boolean;
 }>;
@@ -47,56 +35,104 @@ export const ScreenWrapper = ({
 	containerStyle,
 	title,
 	onBack,
-	darkBackground,
 	hasPlainBackground,
 }: ScreenWrapperProps) => {
 	const user = useUser();
-	const styles = useStyleSheet(screenWrapperStyles);
 	const theme = useTheme();
+	const isDarkMode = useDarkMode();
+
+	const marginLeft = isSmallerScreen ? 10 : 15;
 
 	const content = (
 		<>
 			{Boolean(onBack || title || user?.name) && (
-				<View style={styles.header}>
-					<View style={styles.headerLeft}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						height: 50,
+						width: '100%',
+						padding: 5,
+						flexWrap: 'nowrap',
+					}}
+				>
+					<View
+						style={{
+							flex: 1,
+							flexShrink: 1,
+							height: '100%',
+							flexDirection: 'row',
+							justifyContent: 'flex-start',
+							alignItems: 'center',
+							overflow: 'hidden',
+						}}
+					>
 						{onBack && (
 							<IconButton
-								name='arrow-back'
-								style={styles.back}
+								icon='arrow-back'
+								style={{ borderRadius: 5 }}
 								size={40}
-								type='primary'
 								onPress={onBack}
 							/>
 						)}
 
 						{Boolean(title) && (
 							<Text
-								style={styles.title}
 								variant='headlineLarge'
+								style={{
+									marginLeft,
+									fontWeight: 'bold',
+									color: theme.colors.primary,
+									fontSize: 14,
+									overflow: 'hidden',
+									textTransform: 'capitalize',
+								}}
 							>
 								{title}
 							</Text>
 						)}
 					</View>
 
-					<View style={styles.headerRight}>
+					<View
+						style={{
+							flex: 1,
+							flexShrink: 1,
+							height: '100%',
+							flexDirection: 'row',
+							justifyContent: 'flex-end',
+							alignItems: 'center',
+						}}
+					>
 						{Boolean(user?.name) && (
 							<>
 								<IconButton
-									style={styles.logout}
-									name='power-outline'
+									style={{ padding: 5, borderRadius: 5 }}
+									icon='power-settings-new'
 									size={30}
-									type='danger'
-									appearance='outline'
+									iconColor={theme.colors.error}
+									mode='outlined'
 									onPress={logout}
 								/>
-								<Icon
-									style={styles.userIcon}
-									name='person-outline'
-									fill={theme['color-primary-700']}
+								<MaterialIcon
+									name='account-circle'
+									color={theme.colors.primary}
+									style={{
+										marginLeft,
+										width: 30,
+										height: 30,
+										borderColor: theme.colors.primary,
+										borderWidth: 3,
+										borderRadius: 20,
+									}}
 								/>
 							</>
 						)}
+
+						<IconButton
+							style={{ marginLeft, padding: 5, borderRadius: 5 }}
+							icon={isDarkMode ? 'wb-sunny' : 'nightlight-round'}
+							onPress={toggleDarkMode}
+						/>
 					</View>
 				</View>
 			)}
@@ -104,7 +140,7 @@ export const ScreenWrapper = ({
 			<Animated.View
 				entering={SlideInLeft.springify()}
 				exiting={SlideOutRight.springify()}
-				style={[containerStyle, styles.screen]}
+				style={[containerStyle, { flex: 1 }]}
 			>
 				{children}
 			</Animated.View>
@@ -112,26 +148,20 @@ export const ScreenWrapper = ({
 	);
 
 	return (
-		<SafeAreaView style={styles.safeArea}>
-			{hasPlainBackground && (
-				<Layout style={[styles.container, darkBackground && styles.dark]}>
-					{content}
-				</Layout>
-			)}
-			{!hasPlainBackground && (
-				<LinearGradient
-					style={[styles.container, darkBackground && styles.dark]}
-					colors={[
-						theme[
-							`background-${darkBackground ? 'alternative' : 'basic'}-color-1`
-						] ?? '#ffffff',
-						theme[`color-primary-${darkBackground ? 800 : 200}`] ?? '#F7EBFD',
-					]}
-				>
-					<Background style={styles.background} />
-					{content}
-				</LinearGradient>
-			)}
+		<SafeAreaView style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
+			<Surface style={{ flex: 1, position: 'relative' }}>
+				{!hasPlainBackground && (
+					<Background
+						style={{
+							position: 'absolute',
+							zIndex: 0,
+							width: '100%',
+							height: '100%',
+						}}
+					/>
+				)}
+				{content}
+			</Surface>
 		</SafeAreaView>
 	);
 };
