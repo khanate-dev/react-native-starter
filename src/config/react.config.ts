@@ -39,3 +39,11 @@ const disableAuthConfig: Record<typeof environment, boolean> = {
 
 /** should fetch authentication be disabled? */
 export const disableAuth: boolean = disableAuthConfig[environment];
+
+const shouldAutoFillConfig: Record<typeof environment, boolean> = {
+	development: false,
+	production: false,
+};
+
+/** should the app auto fill inputs with default values? */
+export const shouldAutoFill: boolean = shouldAutoFillConfig[environment];
