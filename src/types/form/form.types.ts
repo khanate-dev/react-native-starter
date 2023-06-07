@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { FormInputProps } from 'components/form/FormInput';
+import type { FormInputProps } from 'components/form/form-input';
 
 export type FormState<Keys extends PropertyKey> = Record<Keys, string>;
 

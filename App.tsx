@@ -6,10 +6,10 @@ import * as Updates from 'expo-updates';
 import { environment } from 'config';
 import { addAlert } from 'contexts/alert';
 import { Auth } from 'screens/auth';
-import { OwnerDashboard } from 'screens/owner-dashboard';
-import { Providers } from 'components/Providers';
+import { OwnerDashboard } from 'screens/dashboard';
+import { Providers } from 'components/providers';
 
-import type { User } from 'schemas/user';
+import type { LoggedInUser } from 'schemas/user';
 
 const appStack = createNativeStackNavigator<{
 	auth: undefined;
@@ -18,7 +18,7 @@ const appStack = createNativeStackNavigator<{
 }>();
 
 const App = () => {
-	const [user, setUser] = useState<null | User>(null);
+	const [user, setUser] = useState<null | LoggedInUser>(null);
 
 	useEffect(() => {
 		if (
@@ -28,9 +28,7 @@ const App = () => {
 			return;
 
 		Updates.addListener((event) => {
-			if (event.type !== Updates.UpdateEventType.UPDATE_AVAILABLE)
-				return;
-
+			if (event.type !== Updates.UpdateEventType.UPDATE_AVAILABLE) return;
 
 			setTimeout(() => {
 				addAlert({
