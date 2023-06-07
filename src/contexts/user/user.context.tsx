@@ -1,18 +1,14 @@
 import { createContext, useContext, useEffect } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 
-import {
-	getUserSetting,
-	removeUserSetting,
-	setUserSetting,
-} from 'helpers/settings';
+import { getSetting, removeSetting, setSetting } from 'helpers/settings';
 
-import type { User } from 'schemas/user';
+import type { LoggedInUser, User } from 'schemas/user';
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export type UserProviderProps = {
-	user: null | User;
-	setUser: Dispatch<SetStateAction<null | User>>;
+	user: null | LoggedInUser;
+	setUser: Dispatch<SetStateAction<null | LoggedInUser>>;
 	children: ReactNode;
 };
 
@@ -25,18 +21,21 @@ export const UserProvider = ({
 }: UserProviderProps) => {
 	useEffect(() => {
 		(async () => {
-			const storedUser = await getUserSetting('user');
+			const storedUser = await getSetting('user');
 			setUser(storedUser);
 		})();
 
-		DeviceEventEmitter.addListener('set-user', async (newUser: User) => {
-			const added = await setUserSetting('user', newUser);
-			if (!added) return;
-			setUser(newUser);
-		});
+		DeviceEventEmitter.addListener(
+			'set-user',
+			async (newUser: LoggedInUser) => {
+				const added = await setSetting('user', newUser);
+				if (!added) return;
+				setUser(newUser);
+			}
+		);
 
-		DeviceEventEmitter.addListener('invalidate-user', () => {
-			const removed = removeUserSetting('user');
+		DeviceEventEmitter.addListener('invalidate-user', async () => {
+			const removed = await removeSetting('user');
 			if (!removed) return;
 			setUser(null);
 		});
@@ -45,7 +44,7 @@ export const UserProvider = ({
 			DeviceEventEmitter.removeAllListeners('invalidate-user');
 			DeviceEventEmitter.removeAllListeners('set-user');
 		};
-	}, []);
+	}, [setUser]);
 
 	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
