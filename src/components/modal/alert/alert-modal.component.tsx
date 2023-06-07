@@ -1,29 +1,46 @@
-import { DeviceEventEmitter, View } from 'react-native';
-import { Icon, Modal, Text, useTheme } from 'react-native-paper';
+import { DeviceEventEmitter, Dimensions, View } from 'react-native';
+import { Dialog, Portal, Text, useTheme } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
+import Constants from 'expo-constants';
 
-import { themeColorIcons } from 'helpers/theme';
-import { FormButton } from 'components/form/form-button';
+import { getThemeColor, themeColorIcons } from 'styles/theme';
+import { FormButton } from 'components/controls/form-button';
+import { AppIcon } from 'components/media/app-icon';
+import { isSmallerScreen } from 'src/config';
 
-import { getAlertModalStyles as getStyles } from './alert-modal.styles';
-
-import type { ThemeColors } from 'types/general';
-import type { FormButtonProps } from 'components/form/form-button';
+import type { FormButtonProps } from 'components/controls/form-button';
+import type { ThemeColor } from 'styles/theme';
 
 export type AlertModalProps = {
+	/** the title of the dialog */
 	title?: string;
+
+	/** the text content for the alert */
 	text: string;
-	type?: Exclude<ThemeColors, 'control'>;
+
+	/** the type of the alert. @default `error` */
+	type?: ThemeColor;
+
+	/** the label for the close button. @default `Close` */
 	closeLabel?: string;
+
+	/** the actions for the alert. @default `[{ label: 'Close' }]` */
 	actions?: FormButtonProps[];
+
+	/** the callback for when the alert is closed */
 	onClose?: () => void;
+
+	/** should the icon be shown?  */
 	noIcon?: boolean;
 };
+
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
 
 export const AlertModal = ({
 	title: passedTitle,
 	text,
-	type = 'danger',
+	type = 'error',
 	closeLabel,
 	actions: passedActions,
 	onClose,
@@ -37,7 +54,7 @@ export const AlertModal = ({
 		{
 			label: closeLabel ?? 'Close',
 			onPress: onClose,
-			status: type === 'basic' ? 'basic' : 'control',
+			status: 'control',
 		},
 	];
 
@@ -46,73 +63,123 @@ export const AlertModal = ({
 		onClose?.();
 	};
 
-	const title = passedTitle ?? (type === 'danger' ? 'Error' : 'Alert');
+	const title = passedTitle ?? (type === 'error' ? 'Error' : 'Alert');
 
 	return (
-		<Modal
-			style={[styles.modal, style]}
-			backdropStyle={[styles.backdrop, backdropStyle]}
-			visible
-			onBackdropPress={handleClose}
-		>
-			<Animated.View
-				style={styles.header}
-				entering={SlideInLeft}
-				exiting={SlideOutRight}
+		<Portal>
+			<Dialog
+				style={{
+					width: screenWidth - (isSmallerScreen ? 50 : 150),
+					maxHeight:
+						screenHeight -
+						Constants.statusBarHeight -
+						(isSmallerScreen ? 50 : 120),
+					marginTop: 10,
+					flex: 1,
+					borderRadius: 15,
+					opacity: 0.9,
+					overflow: 'hidden',
+				}}
+				visible
+				onDismiss={handleClose}
 			>
-				{!noIcon && (
-					<View style={styles.iconContainer}>
-						<Icon
-							fill='#ffffff'
-							name={themeColorIcons[type]}
-						/>
-					</View>
-				)}
-
-				<Text
-					style={styles.title}
-					category='h6'
-					numberOfLines={1}
+				<Animated.View
+					entering={SlideInLeft}
+					exiting={SlideOutRight}
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: getThemeColor(theme, type, 'container'),
+						padding: 15,
+					}}
 				>
-					{title}
-				</Text>
-			</Animated.View>
+					{!noIcon && (
+						<View
+							style={{
+								width: 35,
+								height: 35,
+								padding: 5,
+								borderRadius: 25,
+							}}
+						>
+							<AppIcon
+								name={themeColorIcons[type]}
+								size={25}
+								color='#fff'
+							/>
+						</View>
+					)}
 
-			<Animated.ScrollView
-				contentContainerStyle={styles.body}
-				entering={SlideInLeft}
-				exiting={SlideOutRight}
-			>
-				<Text
-					style={styles.text}
-					category='s1'
-				>
-					{text}
-				</Text>
-			</Animated.ScrollView>
-
-			<Animated.View
-				style={styles.actions}
-				entering={SlideInLeft}
-				exiting={SlideOutRight}
-			>
-				{actions.map((action, index) => (
-					<FormButton
-						key={index}
-						{...action}
-						borders={action.borders ?? 'curved'}
-						status={action.status ?? (type === 'basic' ? 'primary' : type)}
-						appearance={action.appearance ?? 'filled'}
-						size={action.size ?? 'medium'}
-						style={[styles.action, action.style, index > 0 && styles.notFirst]}
-						noMargin
-						onPress={(event) => {
-							action.onPress?.(event);
-							handleClose();
+					<Text
+						variant='titleSmall'
+						numberOfLines={1}
+						style={{
+							textAlign: 'center',
+							marginLeft: !noIcon ? 15 : undefined,
+							color: getThemeColor(theme, type),
 						}}
-					/>
-				))}
-			</Animated.View>
-		</Modal>
+					>
+						{title}
+					</Text>
+				</Animated.View>
+
+				<Animated.ScrollView
+					entering={SlideInLeft}
+					exiting={SlideOutRight}
+					contentContainerStyle={{
+						padding: 15,
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						minHeight: 200,
+					}}
+				>
+					<Text
+						variant='bodyMedium'
+						style={{
+							textAlign: 'center',
+							fontWeight: 'normal',
+							color: getThemeColor(theme, type, 'hover'),
+							lineHeight: 25,
+						}}
+					>
+						{text}
+					</Text>
+				</Animated.ScrollView>
+
+				<Animated.View
+					entering={SlideInLeft}
+					exiting={SlideOutRight}
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+						padding: 15,
+					}}
+				>
+					{actions.map((action, index) => (
+						<FormButton
+							key={index}
+							{...action}
+							borders={action.borders ?? 'curved'}
+							status={action.status ?? type}
+							appearance={action.appearance ?? 'filled'}
+							size={action.size ?? 'medium'}
+							style={[
+								{ flex: 1, maxWidth: 200 },
+								action.style,
+								index > 0 && { marginLeft: 15 },
+							]}
+							noMargin
+							onPress={(event) => {
+								action.onPress?.(event);
+								handleClose();
+							}}
+						/>
+					))}
+				</Animated.View>
+			</Dialog>
+		</Portal>
 	);
 };
