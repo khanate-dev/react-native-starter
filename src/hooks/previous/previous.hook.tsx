@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 /** sends back the previous value of the given ref and updates the current value */
 export const usePrevious = <Value extends unknown>(
-	value: Value
+	valueToCheck: Value
 ): Value | undefined => {
 	const ref = useRef<Value>();
 	useEffect(() => {
-		ref.current = value;
+		ref.current = valueToCheck;
 	});
 	return ref.current;
 };
