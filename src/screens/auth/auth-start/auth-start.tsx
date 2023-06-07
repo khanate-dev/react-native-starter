@@ -1,9 +1,9 @@
 import { Text, useStyleSheet } from '@ui-kitten/components';
 import { ImageBackground, View } from 'react-native';
 
-import { ScreenWrapper } from 'components/layout/ScreenWrapper';
-import { FormButton } from 'components/form/FormButton';
-import { AppLogo } from 'components/media/AppLogo';
+import { ScreenWrapper } from 'components/layout/screen-wrapper';
+import { FormButton } from 'components/form/form-button';
+import { AppLogo } from 'components/media/app-logo';
 
 import { authStartStyles } from './auth-start.styles';
 

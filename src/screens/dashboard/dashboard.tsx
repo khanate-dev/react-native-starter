@@ -6,7 +6,7 @@ import { UpdateWeights } from './update-weights';
 import { BookSales } from './book-sales';
 import { ShedModal } from './shed-modal';
 
-import type { SupervisorDashboardPages } from './supervisor-dashboard.types';
+import type { SupervisorDashboardPages } from './dashboard.types';
 
 const dashboardStack = createNativeStackNavigator<SupervisorDashboardPages>();
 

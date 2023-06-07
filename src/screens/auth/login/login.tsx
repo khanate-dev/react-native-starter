@@ -7,10 +7,10 @@ import { getHeadingGradientProps } from 'helpers/color';
 import { loginFields as fields, loginFormSchema } from 'schemas/user';
 import { login } from 'endpoints/user';
 import { setUser } from 'contexts/user';
-import { ScreenWrapper } from 'components/layout/ScreenWrapper';
-import { Form } from 'components/form/Form';
-import { IconButton } from 'components/form/IconButton';
-import { FormButton } from 'components/form/FormButton';
+import { ScreenWrapper } from 'components/layout/screen-wrapper';
+import { Form } from 'components/form/form';
+import { IconButton } from 'components/form/icon-button';
+import { FormButton } from 'components/form/form-button';
 
 import { loginStyles as styles } from './login.styles';
 
