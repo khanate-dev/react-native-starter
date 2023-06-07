@@ -1,10 +1,10 @@
 import { useState, forwardRef } from 'react';
 import { View } from 'react-native';
-import { Icon, Input, useStyleSheet } from '@ui-kitten/components';
-import { IconButton } from 'components/form/icon-button';
+import { Icon, Input, useStyleSheet } from 'react-native-paper';
 
-import { FormButton } from 'components/form/form-button';
-import { FormDatePicker } from 'components/form/form-date-picker';
+import { IconButton } from 'components/controls/icon-button';
+import { FormButton } from 'components/controls/form-button';
+import { FormDatePicker } from 'components/controls/form-date-picker';
 
 import { formInputStyles } from './form-input.styles';
 
@@ -117,7 +117,7 @@ export const FormInput = forwardRef<Input, FormInputProps>(
 							? (props) => (
 									<IconButton
 										{...props}
-										name={isSecret ? 'eye' : 'eye-off'}
+										name={isSecret ? 'hidden' : 'visible'}
 										autoSize
 										onPress={() => setIsSecret((prevIsSecret) => !prevIsSecret)}
 									/>

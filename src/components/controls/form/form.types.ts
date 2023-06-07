@@ -1,4 +1,4 @@
-import type { FormButtonProps } from 'components/form/form-button';
+import type { FormButtonProps } from 'components/controls/form-button';
 import type { FormState, SchemaField, SchemaFields } from 'types/form';
 import type { App } from 'types/app';
 

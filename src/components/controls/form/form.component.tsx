@@ -11,8 +11,8 @@ import { Alert } from 'components/feedback/Alert';
 import { isSmallerScreen } from 'src/config';
 import { humanizeToken } from 'helpers/string';
 import { objectEntries } from 'helpers/object';
-import { FormInput } from 'components/form/form-input';
-import { FormButton } from 'components/form/form-button';
+import { FormInput } from 'components/controls/form-input';
+import { FormButton } from 'components/controls/form-button';
 
 import type { FormErrors, FormState, SchemaFields } from 'types/form';
 import type { AlertStatus } from 'types/general';
