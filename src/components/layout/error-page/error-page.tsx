@@ -1,8 +1,8 @@
 import { Text, useTheme } from 'react-native-paper';
 
-import { FormButton } from 'components/form/FormButton';
+import { FormButton } from 'components/form/form-button';
 import { isSmallerScreen } from 'src/config';
-import { ScreenWrapper } from 'components/layout/ScreenWrapper';
+import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { MaterialIcon } from 'components/media/material-icon';
 
 export type ErrorPageProps = {
