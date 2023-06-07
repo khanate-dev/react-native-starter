@@ -28,6 +28,7 @@
 			"config": ["src/config/"],
 			"errors": ["src/errors/"],
 			"mocks": ["src/mocks/"],
+			"endpoints": ["src/endpoints/"],
 			"components/*": ["src/components/*"],
 			"contexts/*": ["src/contexts/*"],
 			"errors/*": ["src/errors/*"],
@@ -38,8 +39,7 @@
 			"screens/*": ["src/screens/*"],
 			"styles/*": ["src/styles/*"],
 			"types/*": ["src/types/*"],
-			"schemas/*": ["src/schemas/*"],
-			"endpoints/*": ["src/endpoints/*"]
+			"schemas/*": ["src/schemas/*"]
 		},
 
 		// emit
