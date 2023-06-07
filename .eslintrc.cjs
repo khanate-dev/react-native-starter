@@ -61,6 +61,15 @@ const config = {
 						group: ['../*'],
 						message: 'Do not use parent imports',
 					},
+					{
+						group: ['react-native-paper'],
+						importNames: ['IconButton'],
+						message: "Use 'components/forms/icon-button' instead.",
+					},
+					{
+						group: ['@expo/vector-icons/*'],
+						message: "Use 'components/media/material-icon' instead.",
+					},
 				],
 			},
 		],
