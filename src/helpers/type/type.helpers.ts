@@ -1,9 +1,5 @@
 import { getCatchMessage } from 'errors';
-import { createBulkResponseSchema } from 'helpers/schema';
 
-import type { DefaultBulkResponseObj } from 'helpers/schema';
-import type { BulkResponse } from 'helpers/api';
-import type { z } from 'zod';
 import type { Utils } from 'types/utils';
 
 export const readableTypeOf = (value: unknown) => {
@@ -43,29 +39,4 @@ export const assertArray: AssertArray = (value, checker) => {
 	} catch (error) {
 		throw new TypeError(`Invalid array member. ${getCatchMessage(error)}`);
 	}
-};
-
-export const excludeString = <
-	const T extends string | undefined,
-	const U extends string
->(
-	input: T,
-	excludeList: U | Readonly<U[]>
-) => {
-	return (
-		(Array.isArray(excludeList) &&
-			excludeList.includes(input as unknown as U)) ||
-		(excludeList as string) === input
-			? undefined
-			: input
-	) as T extends U ? Exclude<T, U> | undefined : T;
-};
-
-export const isBulkResponse = <
-	Schema extends z.ZodObject<any, any, any, any> = DefaultBulkResponseObj
->(
-	value: any,
-	schema?: Schema
-): value is BulkResponse<z.infer<Schema>> => {
-	return createBulkResponseSchema(schema).safeParse(value).success;
 };

@@ -1,5 +1,7 @@
 /* eslint-disable vitest/no-conditional-in-test */
 /* eslint-disable vitest/no-conditional-tests */
+import { z } from 'zod';
+
 import {
 	assertArray,
 	assertObject,
@@ -34,7 +36,7 @@ test('should test isObject helper', () => {
 	expect(isObject(2)).toBeFalsy();
 	expect(isObject({ fist: 'of fury' })).toBeTruthy();
 	const a: unknown = 2;
-	isObject(a) && assertType<Obj>(a);
+	isObject(a) && z.util.assertIs<Obj>(a);
 });
 
 test('should test isArray helper', () => {
@@ -45,21 +47,21 @@ test('should test isArray helper', () => {
 	expect(isArray({ fist: 'of fury' })).toBeFalsy();
 	expect(isArray([{ fist: 'of fury' }])).toBeTruthy();
 	const a: unknown = 2;
-	isArray(a) && assertType<unknown[]>(a);
-	isArray(a, isNumber) && assertType<number[]>(a);
-	isArray(a, isObject) && assertType<Obj[]>(a);
+	isArray(a) && z.util.assertIs<unknown[]>(a);
+	isArray(a, isNumber) && z.util.assertIs<number[]>(a);
+	isArray(a, isObject) && z.util.assertIs<Obj[]>(a);
 });
 
 test('should test assertObject helper', () => {
 	let a: unknown = 2;
 	expect(() => {
 		assertObject(a);
-		assertType<Obj>(a);
+		z.util.assertIs<Obj>(a);
 	}).toThrow('Expected object, received number');
 	expect(() => {
 		a = { fist: 'of fury' };
 		assertObject(a);
-		assertType<Obj>(a);
+		z.util.assertIs<Obj>(a);
 	}).not.toThrow();
 	expect(() => assertObject({ fist: 'of fury' })).not.toThrow();
 });
@@ -69,31 +71,31 @@ test('should test assertArray helper', () => {
 	expect(() => {
 		a = 2;
 		assertArray(a);
-		assertType<unknown[]>(a);
+		z.util.assertIs<unknown[]>(a);
 	}).toThrow('Expected array, received number');
 	expect(() => {
 		a = [2];
 		assertArray(a);
-		assertType<unknown[]>(a);
+		z.util.assertIs<unknown[]>(a);
 	}).not.toThrow();
 	expect(() => {
 		a = [2, 3];
 		assertArray(a, assertObject);
-		assertType<Obj[]>(a);
+		z.util.assertIs<Obj[]>(a);
 	}).toThrow('Invalid array member. Expected object, received number');
 	expect(() => {
 		a = [2];
 		assertArray(a, assertNumber);
-		assertType<number[]>(a);
+		z.util.assertIs<number[]>(a);
 	}).not.toThrow();
 	expect(() => {
 		a = { fist: 'of fury' };
 		assertArray(a);
-		assertType<unknown[]>(a);
+		z.util.assertIs<unknown[]>(a);
 	}).toThrow('Expected array, received object');
 	expect(() => {
 		a = [[2]];
 		assertArray(a, assertArray);
-		assertType<unknown[][]>(a);
+		z.util.assertIs<unknown[][]>(a);
 	}).not.toThrow();
 });

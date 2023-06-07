@@ -37,6 +37,30 @@ export const gradientSchema = z.tuple([z.string(), z.string()]);
 
 export type Gradient = z.infer<typeof gradientSchema>;
 
+export const _localIdSchema = z
+	.number()
+	.int()
+	.positive()
+	.finite()
+	.brand('_localId');
+
+type _LocalId = z.infer<typeof _localIdSchema>;
+
+/**
+ * creates a `localId` for the next row in a list.
+ * id is found by finding the last id and incrementing it by 1
+ * @param list the existing list of data
+ */
+export const createLocalId = <T extends { _localId: _LocalId }>(
+	list: T[]
+): _LocalId => {
+	const lastId = Math.max(
+		...list.map((row) => row._localId as unknown as number),
+		0
+	);
+	return (lastId + 1) as _LocalId;
+};
+
 type OptionalGroup<T extends Record<string, unknown>> =
 	| T
 	| { [K in keyof T]?: never };

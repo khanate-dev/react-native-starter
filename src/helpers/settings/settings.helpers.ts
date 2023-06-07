@@ -1,38 +1,67 @@
+import * as SecureStore from 'expo-secure-store';
 import { z } from 'zod';
 
-import { loggedInUserZodSchema } from 'schemas/user';
+import { loggedInUserSchema } from 'schemas/user';
+import { addAlert } from 'contexts/alert';
+import { getCatchMessage } from 'errors/errors';
 
-export const schemas = {
-	user: loggedInUserZodSchema,
+const schemas = {
+	user: loggedInUserSchema,
 	isDarkMode: z.boolean(),
+} satisfies Record<string, z.Schema>;
+
+type Schemas = typeof schemas;
+
+type Settings = {
+	[k in keyof Schemas]: z.infer<Schemas[k]>;
 };
 
-type SettingSchemas = typeof schemas;
-
-export type Settings = {
-	[K in keyof SettingSchemas]: z.infer<SettingSchemas[K]>;
-};
-
-export const removeSetting = (key: keyof Settings): void => {
-	localStorage.removeItem(key);
-};
-
-export const getSetting = <Key extends keyof Settings>(
+export const removeSetting = async <Key extends keyof Settings>(
 	key: Key
-): null | Settings[Key] => {
+): Promise<boolean> => {
 	try {
-		const string = localStorage.getItem(key);
-		if (!string) return null;
-		return schemas[key].parse(JSON.parse(string)) as never;
-	} catch {
-		removeSetting(key);
+		await SecureStore.deleteItemAsync(key);
+		return true;
+	} catch (error: any) {
+		addAlert({
+			title: 'Error Removing From SecureStore',
+			text: error.message ?? error,
+		});
+		return false;
+	}
+};
+
+export const getSetting = async <Key extends keyof Settings>(
+	key: Key
+): Promise<null | Settings[Key]> => {
+	try {
+		const result = await SecureStore.getItemAsync(key);
+		if (!result) return null;
+
+		const parsed = schemas[key].parse(JSON.parse(result)) as never;
+		return parsed;
+	} catch (error) {
+		addAlert({
+			title: 'error reading from secure store',
+			text: getCatchMessage(error),
+		});
+		await removeSetting(key);
 		return null;
 	}
 };
 
-export const setSetting = <Key extends keyof Settings>(
+export const setSetting = async <Key extends keyof Settings>(
 	key: Key,
 	value: Settings[Key]
-): void => {
-	localStorage.setItem(key, JSON.stringify(value));
+): Promise<boolean> => {
+	try {
+		await SecureStore.setItemAsync(key, JSON.stringify(value));
+		return true;
+	} catch (error: any) {
+		addAlert({
+			title: 'Error Writing To SecureStore',
+			text: error.message ?? error,
+		});
+		return false;
+	}
 };

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
 	objectEntries,
 	objectKeys,
@@ -14,7 +16,7 @@ describe('testing objectEntries', () => {
 			['first', 1],
 			['second', 2],
 		]);
-		assertType<['first' | 'second', 1 | 2][]>(entries);
+		z.util.assertIs<['first' | 'second', 1 | 2][]>(entries);
 	});
 });
 
@@ -23,7 +25,7 @@ describe('testing objectKeys', () => {
 		const object = { first: 1, second: 2 } as const;
 		const keys = objectKeys(object);
 		expect(keys).toStrictEqual(['first', 'second']);
-		assertType<('first' | 'second')[]>(keys);
+		z.util.assertIs<('first' | 'second')[]>(keys);
 	});
 });
 
@@ -32,7 +34,7 @@ describe('testing objectValues', () => {
 		const object = { first: 1, second: 2 } as const;
 		const values = objectValues(object);
 		expect(values).toStrictEqual([1, 2]);
-		assertType<(1 | 2)[]>(values);
+		z.util.assertIs<(1 | 2)[]>(values);
 	});
 });
 
@@ -42,14 +44,14 @@ describe('testing omitKey', () => {
 		const object = { ...omitted, second: 2 };
 		const result = omit(object, 'second');
 		expect(result).toStrictEqual(omitted);
-		assertType<typeof omitted>(result);
+		z.util.assertIs<typeof omitted>(result);
 	});
 	it('should remove multiple keys from the object', () => {
 		const omitted = { first: 1 };
 		const object = { ...omitted, second: 2, third: 3 };
 		const result = omit(object, ['second', 'third']);
 		expect(result).toStrictEqual(omitted);
-		assertType<typeof omitted>(result);
+		z.util.assertIs<typeof omitted>(result);
 	});
 });
 
@@ -59,13 +61,13 @@ describe('testing pickKey', () => {
 		const object = { ...picked, b: 2 };
 		const result = pick(object, 'a');
 		expect(result).toStrictEqual(picked);
-		assertType<typeof picked>(result);
+		z.util.assertIs<typeof picked>(result);
 	});
 	it('should pick multiple keys from the object', () => {
 		const picked = { a: 1, b: 2 };
 		const object = { ...picked, c: 3 };
 		const result = pick(object, ['a', 'b']);
 		expect(result).toStrictEqual(picked);
-		assertType<typeof picked>(result);
+		z.util.assertIs<typeof picked>(result);
 	});
 });

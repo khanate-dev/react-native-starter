@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import { formatToken } from './format-token.helpers';
 
 describe('test formatString', () => {
@@ -21,22 +23,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 2nd test string', () => {
@@ -60,22 +62,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 3rd test string', () => {
@@ -98,22 +100,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 4th test string', () => {
@@ -136,22 +138,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 5th test string', () => {
@@ -174,22 +176,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 6th test string', () => {
@@ -212,22 +214,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 7th test string', () => {
@@ -250,22 +252,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 8th test string', () => {
@@ -288,22 +290,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 9th test string', () => {
@@ -326,22 +328,22 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 
 	it('should convert the 10th test string', () => {
@@ -364,21 +366,21 @@ describe('test formatString', () => {
 		};
 
 		expect(expected.camel).toStrictEqual(response.camel);
-		assertType<typeof response.camel>(expected.camel);
+		z.util.assertIs<typeof response.camel>(expected.camel);
 
 		expect(expected.pascal).toStrictEqual(response.pascal);
-		assertType<typeof response.pascal>(expected.pascal);
+		z.util.assertIs<typeof response.pascal>(expected.pascal);
 
 		expect(expected.snake).toStrictEqual(response.snake);
-		assertType<typeof response.snake>(expected.snake);
+		z.util.assertIs<typeof response.snake>(expected.snake);
 
 		expect(expected.kebab).toStrictEqual(response.kebab);
-		assertType<typeof response.kebab>(expected.kebab);
+		z.util.assertIs<typeof response.kebab>(expected.kebab);
 
 		expect(expected.constant).toStrictEqual(response.constant);
-		assertType<typeof response.constant>(expected.constant);
+		z.util.assertIs<typeof response.constant>(expected.constant);
 
 		expect(expected.human).toStrictEqual(response.human);
-		assertType<typeof response.human>(expected.human);
+		z.util.assertIs<typeof response.human>(expected.human);
 	});
 });
