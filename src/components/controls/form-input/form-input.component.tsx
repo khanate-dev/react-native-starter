@@ -1,15 +1,33 @@
 import { useState, forwardRef } from 'react';
 import { View } from 'react-native';
-import { Icon, Input, useStyleSheet } from 'react-native-paper';
+import { HelperText, TextInput } from 'react-native-paper';
+import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
 import { IconButton } from 'components/controls/icon-button';
-import { FormButton } from 'components/controls/form-button';
-import { FormDatePicker } from 'components/controls/form-date-picker';
+import { isSmallerScreen } from 'src/config';
+import { AppIcon } from 'components/media/app-icon';
 
-import { formInputStyles } from './form-input.styles';
+import type { TextInputProps } from 'react-native-paper';
+import type { ForwardedRef } from 'react';
+import type {
+	KeyboardTypeOptions,
+	TextInput as NativeTextInput,
+	StyleProp,
+	ViewStyle,
+} from 'react-native';
+import type { App } from 'types/app';
+import type { AppIconName } from 'components/media/app-icon';
 
-import type { FormInputProps } from './form-input.types';
-import type { KeyboardTypeOptions } from 'react-native';
+type FormInputType =
+	| 'string'
+	| 'int'
+	| 'float'
+	| 'email'
+	| 'password'
+	| 'phone'
+	| 'search'
+	| 'date'
+	| 'time';
 
 const keyboardTypes: Record<FormInputProps['type'], KeyboardTypeOptions> = {
 	email: 'email-address',
@@ -20,142 +38,148 @@ const keyboardTypes: Record<FormInputProps['type'], KeyboardTypeOptions> = {
 	string: 'default',
 	search: 'default',
 	date: 'default',
+	time: 'default',
 };
 
-const icons: Record<FormInputProps['type'], string> = {
-	email: 'at-outline',
-	float: 'hash-outline',
-	int: 'hash-outline',
-	phone: 'phone-outline',
-	password: 'keypad-outline',
-	string: 'edit-outline',
-	search: 'search-outline',
-	date: 'calendar-outline',
+const icons: Record<FormInputProps['type'], AppIconName> = {
+	email: 'email-at',
+	float: 'number',
+	int: 'number',
+	phone: 'phone',
+	password: 'password',
+	string: 'text',
+	search: 'search',
+	date: 'date',
+	time: 'time',
 };
 
-export const FormInput = forwardRef<Input, FormInputProps>(
-	(
-		{
-			style,
-			style: controlStyle,
-			type,
-			value,
-			error,
-			onChange,
-			size,
-			status,
-			button,
-			hasIcon,
-			noCaption,
-			noMargin,
-			isLast,
-			disabled,
-			...textInputProps
-		},
-		ref
-	) => {
-		const styles = useStyleSheet(formInputStyles);
-		const [isSecret, setIsSecret] = useState<boolean>(true);
+export type FormInputProps = Omit<
+	TextInputProps,
+	| 'onChangeText'
+	| 'onChange'
+	| 'value'
+	| 'error'
+	| 'left'
+	| 'right'
+	| 'disabled'
+> &
+	App.PropsWithStyle<{
+		/** the styles to apply to the component */
+		containerStyle?: StyleProp<ViewStyle>;
 
-		let input: JSX.Element;
+		/** the type of the input field */
+		type: FormInputType;
 
-		const inputStatus = error ? 'danger' : status;
+		/** the current value of the input field */
+		value: string;
 
-		if (type === 'date') {
-			input = (
-				<FormDatePicker
-					ref={ref}
-					{...(textInputProps as any)}
-					value={value}
-					size={size ?? 'large'}
-					status={inputStatus}
-					hasIcon={hasIcon}
-					noCaption={noCaption}
-					noMargin={noMargin}
-					disabled={false}
-					controlStyle={[styles.input, controlStyle]}
-					style={[
-						!noMargin && !button && styles.bottomMargin,
-						button && styles.inputWithAction,
-						style,
-					]}
-					onChange={onChange}
+		/** the function to call when the input changes */
+		onChange: (value: string) => void;
+
+		/** the error message to show beneath the input */
+		error?: string;
+
+		/** the caption to show beneath the input */
+		caption?: string;
+
+		/** should the input have an icon to the left side */
+		hasIcon?: boolean;
+
+		/** should the input have no vertical margins? */
+		noMargin?: boolean;
+
+		/** is the input the last in the form? */
+		isLast?: boolean;
+
+		/** should the input be disabled? */
+		disabled?: boolean | ((value: string) => boolean);
+	}>;
+
+const FormInputComponent = (
+	{
+		containerStyle,
+		type,
+		value,
+		error,
+		caption,
+		onChange,
+		hasIcon,
+		noMargin,
+		isLast,
+		disabled: disabledProp,
+		...textInputProps
+	}: FormInputProps,
+	ref: ForwardedRef<NativeTextInput>
+) => {
+	const [isSecret, setIsSecret] = useState<boolean>(true);
+	const [showingPicker, setShowingPicker] = useState<boolean>(false);
+
+	const disabled =
+		typeof disabledProp === 'function' ? disabledProp(value) : disabledProp;
+
+	return (
+		<View
+			style={[
+				{ marginBottom: noMargin ? 0 : isSmallerScreen ? 10 : 20 },
+				containerStyle,
+			]}
+		>
+			<TextInput
+				ref={ref}
+				{...textInputProps}
+				value={value}
+				keyboardType={keyboardTypes[type]}
+				returnKeyType={isLast ? 'done' : 'next'}
+				secureTextEntry={type === 'password' && isSecret}
+				error={Boolean(error)}
+				disabled={disabled}
+				editable={type === 'date' || type === 'time'}
+				left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
+				right={
+					type === 'password' ? (
+						<IconButton
+							icon={isSecret ? 'hidden' : 'visible'}
+							onPress={() => setIsSecret((prev) => !prev)}
+						/>
+					) : type === 'date' || type === 'time' ? (
+						<IconButton
+							icon={type}
+							disabled={disabled}
+							onPress={() => setShowingPicker(true)}
+						/>
+					) : undefined
+				}
+				onChangeText={onChange}
+			/>
+			<HelperText
+				type={error ? 'error' : 'info'}
+				visible={Boolean(error || caption)}
+				disabled={disabled}
+			>
+				{error || caption}
+			</HelperText>
+			{type === 'date' && (
+				<DatePickerModal
+					locale='en'
+					mode='single'
+					visible={showingPicker}
+					date={new Date(value)}
+					onDismiss={() => setShowingPicker(false)}
+					onConfirm={(val) => onChange(val.date?.toISOString() ?? '')}
 				/>
-			);
-		} else {
-			input = (
-				<Input
-					ref={ref}
-					{...textInputProps}
-					value={value}
-					caption={!noCaption ? error : undefined}
-					size={size ?? 'large'}
-					keyboardType={keyboardTypes[type]}
-					status={inputStatus}
-					returnKeyType={isLast ? 'done' : 'next'}
-					secureTextEntry={type === 'password' && isSecret}
-					disabled={typeof disabled === 'function' ? disabled(value) : disabled}
-					style={[
-						styles.input,
-						!noMargin && !button && styles.bottomMargin,
-						button && styles.inputWithAction,
-						style,
-						controlStyle,
-					]}
-					accessoryLeft={
-						hasIcon
-							? (props) => (
-									<Icon
-										{...props}
-										name={icons[type]}
-									/>
-							  )
-							: undefined
-					}
-					accessoryRight={
-						type === 'password'
-							? (props) => (
-									<IconButton
-										{...props}
-										name={isSecret ? 'hidden' : 'visible'}
-										autoSize
-										onPress={() => setIsSecret((prevIsSecret) => !prevIsSecret)}
-									/>
-							  )
-							: undefined
-					}
-					onChangeText={onChange}
+			)}
+			{type === 'time' && (
+				<TimePickerModal
+					locale='en'
+					visible={showingPicker}
+					hours={Number(value.split(':')[0] ?? '')}
+					minutes={Number(value.split(':')[1] ?? '')}
+					onDismiss={() => setShowingPicker(false)}
+					onConfirm={(val) => onChange(`${val.hours}:${val.minutes}`)}
 				/>
-			);
-		}
+			)}
+		</View>
+	);
+};
 
-		if (!button) return input;
-
-		return (
-			<View style={[styles.actionAndInput, !noMargin && styles.bottomMargin]}>
-				{input}
-				<FormButton
-					{...button}
-					status={button.status ?? inputStatus}
-					size={button.size ?? size ?? 'small'}
-					borders={button.borders ?? 'curved'}
-					hasBorder={button.hasBorder ?? true}
-					style={[
-						styles.action,
-						button.style,
-						Boolean(textInputProps.label) && styles.actionWithLabel,
-						Boolean(!noCaption && (error || textInputProps.caption)) &&
-							styles.actionWithCaption,
-					]}
-					disabled={
-						(typeof disabled === 'function' ? disabled(value) : disabled) ||
-						(typeof button.disabled === 'function'
-							? button.disabled(value)
-							: button.disabled)
-					}
-					noMargin
-				/>
-			</View>
-		);
-	}
-);
+export const FormInput = forwardRef(FormInputComponent);
