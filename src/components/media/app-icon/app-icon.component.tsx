@@ -1,6 +1,10 @@
 /* eslint-disable no-restricted-imports */
 import Icon from '@expo/vector-icons/MaterialIcons';
 
+import type map from '@expo/vector-icons/build/vendor/react-native-vector-icons/glyphmaps/MaterialIcons.json';
+
+type Map = keyof typeof map;
+
 export const materialIconMap = {
 	'error-triangle': 'report-problem',
 	logout: 'power-settings-new',
@@ -13,7 +17,16 @@ export const materialIconMap = {
 	notifications: 'notifications-active',
 	'error-circle': 'error-outline',
 	'success-circle': 'check-circle-outline',
-} as const;
+	email: 'email',
+	'email-at': 'alternate-email',
+	phone: 'phone',
+	number: 'tag',
+	password: 'vpn-key',
+	text: 'title',
+	search: 'search',
+	date: 'date-range',
+	time: 'schedule',
+} as const satisfies Record<string, Map>;
 
 export type AppIconName = keyof typeof materialIconMap;
 
