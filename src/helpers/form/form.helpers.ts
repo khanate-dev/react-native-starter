@@ -11,6 +11,7 @@ import type {
 	SchemaFields,
 } from 'types/form';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import type { ThemeColor } from 'styles/theme';
 
 export const formTypeDefaults: Record<SchemaField<string>['type'], string> = {
 	string: 'test',
@@ -63,10 +64,9 @@ export const updateForm = <Keys extends PropertyKey>(
 };
 
 export type AlertStatus =
-	| null
 	| string
 	| {
-			type: 'danger' | 'success' | 'info' | 'warning';
+			type: ThemeColor;
 			text: string;
 	  };
 

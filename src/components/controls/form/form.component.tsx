@@ -1,23 +1,73 @@
 import { useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { getDefaultFormState } from 'helpers/defaults';
-import { Alert } from 'components/feedback/Alert';
 
 import {
+	getDefaultFormState,
 	updateForm,
 	handleInputSubmitEditing,
 	trySubmission,
 } from 'helpers/form';
-import { isSmallerScreen } from 'src/config';
 import { humanizeToken } from 'helpers/string';
 import { objectEntries } from 'helpers/object';
 import { FormInput } from 'components/controls/form-input';
 import { FormButton } from 'components/controls/form-button';
+import { Alert } from 'components/feedback/alert';
 
-import type { FormErrors, FormState, SchemaFields } from 'types/form';
-import type { AlertStatus } from 'types/general';
-import type { FormProps } from './form.types';
-import type { Datepicker, Input } from '@ui-kitten/components';
+import type { TextInput } from 'react-native';
+import type {
+	FormErrors,
+	FormState,
+	SchemaFields,
+	SchemaField,
+} from 'types/form';
+import type { AlertStatus } from 'helpers/form';
+import type { FormButtonProps } from 'components/controls/form-button';
+import type { App } from 'types/app';
+import type { AppIconName } from 'components/media/app-icon';
+
+export type FormProps<
+	Keys extends string,
+	Fields extends SchemaFields<Keys>
+> = App.PropsWithStyle<{
+	/** the input fields object to use for the form */
+	fields: Fields;
+
+	/** the default values for form inputs */
+	defaultValues?: null | Partial<FormState<keyof Fields>>;
+
+	/**
+	 * the function to call when the submit button is pressed.
+	 *
+	 * return a string from the promise to show as a success message
+	 */
+	onSubmit: (state: FormState<keyof Fields>) => Promise<void | string>;
+
+	/** the function to call when an input's value changes */
+	onInputChange?: (
+		name: Keys,
+		field: SchemaField<Keys>,
+		newValue: string,
+		state: FormState<keyof Fields>
+	) => void;
+
+	/** the label of the submit button */
+	submitLabel?: string | ((isSubmitting: boolean) => string);
+
+	/** the icon to show on the submit button */
+	submitIcon?: AppIconName;
+
+	/** the props to pass to the submit button */
+	submitProps?: Partial<FormButtonProps>;
+
+	/** should the form fields and submit button show icons? */
+	hasIcons?: boolean;
+
+	/** is the form page busy? */
+	isBusy?: boolean | ((state: FormState<keyof Fields>) => boolean);
+
+	/** should the form submission be disabled? */
+	disabled?: boolean | ((state: FormState<keyof Fields>) => boolean);
+}>;
 
 export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 	style,
@@ -32,7 +82,7 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 	isBusy,
 	disabled,
 }: FormProps<Keys, Fields>) => {
-	const formRefs = useRef<(null | Input | Datepicker)[]>([]);
+	const formRefs = useRef<(null | TextInput)[]>([]);
 
 	const [form, setForm] = useState<FormState<keyof Fields>>(
 		getDefaultFormState(fields, defaultValues)
@@ -43,8 +93,8 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 
 	const entries = objectEntries(fields);
 
-	const handleSubmit = async () =>
-		trySubmission(
+	const handleSubmit = async () => {
+		return trySubmission(
 			fields,
 			setErrors,
 			setStatus,
@@ -52,6 +102,7 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 			form,
 			onSubmit
 		);
+	};
 
 	return (
 		<View style={[{ flexGrow: 1, flexShrink: 0 }, style]}>
@@ -66,7 +117,6 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 						type={field.type}
 						value={form[name]}
 						error={errors[name]}
-						size={isSmallerScreen ? 'medium' : 'large'}
 						hasIcon={hasIcons}
 						button={field.button}
 						blurOnSubmit={index + 1 === entries.length}
@@ -92,18 +142,16 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 				))}
 			</ScrollView>
 
-			{Boolean(status) && (
+			{status !== null && (
 				<Alert
-					state={status}
-					hasIcon
+					text={typeof status === 'string' ? status : status.text}
+					type={typeof status === 'string' ? 'error' : status.type}
+					noIcon={!hasIcons}
 				/>
 			)}
 
 			<FormButton
-				status='secondary'
-				borders='rounded'
-				size={isSmallerScreen ? 'medium' : 'large'}
-				icon={submitIcon ?? hasIcons ? 'flash-outline' : undefined}
+				icon={submitIcon ?? hasIcons ? 'submit' : undefined}
 				label={
 					submitLabel
 						? typeof submitLabel === 'string'
@@ -111,7 +159,7 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 							: submitLabel(isSubmitting)
 						: 'Submit'
 				}
-				isLoading={
+				loading={
 					(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
 					isSubmitting
 				}
@@ -119,7 +167,6 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 					(typeof disabled === 'function' ? disabled(form as any) : disabled) ||
 					(typeof status === 'object' && status?.type === 'success')
 				}
-				elevated
 				onPress={handleSubmit}
 				{...submitProps}
 			/>
