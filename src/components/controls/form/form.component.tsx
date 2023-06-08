@@ -1,17 +1,14 @@
 import { useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { ZodError } from 'zod';
 
-import {
-	getDefaultFormState,
-	updateForm,
-	handleInputSubmitEditing,
-	trySubmission,
-} from 'helpers/form';
 import { humanizeToken } from 'helpers/string';
 import { objectEntries } from 'helpers/object';
 import { FormInput } from 'components/controls/form-input';
 import { FormButton } from 'components/controls/form-button';
 import { Alert } from 'components/feedback/alert';
+import { getCatchMessage } from 'errors/errors';
+import { shouldAutoFill } from 'src/config';
 
 import type { TextInput } from 'react-native';
 import type {
@@ -20,10 +17,26 @@ import type {
 	SchemaFields,
 	SchemaField,
 } from 'types/form';
-import type { AlertStatus } from 'helpers/form';
 import type { FormButtonProps } from 'components/controls/form-button';
 import type { App } from 'types/app';
 import type { AppIconName } from 'components/media/app-icon';
+import type { ThemeColor } from 'styles/theme';
+
+export const formTypeDefaults: Record<SchemaField<string>['type'], string> = {
+	string: 'test',
+	int: '25',
+	float: '25.255',
+	date: '2022-10-20T10:20:00.000Z',
+	time: '10:20',
+	email: 'testing@test.com',
+	password: '12345',
+	phone: '090078601',
+	search: '',
+};
+
+export const formDefaults: Record<string, string> = {
+	Cnic: '12345-1234567-1',
+};
 
 export type FormProps<
 	Keys extends string,
@@ -69,6 +82,8 @@ export type FormProps<
 	disabled?: boolean | ((state: FormState<keyof Fields>) => boolean);
 }>;
 
+export type Status = null | string | { type: ThemeColor; text: string };
+
 export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 	style,
 	fields,
@@ -84,24 +99,66 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 }: FormProps<Keys, Fields>) => {
 	const formRefs = useRef<(null | TextInput)[]>([]);
 
-	const [form, setForm] = useState<FormState<keyof Fields>>(
-		getDefaultFormState(fields, defaultValues)
-	);
-	const [errors, setErrors] = useState<FormErrors<keyof Fields>>({});
-	const [status, setStatus] = useState<null | AlertStatus>(null);
-	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
 	const entries = objectEntries(fields);
 
+	const [form, setForm] = useState(
+		entries.reduce(
+			(object, [key, field]) => ({
+				...object,
+				[key]:
+					defaultValues?.[key] ??
+					(shouldAutoFill
+						? formDefaults[key] ?? formTypeDefaults[field.type]
+						: ''),
+			}),
+			{} as FormState<keyof Fields>
+		)
+	);
+	const [errors, setErrors] = useState<FormErrors<keyof Fields>>({});
+	const [status, setStatus] = useState<Status>(null);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
 	const handleSubmit = async () => {
-		return trySubmission(
-			fields,
-			setErrors,
-			setStatus,
-			setIsSubmitting,
-			form,
-			onSubmit
-		);
+		try {
+			Keyboard.dismiss();
+			setErrors({});
+			setStatus(null);
+
+			setIsSubmitting(true);
+
+			const newStatus = await onSubmit(form);
+			if (!newStatus) return;
+			setStatus({
+				type: 'success',
+				text: newStatus,
+			});
+		} catch (error: any) {
+			if (error instanceof ZodError) {
+				const newErrors = error.issues.reduce(
+					(object, err) => ({
+						...object,
+						[String(err.path[0])]: err.message,
+					}),
+					{}
+				);
+				setErrors(newErrors);
+				const otherIssue = error.issues.find(({ code, path }) => {
+					const name = path[0];
+					return (
+						code === 'custom' ||
+						(typeof name === 'string' && !Object.keys(fields).includes(name))
+					);
+				});
+				const newStatus = otherIssue
+					? `${otherIssue.path.join('.')}: ${otherIssue.message}`
+					: null;
+				setStatus(newStatus ?? null);
+			} else {
+				setStatus(getCatchMessage(error));
+			}
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -131,11 +188,17 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 							(field.dependsOn && !form[field.dependsOn]) ||
 							(typeof status === 'object' && status?.type === 'success')
 						}
-						onSubmitEditing={() =>
-							handleInputSubmitEditing(formRefs, index, handleSubmit)
-						}
+						onSubmitEditing={() => {
+							const nextField = formRefs.current[index + 1];
+							if (!nextField) {
+								handleSubmit();
+								return;
+							}
+							nextField.focus();
+							!nextField.props.editable && Keyboard.dismiss();
+						}}
 						onChange={(value) => {
-							updateForm(setForm, name, value);
+							setForm((prev) => ({ ...prev, [name]: value }));
 							onInputChange?.(name, field, value, form as any);
 						}}
 					/>
