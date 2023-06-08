@@ -70,13 +70,7 @@ export const ErrorPage = ({
 
 			<FormButton
 				label={buttonLabel ?? 'Back'}
-				size='medium'
-				status='danger'
-				appearance='outline'
-				borders='curved'
-				style={{
-					minWidth: 150,
-				}}
+				style={{ minWidth: 150 }}
 				onPress={onBack}
 			/>
 		</ScreenWrapper>
