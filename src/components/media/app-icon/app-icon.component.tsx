@@ -26,6 +26,7 @@ export const materialIconMap = {
 	search: 'search',
 	date: 'date-range',
 	time: 'schedule',
+	close: 'cancel',
 } as const satisfies Record<string, Map>;
 
 export type AppIconName = keyof typeof materialIconMap;
