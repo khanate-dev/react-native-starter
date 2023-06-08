@@ -10,11 +10,16 @@ export type IconButtonProps = Omit<Props, 'icon'> & {
 	icon: AppIconName;
 };
 
-export const IconButton = ({ icon, ...props }: IconButtonProps) => {
+export const IconButton = ({
+	icon,
+	mode = 'contained',
+	...props
+}: IconButtonProps) => {
 	const name = materialIconMap[icon];
 	return (
 		<Component
 			icon={name}
+			mode={mode}
 			{...props}
 		/>
 	);
