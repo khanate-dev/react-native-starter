@@ -118,17 +118,17 @@ export const themeColorIcons: Record<ThemeColor, AppIconName> = {
 export const getThemeColor = (
 	theme: MD3Theme,
 	color: ThemeColor,
-	variant: 'normal' | 'hover' | 'container' | 'container-hover' = 'normal'
+	variant: 'normal' | 'contrast' | 'container' | 'container-contrast' = 'normal'
 ): string => {
 	const name = themeColorMap[color];
 	switch (variant) {
 		case 'normal':
 			return theme.colors[name];
-		case 'hover':
+		case 'contrast':
 			return theme.colors[`on${formatToken(name, 'pascal')}`];
 		case 'container':
 			return theme.colors[`${name}Container`];
-		case 'container-hover':
+		case 'container-contrast':
 			return theme.colors[`on${formatToken(name, 'pascal')}Container`];
 	}
 };
