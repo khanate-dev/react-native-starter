@@ -5,7 +5,7 @@ import { humanizeToken } from 'helpers/string';
 import type { ZodDate, ZodEmail, ZodPhone, ZodTime } from 'helpers/schema';
 import type { Utils } from 'types/utils';
 
-type SchemaMap = {
+type schemaMap = {
 	string: z.ZodString | z.ZodNullable<z.ZodString>;
 	password: z.ZodString | z.ZodNullable<z.ZodString>;
 	search: z.ZodString | z.ZodNullable<z.ZodString>;
@@ -18,15 +18,30 @@ type SchemaMap = {
 	time: ZodTime | z.ZodNullable<ZodTime>;
 };
 
-type SchemaFieldType = keyof SchemaMap;
+export type SchemaFieldType = keyof schemaMap;
 
-type SchemaField<Zod extends SchemaMap[keyof SchemaMap]> = {
+type equal<T, U> = (<G>(x: G) => G extends T ? 1 : 2) extends <G>(
+	x: G
+) => G extends U ? 1 : 2
+	? true
+	: false;
+
+type matchInUnion<
+	T extends z.ZodSchema,
+	Union
+> = Union extends infer U extends z.ZodSchema
+	? equal<z.infer<T>, z.infer<U>>
+	: never;
+
+export type FormSchemaField<Zod extends schemaMap[keyof schemaMap]> = {
 	/** the zod schema for the field */
 	zod: Zod;
 
 	/** the type of the schema field */
 	type: keyof {
-		[k in keyof SchemaMap as Zod extends SchemaMap[k] ? k : never]: true;
+		[k in keyof schemaMap as matchInUnion<Zod, schemaMap[k]> extends false
+			? never
+			: k]: true;
 	};
 
 	/** label of the field */
@@ -41,16 +56,17 @@ type SchemaField<Zod extends SchemaMap[keyof SchemaMap]> = {
 	? { notRequired: true }
 	: { notRequired?: false });
 
-type FormWorkingObj<T extends Record<string, SchemaMap[SchemaFieldType]>> =
-	Utils.prettify<{
-		[k in keyof T]: T[k] extends SchemaMap['int'] | SchemaMap['float']
-			? string
-			: T[k] extends SchemaMap['boolean']
-			? boolean
-			: T[k] extends SchemaMap['date'] | SchemaMap['time']
-			? z.infer<T[k]> | null
-			: string;
-	}>;
+export type FormSchemaWorkingObj<
+	T extends Record<string, schemaMap[SchemaFieldType]>
+> = Utils.prettify<{
+	[k in keyof T]: T[k] extends schemaMap['int'] | schemaMap['float']
+		? string
+		: T[k] extends schemaMap['boolean']
+		? boolean
+		: T[k] extends schemaMap['date'] | schemaMap['time']
+		? z.infer<T[k]> | null
+		: string;
+}>;
 
 const transformSchema = <T extends z.ZodSchema, D extends boolean>(
 	input: T,
@@ -92,7 +108,7 @@ const transformSchema = <T extends z.ZodSchema, D extends boolean>(
 	return (zod as z.ZodSchema).catch(def) as never;
 };
 
-export class FormSchema<T extends Record<string, SchemaMap[SchemaFieldType]>> {
+export class FormSchema<T extends Record<string, schemaMap[SchemaFieldType]>> {
 	/** the zod schema for the form */
 	zod: z.ZodObject<{ [k in keyof T]: T[k] }, 'strict', z.ZodUndefined>;
 
@@ -116,15 +132,15 @@ export class FormSchema<T extends Record<string, SchemaMap[SchemaFieldType]>> {
 	fieldsArray: (typeof this.fields)[keyof typeof this.fields][];
 
 	/** the default object for the schema */
-	defaultValues: FormWorkingObj<T>;
+	defaultValues: FormSchemaWorkingObj<T>;
 
-	constructor(fields: { [k in keyof T]: SchemaField<T[k]> }) {
+	constructor(fields: { [k in keyof T]: FormSchemaField<T[k]> }) {
 		const zodObject = {} as { [k in keyof T]: T[k] };
 		const defaultZodObject = {} as {
 			[k in keyof T]: z.ZodCatch<T[k]>;
 		};
 		this.fields = (
-			Object.entries(fields) as [keyof T, SchemaField<T[keyof T]>][]
+			Object.entries(fields) as [keyof T, FormSchemaField<T[keyof T]>][]
 		).reduce<typeof this.fields>((obj, [key, field]) => {
 			const zod = transformSchema(field.zod);
 			zodObject[key] = zod as never;
@@ -144,14 +160,3 @@ export class FormSchema<T extends Record<string, SchemaMap[SchemaFieldType]>> {
 		this.defaultValues = this.defaultZod.parse({}) as never;
 	}
 }
-
-const user = new FormSchema({
-	email: {
-		zod: z.string().email().brand('phone'),
-		type: 'email',
-		label: 'Email',
-	},
-} as const);
-
-const _ = user.fields;
-//    ^?
