@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { getDefaultFormState } from 'helpers/defaults';
+import { Alert } from 'components/feedback/Alert';
+
 import {
 	updateForm,
 	handleInputSubmitEditing,
 	trySubmission,
 } from 'helpers/form';
-import { getDefaultFormState } from 'helpers/defaults';
-import { Alert } from 'components/feedback/Alert';
-
 import { isSmallerScreen } from 'src/config';
 import { humanizeToken } from 'helpers/string';
 import { objectEntries } from 'helpers/object';
@@ -43,7 +43,7 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 
 	const entries = objectEntries(fields);
 
-	const handleSubmit = () =>
+	const handleSubmit = async () =>
 		trySubmission(
 			fields,
 			setErrors,
@@ -103,7 +103,7 @@ export const Form = <Keys extends string, Fields extends SchemaFields<Keys>>({
 				status='secondary'
 				borders='rounded'
 				size={isSmallerScreen ? 'medium' : 'large'}
-				iconLeft={submitIcon ?? hasIcons ? 'flash-outline' : undefined}
+				icon={submitIcon ?? hasIcons ? 'flash-outline' : undefined}
 				label={
 					submitLabel
 						? typeof submitLabel === 'string'

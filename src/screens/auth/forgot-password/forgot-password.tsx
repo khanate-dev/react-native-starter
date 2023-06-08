@@ -36,7 +36,7 @@ export const ForgotPassword = ({
 			codeStatus === 'sending'
 				? 'Sending...'
 				: `${codeStatus ? 'Re-' : ''}Send Code`,
-		iconLeft: !codeStatus
+		icon: !codeStatus
 			? 'email-outline'
 			: codeStatus === 'sendingFailed'
 			? 'close-circle-outline'
@@ -70,7 +70,7 @@ export const ForgotPassword = ({
 				: codeStatus === 'rejected'
 				? 'Retry'
 				: 'Verify Code',
-		iconLeft:
+		icon:
 			codeStatus === 'rejected'
 				? 'close-circle-outline'
 				: codeStatus === 'confirmed'

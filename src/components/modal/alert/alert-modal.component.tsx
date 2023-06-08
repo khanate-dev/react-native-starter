@@ -24,7 +24,7 @@ export type AlertModalProps = {
 	/** the label for the close button. @default `Close` */
 	closeLabel?: string;
 
-	/** the actions for the alert. @default `[{ label: 'Close' }]` */
+	/** the actions for the alert */
 	actions?: FormButtonProps[];
 
 	/** the callback for when the alert is closed */
@@ -47,14 +47,13 @@ export const AlertModal = ({
 	noIcon,
 }: AlertModalProps) => {
 	const theme = useTheme();
-	const styles = getStyles(theme, type, noIcon);
 
 	const actions: AlertModalProps['actions'] = [
 		...(passedActions ?? []),
 		{
 			label: closeLabel ?? 'Close',
+			mode: 'outlined',
 			onPress: onClose,
-			status: 'control',
 		},
 	];
 
@@ -162,10 +161,7 @@ export const AlertModal = ({
 						<FormButton
 							key={index}
 							{...action}
-							borders={action.borders ?? 'curved'}
-							status={action.status ?? type}
-							appearance={action.appearance ?? 'filled'}
-							size={action.size ?? 'medium'}
+							mode={action.mode ?? 'contained'}
 							style={[
 								{ flex: 1, maxWidth: 200 },
 								action.style,

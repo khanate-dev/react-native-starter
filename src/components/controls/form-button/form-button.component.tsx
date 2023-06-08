@@ -1,100 +1,50 @@
 import { forwardRef } from 'react';
-import { View } from 'react-native';
-import { Button, Icon, Spinner, useTheme } from '@ui-kitten/components';
+import { Button } from 'react-native-paper';
 
 import { isSmallerScreen } from 'src/config';
 
-import { getFormButtonStyles as getStyles } from './form-button.styles';
+import type { AppIconName } from 'components/media/app-icon';
+import type { ButtonProps } from 'react-native-paper';
+import type { ReactNode, ForwardedRef } from 'react';
+import type { View } from 'react-native';
 
-import type {
-	FormButtonAccessoryLeftProps,
-	FormButtonProps,
-} from './form-button.types';
-import type { ImageStyle } from 'react-native';
+export type FormButtonProps = Omit<ButtonProps, 'icon' | 'color' | 'children'> & {
+	/** the label to show on the button */
+	label: ReactNode;
 
-const FormButtonAccessoryLeft = ({
-	iconLeft,
-	isLoading,
-	props,
-}: FormButtonAccessoryLeftProps) => {
-	if (isLoading) {
-		return (
-			<View style={props?.style}>
-				<Spinner
-					status='control'
-					size='small'
-				/>
-			</View>
-		);
-	}
+	/** the icon to show to the left of the button label */
+	icon?: AppIconName;
 
+	/** should the button have no vertical margins? */
+	noMargin?: boolean;
+};
+
+const FormButtonComponent = (
+	props: FormButtonProps,
+	ref: ForwardedRef<View>
+) => {
+	const {
+		style,
+		label,
+		mode = 'contained',
+		noMargin,
+		disabled,
+		...restProps
+	} = props;
 	return (
-		<Icon
-			{...props}
-			name={iconLeft ?? 'radio-button-off-outline'}
-		/>
+		<Button
+			{...restProps}
+			ref={ref}
+			mode={mode}
+			disabled={disabled || restProps.loading}
+			style={[
+				{ marginTop: !noMargin ? (isSmallerScreen ? 10 : 20) : undefined },
+				style,
+			]}
+		>
+			{label}
+		</Button>
 	);
 };
 
-export const FormButton = forwardRef<Button, FormButtonProps>(
-	(
-		{
-			label,
-			iconLeft,
-			status = 'primary',
-			appearance = 'filled',
-			size = isSmallerScreen ? 'medium' : 'large',
-			noMargin,
-			hasBorder,
-			borders,
-			isLoading,
-			disabled,
-			elevated,
-			...parentProps
-		},
-		ref
-	) => {
-		const theme = useTheme();
-		const styles = getStyles(
-			theme,
-			borders,
-			hasBorder || appearance === 'outline',
-			noMargin,
-			elevated
-		);
-
-		return (
-			<Button
-				{...parentProps}
-				ref={ref}
-				appearance={appearance}
-				size={size}
-				status={status}
-				disabled={disabled || isLoading}
-				style={[
-					styles.button,
-					(disabled || isLoading) && styles.disabled,
-					parentProps.style,
-				]}
-				accessoryLeft={
-					iconLeft || isLoading
-						? (props) => (
-								<FormButtonAccessoryLeft
-									{...{
-										iconLeft,
-										isLoading,
-										props: {
-											...props,
-											style: [props?.style, styles.icon as ImageStyle],
-										},
-									}}
-								/>
-						  )
-						: undefined
-				}
-			>
-				{label}
-			</Button>
-		);
-	}
-);
+export const FormButton = forwardRef(FormButtonComponent);
