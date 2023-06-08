@@ -13,11 +13,29 @@ export type ZodDbId = typeof dbIdSchema;
 
 export type DbId = z.infer<ZodDbId>;
 
-export const jwtSchema = z.string().regex(JWT_REGEX);
+export const jwtSchema = z.string().regex(JWT_REGEX).brand('jwt');
 
-export const phoneSchema = z.string().regex(PHONE_REGEX);
+export type ZodJwt = typeof jwtSchema;
 
-export const cnicSchema = z.string().regex(CNIC_REGEX);
+export type Jwt = z.infer<typeof jwtSchema>;
+
+export const cnicSchema = z.string().regex(CNIC_REGEX).brand('cnic');
+
+export type ZodCnic = typeof cnicSchema;
+
+export type Cnic = z.infer<typeof cnicSchema>;
+
+export const emailSchema = z.string().email().brand('email');
+
+export type ZodEmail = typeof emailSchema;
+
+export type Email = z.infer<typeof emailSchema>;
+
+export const phoneSchema = z.string().regex(PHONE_REGEX).brand('phone');
+
+export type ZodPhone = typeof phoneSchema;
+
+export type Phone = z.infer<typeof phoneSchema>;
 
 export const dayjsSchema = z.instanceof(
 	dayjsUtc as unknown as typeof dayjsUtc.Dayjs
@@ -25,13 +43,31 @@ export const dayjsSchema = z.instanceof(
 
 export type ZodDayjs = typeof dayjsSchema;
 
-export const datetimeSchema = z.preprocess((value) => {
+export const dateSchema = z.preprocess((value) => {
 	if (isDayjs(value)) return value;
 	const parsed = dayjsUtc.utc(value as never);
 	return parsed.isValid() ? parsed : null;
 }, dayjsSchema);
 
-export type ZodDatetime = typeof datetimeSchema;
+export type ZodDate = typeof dateSchema;
+
+export const timeSchema = z.preprocess(
+	(value) => {
+		const parsed = isDayjs(value)
+			? value
+			: dayjsUtc.utc(value as never, 'HH:mm');
+		if (!parsed.isValid()) return null;
+		return { hour: parsed.hour(), minute: parsed.minute() };
+	},
+	z.object({
+		hour: z.number().min(0).max(23),
+		minute: z.number().min(0).max(59),
+	})
+);
+
+export type ZodTime = typeof timeSchema;
+
+export type Time = z.infer<ZodTime>;
 
 export const gradientSchema = z.tuple([z.string(), z.string()]);
 
@@ -85,8 +121,8 @@ export const createGroupedOptionalSchema = <
 
 export const dbMetaSchema = z.strictObject({
 	id: dbIdSchema,
-	created_at: datetimeSchema,
-	updated_at: datetimeSchema,
+	created_at: dateSchema,
+	updated_at: dateSchema,
 });
 
 export type DbMeta = z.infer<typeof dbMetaSchema>;
