@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 import { humanizeToken } from 'helpers/string';
+import { dayjsUtc } from 'helpers/date';
+import { shouldAutoFill } from 'src/config';
 
 import type { ZodDate, ZodEmail, ZodPhone, ZodTime } from 'helpers/schema';
 import type { Utils } from 'types/utils';
@@ -115,6 +117,21 @@ const transformSchema = <T extends z.ZodSchema, D extends boolean>(
 	return (zod as z.ZodSchema).catch(def) as never;
 };
 
+export const formTypeDefaults: {
+	[k in keyof FormSchemaMap]: FormSchemaWorkingType<FormSchemaMap[k]>;
+} = {
+	string: 'test',
+	int: '25',
+	float: '25.255',
+	date: dayjsUtc.utc('2022-10-20T10:20:00.000Z'),
+	time: { hour: 10, minute: 20 },
+	email: 'testing@test.com',
+	password: '12345',
+	phone: '090078601',
+	search: '',
+	boolean: false,
+};
+
 export class FormSchema<
 	T extends Record<string, FormSchemaMap[SchemaFieldType]>
 > {
@@ -129,13 +146,13 @@ export class FormSchema<
 	>;
 
 	/** list of schema fields */
-	fields: {
-		[k in keyof T]: T[k] & {
+	fields: Utils.prettify<{
+		[k in keyof T]: FormSchemaField<T[k]> & {
 			/** the name of the field */
 			name: k;
 			label: string;
 		};
-	};
+	}>;
 
 	/** the schema's fields in an array */
 	fieldsArray: (typeof this.fields)[keyof typeof this.fields][];
@@ -171,7 +188,11 @@ export class FormSchema<
 		>((obj, [key, value]) => {
 			return {
 				...obj,
-				[key]: typeof value === 'number' ? value.toString() : value,
+				[key]: shouldAutoFill
+					? formTypeDefaults[fields[key]?.type as never]
+					: typeof value === 'number'
+					? value.toString()
+					: value,
 			};
 		}, {} as typeof this.defaultValues);
 	}
