@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 
-import { AlertModal } from 'components/modal/alert';
+import { AlertModal } from 'components/feedback/alert-modal';
 
 import type { Dispatch, SetStateAction, PropsWithChildren } from 'react';
-import type { AlertModalProps } from 'components/modal/alert';
+import type { AlertModalProps } from 'components/feedback/alert-modal';
 
 const AlertContext = createContext<
 	Dispatch<SetStateAction<null | AlertModalProps>>

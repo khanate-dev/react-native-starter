@@ -3,13 +3,13 @@ import { ZodError } from 'zod';
 
 import { shouldAutoFill } from 'config';
 
+import type { TextInput } from 'react-native';
 import type {
 	FormErrors,
 	SchemaField,
 	FormState,
 	SchemaFields,
 } from 'types/form';
-import type { Datepicker, Input } from 'react-native-paper';
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 export const formTypeDefaults: Record<SchemaField<string>['type'], string> = {
@@ -17,6 +17,7 @@ export const formTypeDefaults: Record<SchemaField<string>['type'], string> = {
 	int: '25',
 	float: '25.255',
 	date: '2022-10-20T10:20:00.000Z',
+	time: '10:20',
 	email: 'testing@test.com',
 	password: '12345',
 	phone: '090078601',
@@ -124,16 +125,13 @@ export const trySubmission = async <
 	}
 };
 
-const isDatepicker = (ref: Input | Datepicker): ref is Datepicker =>
-	Boolean((ref as Datepicker).hide);
-
 export const handleInputSubmitEditing = (
-	formRefs: MutableRefObject<(null | Input | Datepicker)[]>,
+	formRefs: MutableRefObject<(null | TextInput)[]>,
 	index: number,
 	submit: () => void
 ) => {
 	const nextField = formRefs.current[index + 1];
 	if (!nextField) return submit();
 	nextField.focus();
-	isDatepicker(nextField) && Keyboard.dismiss();
+	!nextField.props.editable && Keyboard.dismiss();
 };

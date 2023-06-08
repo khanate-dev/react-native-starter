@@ -116,7 +116,7 @@ export const AlertModal = ({
 						style={{
 							textAlign: 'center',
 							marginLeft: !noIcon ? 15 : undefined,
-							color: getThemeColor(theme, type),
+							color: getThemeColor(theme, type, 'container-contrast'),
 						}}
 					>
 						{title}
@@ -139,7 +139,7 @@ export const AlertModal = ({
 						style={{
 							textAlign: 'center',
 							fontWeight: 'normal',
-							color: getThemeColor(theme, type, 'hover'),
+							color: getThemeColor(theme, type, 'container-contrast'),
 							lineHeight: 25,
 						}}
 					>

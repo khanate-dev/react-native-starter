@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { DeviceEventEmitter } from 'react-native';
 
-import { LoadingModal } from 'components/modal/loading';
+import { LoadingModal } from 'components/feedback/loading-modal';
 
 import type { SetStateAction, PropsWithChildren } from 'react';
 
