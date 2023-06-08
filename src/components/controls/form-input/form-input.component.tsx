@@ -6,7 +6,9 @@ import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { IconButton } from 'components/controls/icon-button';
 import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
+import { FormButton } from 'components/controls/form-button';
 
+import type { FormButtonProps } from 'components/controls/form-button';
 import type { TextInputProps } from 'react-native-paper';
 import type { ForwardedRef } from 'react';
 import type {
@@ -82,6 +84,9 @@ export type FormInputProps = Omit<
 		/** the caption to show beneath the input */
 		caption?: string;
 
+		/** the button to show on the right side of the input */
+		button?: Pick<FormButtonProps, 'label' | 'onPress' | 'icon'>;
+
 		/** should the input have an icon to the left side */
 		hasIcon?: boolean;
 
@@ -100,9 +105,10 @@ const FormInputComponent = (
 		containerStyle,
 		type,
 		value,
+		onChange,
 		error,
 		caption,
-		onChange,
+		button,
 		hasIcon,
 		noMargin,
 		isLast,
@@ -117,6 +123,36 @@ const FormInputComponent = (
 	const disabled =
 		typeof disabledProp === 'function' ? disabledProp(value) : disabledProp;
 
+	const inputJsx = (
+		<TextInput
+			ref={ref}
+			{...textInputProps}
+			value={value}
+			keyboardType={keyboardTypes[type]}
+			returnKeyType={isLast ? 'done' : 'next'}
+			secureTextEntry={type === 'password' && isSecret}
+			error={Boolean(error)}
+			disabled={disabled}
+			editable={type === 'date' || type === 'time'}
+			left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
+			right={
+				type === 'password' ? (
+					<IconButton
+						icon={isSecret ? 'hidden' : 'visible'}
+						onPress={() => setIsSecret((prev) => !prev)}
+					/>
+				) : type === 'date' || type === 'time' ? (
+					<IconButton
+						icon={type}
+						disabled={disabled}
+						onPress={() => setShowingPicker(true)}
+					/>
+				) : undefined
+			}
+			onChangeText={onChange}
+		/>
+	);
+
 	return (
 		<View
 			style={[
@@ -124,33 +160,26 @@ const FormInputComponent = (
 				containerStyle,
 			]}
 		>
-			<TextInput
-				ref={ref}
-				{...textInputProps}
-				value={value}
-				keyboardType={keyboardTypes[type]}
-				returnKeyType={isLast ? 'done' : 'next'}
-				secureTextEntry={type === 'password' && isSecret}
-				error={Boolean(error)}
-				disabled={disabled}
-				editable={type === 'date' || type === 'time'}
-				left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
-				right={
-					type === 'password' ? (
-						<IconButton
-							icon={isSecret ? 'hidden' : 'visible'}
-							onPress={() => setIsSecret((prev) => !prev)}
-						/>
-					) : type === 'date' || type === 'time' ? (
-						<IconButton
-							icon={type}
-							disabled={disabled}
-							onPress={() => setShowingPicker(true)}
-						/>
-					) : undefined
-				}
-				onChangeText={onChange}
-			/>
+			{button ? (
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flexWrap: 'nowrap',
+						alignContent: 'center',
+						gap: isSmallerScreen ? 5 : 10,
+					}}
+				>
+					{inputJsx}
+					<FormButton
+						style={{ flex: 0 }}
+						{...button}
+					/>
+				</View>
+			) : (
+				inputJsx
+			)}
+
 			<HelperText
 				type={error ? 'error' : 'info'}
 				visible={Boolean(error || caption)}
@@ -158,6 +187,7 @@ const FormInputComponent = (
 			>
 				{error || caption}
 			</HelperText>
+
 			{type === 'date' && (
 				<DatePickerModal
 					locale='en'
@@ -168,6 +198,7 @@ const FormInputComponent = (
 					onConfirm={(val) => onChange(val.date?.toISOString() ?? '')}
 				/>
 			)}
+
 			{type === 'time' && (
 				<TimePickerModal
 					locale='en'

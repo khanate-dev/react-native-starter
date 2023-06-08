@@ -8,7 +8,10 @@ import type { ButtonProps } from 'react-native-paper';
 import type { ReactNode, ForwardedRef } from 'react';
 import type { View } from 'react-native';
 
-export type FormButtonProps = Omit<ButtonProps, 'icon' | 'color' | 'children'> & {
+export type FormButtonProps = Omit<
+	ButtonProps,
+	'icon' | 'color' | 'children'
+> & {
 	/** the label to show on the button */
 	label: ReactNode;
 
