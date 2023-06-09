@@ -1,62 +1,70 @@
-import { Text, useStyleSheet } from '@ui-kitten/components';
-import { ImageBackground, View } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
+import { View } from 'react-native';
 
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { Button } from 'components/controls/button';
 import { AppLogo } from 'components/media/app-logo';
 
-import { authStartStyles } from './auth-start.styles';
-
 import type { AuthPageProps } from '../auth.types';
-import type { ImageStyle } from 'react-native';
 
 export const AuthStart = ({ navigation }: AuthPageProps<'auth-start'>) => {
-	const styles = useStyleSheet(authStartStyles);
+	const theme = useTheme();
 
 	return (
 		<ScreenWrapper>
-			<ImageBackground
-				style={styles.container}
-				imageStyle={styles.background as ImageStyle}
-				source={require('media/images/auth-background.png')}
-				resizeMode='cover'
-			>
-				<View style={styles.content}>
-					<View style={styles.logo}>
-						<AppLogo size={70} />
-					</View>
-
-					<Text
-						style={styles.title}
-						category='h1'
-						status='primary'
-					>
-						Welcome to {'\n'}Compass Poultry
-					</Text>
-
-					<View style={styles.buttons}>
-						<Button
-							style={styles.registerButton}
-							label='Register'
-							appearance='outline'
-							status='control'
-							size='giant'
-							borders='rounded'
-							onPress={() => navigation.navigate('register')}
-						/>
-
-						<Button
-							style={styles.loginButton}
-							appearance='ghost'
-							label='Login'
-							status='primary'
-							size='giant'
-							borders='rounded'
-							onPress={() => navigation.navigate('login')}
-						/>
-					</View>
+			<View style={{ flex: 1, padding: 40 }}>
+				<View
+					style={{
+						borderWidth: 2,
+						borderColor: 'color-primary-500',
+						padding: 10,
+						width: 80,
+						height: 80,
+						aspectRatio: 1,
+						borderRadius: 10,
+						overflow: 'hidden',
+						backgroundColor: 'color-basic-100',
+						shadowRadius: 6.27,
+						shadowOffset: { width: 0, height: 5 },
+						shadowOpacity: 0.34,
+						elevation: 10,
+						marginBottom: 20,
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<AppLogo size={70} />
 				</View>
-			</ImageBackground>
+
+				<Text
+					variant='titleLarge'
+					style={{
+						color: theme.colors.primary,
+						fontWeight: 'normal',
+						textShadowRadius: 10,
+						textShadowOffset: {
+							width: 1,
+							height: 3,
+						},
+						marginBottom: 'auto',
+					}}
+				>
+					Welcome to {'\n'}Compass Poultry
+				</Text>
+
+				<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+					<Button
+						label='Register'
+						style={{ marginBottom: 20 }}
+						onPress={() => navigation.navigate('register')}
+					/>
+
+					<Button
+						label='Login'
+						onPress={() => navigation.navigate('login')}
+					/>
+				</View>
+			</View>
 		</ScreenWrapper>
 	);
 };
