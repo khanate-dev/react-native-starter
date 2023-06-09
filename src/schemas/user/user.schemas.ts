@@ -38,33 +38,3 @@ export const loginFormSchema = new FormSchema({
 		type: 'password',
 	},
 });
-
-const forgotPasswordSchema = userSchema
-	.pick({ email: true, password: true })
-	.extend({
-		code: z.number().int().min(0).max(999999),
-		confirmPassword: userSchema.shape.password,
-	});
-
-export type ForgotPassword = z.infer<typeof forgotPasswordSchema>;
-
-export const forgotPasswordFormSchema = new FormSchema({
-	email: {
-		zod: forgotPasswordSchema.shape.email,
-		type: 'email',
-	},
-	code: {
-		zod: forgotPasswordSchema.shape.code,
-		type: 'int',
-		label: 'Reset Code',
-	},
-	password: {
-		zod: forgotPasswordSchema.shape.password,
-		type: 'password',
-	},
-	confirmPassword: {
-		zod: forgotPasswordSchema.shape.confirmPassword,
-		type: 'password',
-		label: 'Confirm Password',
-	},
-});

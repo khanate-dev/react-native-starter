@@ -1,24 +1,54 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { Icon, Text, useStyleSheet, useTheme } from '@ui-kitten/components';
-import { wait } from 'helpers/time';
+import { Text, useTheme } from 'react-native-paper';
+import { z } from 'zod';
 
-import { forgotPasswordFields as fields } from 'schemas/user';
+import { wait } from 'helpers/async';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { Form } from 'components/controls/form';
-
-import { forgotPasswordStyles } from './forgot-password.styles';
+import { userSchema } from 'schemas/user';
+import { FormSchema } from 'schemas/form-schema.class';
+import { isSmallerScreen } from 'src/config';
+import { AppIcon } from 'components/media/app-icon';
 
 import type { AuthPageProps } from '../auth.types';
-import type { ResetCodeStatus } from './forgot-password.types';
+
+export type ResetCodeStatus =
+	| 'idle'
+	| 'sending'
+	| 'sent'
+	| 'sendingFailed'
+	| 'verifying'
+	| 'confirmed'
+	| 'rejected';
+
+export const schema = new FormSchema({
+	email: {
+		zod: userSchema.shape.email,
+		type: 'email',
+	},
+	code: {
+		zod: z.number().int().min(0).max(999999),
+		type: 'int',
+		label: 'Reset Code',
+	},
+	password: {
+		zod: userSchema.shape.password,
+		type: 'password',
+	},
+	confirmPassword: {
+		zod: userSchema.shape.password,
+		type: 'password',
+		label: 'Confirm Password',
+	},
+});
 
 export const ForgotPassword = ({
 	navigation,
 }: AuthPageProps<'forgot-password'>) => {
 	const theme = useTheme();
-	const styles = useStyleSheet(forgotPasswordStyles);
 
-	const [codeStatus, setCodeStatus] = useState<ResetCodeStatus>(null);
+	const [codeStatus, setCodeStatus] = useState<ResetCodeStatus>('idle');
 	const [isResetting, setIsResetting] = useState<boolean>(false);
 
 	fields.email.inputProps = {
@@ -31,7 +61,7 @@ export const ForgotPassword = ({
 		disabled: codeStatus === 'sending',
 	};
 	fields.email.button = {
-		style: styles.inputAction,
+		style: { width: isSmallerScreen ? 125 : 175 },
 		label:
 			codeStatus === 'sending'
 				? 'Sending...'
@@ -98,19 +128,35 @@ export const ForgotPassword = ({
 			title='Reset Password'
 			onBack={() => navigation.goBack()}
 		>
-			<View style={styles.header}>
-				<Icon
-					style={styles.headerIcon}
-					name='loader-outline'
-					fill={theme['color-primary-100']}
+			<View
+				style={{
+					backgroundColor: theme.colors.primary,
+					flexDirection: 'row',
+					padding: isSmallerScreen ? 20 : 40,
+				}}
+			>
+				<AppIcon
+					name='restore'
+					color={theme.colors.onPrimary}
+					style={{
+						width: isSmallerScreen ? 50 : 75,
+						height: isSmallerScreen ? 50 : 75,
+						marginRight: isSmallerScreen ? 10 : 20,
+					}}
 				/>
 
 				<View>
-					<Text style={[styles.headerText, styles.heading]}>
+					<Text
+						style={{ color: theme.colors.onPrimary }}
+						variant='titleLarge'
+					>
 						Reset Password
 					</Text>
 
-					<Text style={[styles.headerText, styles.subtitle]}>
+					<Text
+						style={{ color: theme.colors.onPrimary }}
+						variant='titleSmall'
+					>
 						{codeStatus === 'sent'
 							? 'A Reset Code Has Been Sent To Your Email'
 							: 'Enter The Email To Get The Reset Code'}
@@ -119,10 +165,12 @@ export const ForgotPassword = ({
 			</View>
 
 			<Form
-				style={styles.form}
-				fields={fields}
+				schema={schema}
 				isBusy={isResetting}
 				submitLabel={isResetting ? 'Resetting...' : 'Reset Password'}
+				styles={{
+					container: { padding: isSmallerScreen ? 15 : 30 },
+				}}
 				disabled={(state) =>
 					!state.password ||
 					state.password !== state.confirmPassword ||
@@ -132,18 +180,18 @@ export const ForgotPassword = ({
 				onSubmit={async (_body) => {
 					setIsResetting(true);
 					await wait(1500).finally(() => setIsResetting(false));
-					setCodeStatus(null);
+					setCodeStatus('idle');
 					setTimeout(() => {
 						navigation.goBack();
 					}, 500);
 					return 'Password Reset Successful!';
 				}}
-				onInputChange={(name, _field, value, state) => {
-					if (name === 'email') {
-						if (value.trim()) return;
-						setCodeStatus(null);
+				onInputChange={(field, value, state) => {
+					if (field.name === 'email') {
+						if (value) return;
+						setCodeStatus('idle');
 					}
-					if (name === 'code') {
+					if (field.name === 'code') {
 						if (
 							value.trim() ||
 							!state.email.trim() ||

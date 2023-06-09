@@ -7,7 +7,13 @@ import {
 	putRequest,
 	deleteRequest,
 } from 'helpers/api';
-import { mockedAdd, mockedDelete, mockedGet, mockedUpdate } from 'mocks';
+import {
+	mockToken,
+	mockedAdd,
+	mockedDelete,
+	mockedGet,
+	mockedUpdate,
+} from 'mocks';
 
 import type { User, Login, UserSansMeta, LoggedInUser } from 'schemas/user';
 import type { DbId } from 'helpers/schema';
@@ -44,7 +50,7 @@ export const userMocks: typeof userEndpoints = {
 		);
 		if (!user) throw new Error('user not found');
 		if (user.password !== password) throw new Error('incorrect password');
-		return { ...user, token: '123456789' };
+		return { ...user, token: mockToken };
 	},
 	get: async () => mockedGet('user'),
 	getById: async (id) => mockedGet('user', id),
