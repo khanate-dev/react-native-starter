@@ -3,9 +3,6 @@ import { isDayjs } from 'dayjs';
 
 import { CNIC_REGEX, JWT_REGEX, PHONE_REGEX } from 'config';
 import { dayjsUtc } from 'helpers/date';
-import { objectEntries } from 'helpers/object';
-
-import type { SchemaField } from 'types/form';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbKey');
 
@@ -140,40 +137,4 @@ export const createSchema = <
 	});
 
 	return [schema, modelSchema] as const;
-};
-
-export const createSchemaFields = <
-	Schema extends z.AnyZodObject,
-	SchemaKeys extends keyof z.infer<Schema>,
-	InputFields extends {
-		[Key in SchemaKeys]?: SchemaField<SchemaKeys>;
-	},
-	Fields extends {
-		[Key in keyof InputFields]: SchemaField<keyof InputFields>;
-	}
->(
-	schema: Schema,
-	input: InputFields
-) => {
-	const formSchema = z.strictObject(
-		objectEntries(schema.shape as Record<string, z.ZodAny>).reduce(
-			(object, [name, current]) => ({
-				...object,
-				[name]: z.preprocess(
-					(value) =>
-						current.isNullable() && value !== 0 && !value
-							? null
-							: ['int', 'float'].includes(
-									input[name as keyof InputFields]?.type ?? 'string'
-							  )
-							? Number(value)
-							: value,
-					current
-				),
-			}),
-			{}
-		)
-	) as Schema;
-
-	return [input as unknown as Fields, formSchema] as const;
 };
