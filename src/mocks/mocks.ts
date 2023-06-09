@@ -18,7 +18,7 @@ export const createMockedData = <T extends DbMeta>(
 export const mockData = {
 	user: createMockedData<User>([
 		{
-			email: 'test@test.com',
+			email: 'test@test.com' as User['email'],
 			name: 'test',
 			password: 'test',
 		},
