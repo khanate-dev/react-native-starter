@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { HelperText, Switch, Text, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
@@ -14,10 +14,9 @@ import type { Dayjs } from 'dayjs';
 import type { ButtonProps } from 'components/controls/button';
 import type {
 	KeyboardTypeOptions,
-	TextInput as NativeTextInput,
 	StyleProp,
 	ViewStyle,
-	Switch as NativeSwitch,
+	TextStyle,
 } from 'react-native';
 import type { AppIconName } from 'components/media/app-icon';
 import type { FormSchemaFieldType } from 'schemas/form-schema.class';
@@ -50,10 +49,13 @@ const icons: Record<FormSchemaFieldType, AppIconName> = {
 	boolean: 'check',
 };
 
-export type FormControlProps = {
-	/** the styles to apply to the component */
-	containerStyle?: StyleProp<ViewStyle>;
+type styles = {
+	container?: StyleProp<ViewStyle>;
+	icon?: StyleProp<ViewStyle>;
+	button?: StyleProp<ViewStyle>;
+};
 
+export type FormControlProps = {
 	/** the type of the input field */
 	type: unknown;
 
@@ -65,6 +67,9 @@ export type FormControlProps = {
 
 	/** the function to submit the function. Used to trigger form submission on the last input field submission */
 	onSubmit?: () => void;
+
+	/** the styles to apply the control */
+	styles?: styles;
 
 	/** the label to show on the field */
 	label: string;
@@ -94,30 +99,34 @@ export type FormControlProps = {
 			type: 'date';
 			value: Dayjs | null;
 			onChange: (value: Dayjs | null) => void;
+			styles?: styles & { control?: StyleProp<TextStyle> };
 	  }
 	| {
 			type: 'time';
 			value: z.infer<ZodTime> | null;
 			onChange: (value: z.infer<ZodTime> | null) => void;
+			styles?: styles & { control?: StyleProp<TextStyle> };
 	  }
 	| {
 			type: 'boolean';
 			value: boolean;
 			onChange: (value: boolean) => void;
+			styles?: styles & { control?: StyleProp<ViewStyle> };
 	  }
 	| {
 			type: Exclude<FormSchemaFieldType, 'date' | 'time' | 'boolean'>;
 			value: string;
 			onChange: (value: string) => void;
+			styles?: styles & { control?: StyleProp<TextStyle> };
 	  }
 );
 
 export const FormControl = ({
-	containerStyle,
 	type,
 	value,
 	onChange,
 	onSubmit,
+	styles,
 	label,
 	error,
 	caption,
@@ -130,9 +139,6 @@ export const FormControl = ({
 	const [isSecret, setIsSecret] = useState<boolean>(true);
 	const [showingPicker, setShowingPicker] = useState<boolean>(false);
 
-	const switchRef = useRef<NativeSwitch>(null);
-	const inputRef = useRef<NativeTextInput>(null);
-
 	const lineFlex = {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -141,12 +147,20 @@ export const FormControl = ({
 		gap: isSmallerScreen ? 5 : 10,
 	} satisfies StyleProp<ViewStyle>;
 
+	const iconJsx = hasIcon ? (
+		<AppIcon
+			style={styles?.icon}
+			name={icons[type]}
+		/>
+	) : undefined;
+
 	const inputJsx =
 		type === 'boolean' ? (
 			<View style={lineFlex}>
+				{iconJsx}
 				<Text variant='labelMedium'>{label}</Text>
 				<Switch
-					ref={switchRef}
+					style={styles?.control}
 					value={value}
 					disabled={disabled}
 					onValueChange={onChange}
@@ -154,7 +168,7 @@ export const FormControl = ({
 			</View>
 		) : (
 			<TextInput
-				ref={inputRef}
+				style={styles?.control}
 				label={label}
 				keyboardType={keyboardTypes[type]}
 				returnKeyType={isLast ? 'done' : 'next'}
@@ -162,7 +176,7 @@ export const FormControl = ({
 				error={Boolean(error)}
 				disabled={disabled}
 				editable={type === 'date' || type === 'time'}
-				left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
+				left={iconJsx}
 				blurOnSubmit={isLast}
 				value={
 					isDayjs(value)
@@ -199,14 +213,14 @@ export const FormControl = ({
 		<View
 			style={[
 				{ marginBottom: noMargin ? 0 : isSmallerScreen ? 10 : 20 },
-				containerStyle,
+				styles?.container,
 			]}
 		>
 			{button ? (
 				<View style={lineFlex}>
 					{inputJsx}
 					<Button
-						style={{ flex: 0 }}
+						style={[{ flex: 0 }, styles?.button]}
 						{...button}
 					/>
 				</View>
