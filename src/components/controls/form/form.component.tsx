@@ -6,16 +6,14 @@ import { FormControl } from 'components/controls/form-control';
 import { Button } from 'components/controls/button';
 import { Alert } from 'components/feedback/alert';
 import { getCatchMessage } from 'errors/errors';
+import { deepMerge } from 'helpers/object';
 
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle, ViewProps } from 'react-native';
 import type { ButtonProps } from 'components/controls/button';
-import type { AppIconName } from 'components/media/app-icon';
 import type { ThemeColor } from 'styles/theme';
 import type {
 	FormSchema,
-	FormSchemaField,
 	FormSchemaMap,
-	FormSchemaWorkingType,
 	FormSchemaFieldType,
 	FormSchemaWorkingObj,
 } from 'schemas';
@@ -26,20 +24,29 @@ type baseStyle = {
 	button?: StyleProp<ViewStyle>;
 };
 
-type styles<T extends Record<string, FormSchemaMap[FormSchemaFieldType]>> = {
-	container?: StyleProp<ViewStyle>;
-	button?: StyleProp<ViewStyle>;
+type componentProps<
+	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
+> = {
+	container?: Partial<ViewProps>;
+	button?: Partial<ButtonProps>;
 	control?: {
-		container?: StyleProp<ViewStyle>;
-		icon?: StyleProp<ViewStyle>;
-		button?: StyleProp<ViewStyle>;
-		control?: StyleProp<ViewStyle>;
-	};
-	fields?: {
-		[k in keyof T]?: baseStyle & {
-			control?: StyleProp<
-				T[k]['_output'] extends boolean | null ? ViewStyle : TextStyle
-			>;
+		common: {
+			style?: {
+				container?: StyleProp<ViewStyle>;
+				icon?: StyleProp<ViewStyle>;
+				button?: StyleProp<ViewStyle>;
+				control?: StyleProp<ViewStyle>;
+			};
+		};
+		fields: {
+			[k in keyof T]?: {
+				style?: baseStyle & {
+					control?: StyleProp<
+						T[k]['_output'] extends boolean | null ? ViewStyle : TextStyle
+					>;
+				};
+				dependsOn: keyof Omit<T, k>;
+			};
 		};
 	};
 };
@@ -47,9 +54,6 @@ type styles<T extends Record<string, FormSchemaMap[FormSchemaFieldType]>> = {
 export type FormProps<
 	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
 > = {
-	/** the styles to apply to the component */
-	styles?: styles<T>;
-
 	/** the input fields object to use for the form */
 	schema: FormSchema<T>;
 
@@ -65,24 +69,10 @@ export type FormProps<
 		void | string
 	>;
 
-	/** the function to call when an input's value changes */
-	onInputChange?: <Key extends keyof T>(
-		field: FormSchemaField<T[Key]>,
-		newValue: FormSchemaWorkingType<T[Key]>,
-		state: FormSchemaWorkingObj<T>
-	) => void;
-
-	/** the label of the submit button */
-	submitLabel?: string | ((isSubmitting: boolean) => string);
-
-	/** the icon to show on the submit button */
-	submitIcon?: AppIconName;
-
-	/** the props to pass to the submit button */
-	submitProps?: Partial<ButtonProps>;
-
-	/** the object describing the fields each fields depends on */
-	dependsOn?: { [k in keyof T]?: keyof Omit<T, k> };
+	/** the props to apply the components */
+	componentProps?:
+		| componentProps<T>
+		| ((state: FormSchemaWorkingObj<T>) => componentProps<T>);
 
 	/** should the form fields and submit button show icons? */
 	hasIcons?: boolean;
@@ -99,15 +89,10 @@ type Status = null | string | { type: ThemeColor; text: string };
 export const Form = <
 	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
 >({
-	styles,
 	schema,
 	defaultValues,
-	submitLabel,
-	submitIcon,
 	onSubmit,
-	onInputChange,
-	submitProps,
-	dependsOn,
+	componentProps,
 	hasIcons,
 	isBusy,
 	disabled,
@@ -164,15 +149,25 @@ export const Form = <
 		}
 	};
 
+	const { container, control, button } =
+		typeof componentProps === 'function'
+			? componentProps(form)
+			: componentProps ?? {};
+
 	return (
-		<View style={[{ flexGrow: 1, flexShrink: 0 }, styles?.container]}>
+		<View
+			{...container}
+			style={[{ flexGrow: 1, flexShrink: 0 }, container?.style]}
+		>
 			<ScrollView style={{ flexGrow: 1, flexShrink: 0 }}>
 				{schema.fieldsArray.map((field, index) => {
-					const depends = dependsOn?.[field.name] as undefined | keyof T;
-					const currStyle = styles?.fields?.[field.name];
-					const style = styles?.control;
+					const props = deepMerge(
+						control?.common ?? {},
+						control?.fields[field.name] ?? {}
+					);
 					return (
 						<FormControl
+							{...props}
 							key={String(field.name)}
 							type={field.type as never}
 							value={form[field.name]}
@@ -181,22 +176,16 @@ export const Form = <
 							button={field.button}
 							hasIcon={hasIcons}
 							isLast={index + 1 === schema.fieldsArray.length}
-							styles={{
-								container: currStyle?.container ?? style?.container,
-								button: currStyle?.button ?? style?.button,
-								icon: currStyle?.icon ?? style?.icon,
-								control: currStyle?.control ?? style?.control,
-							}}
+							styles={props.style}
 							disabled={
 								(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
 								isSubmitting ||
-								(depends && !form[depends]) ||
+								(props.dependsOn && !form[props.dependsOn]) ||
 								(typeof status === 'object' && status?.type === 'success')
 							}
 							onSubmit={handleSubmit}
 							onChange={(value: unknown) => {
 								setForm((prev) => ({ ...prev, [field.name]: value }));
-								onInputChange?.(field, value as never, form);
 							}}
 						/>
 					);
@@ -212,25 +201,20 @@ export const Form = <
 			)}
 
 			<Button
-				style={styles?.button}
-				icon={submitIcon ?? hasIcons ? 'submit' : undefined}
-				label={
-					submitLabel
-						? typeof submitLabel === 'string'
-							? submitLabel
-							: submitLabel(isSubmitting)
-						: 'Submit'
-				}
+				{...button}
+				icon={button?.icon ?? hasIcons ? 'submit' : undefined}
+				label={button?.label ?? 'Submit'}
 				loading={
 					(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
-					isSubmitting
+					isSubmitting ||
+					button?.loading
 				}
 				disabled={
 					(typeof disabled === 'function' ? disabled(form as any) : disabled) ||
-					(typeof status === 'object' && status?.type === 'success')
+					(typeof status === 'object' && status?.type === 'success') ||
+					button?.disabled
 				}
 				onPress={handleSubmit}
-				{...submitProps}
 			/>
 		</View>
 	);
