@@ -1,37 +1,30 @@
-import { useState, forwardRef } from 'react';
+import { useState, useRef } from 'react';
 import { View } from 'react-native';
-import { HelperText, TextInput } from 'react-native-paper';
+import { HelperText, Switch, Text, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
+import { isDayjs } from 'dayjs';
 
 import { IconButton } from 'components/controls/icon-button';
 import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
 import { FormButton } from 'components/controls/form-button';
+import { dayjsUtc } from 'helpers/date';
 
+import type { Dayjs } from 'dayjs';
 import type { FormButtonProps } from 'components/controls/form-button';
-import type { TextInputProps } from 'react-native-paper';
-import type { ForwardedRef } from 'react';
 import type {
 	KeyboardTypeOptions,
 	TextInput as NativeTextInput,
 	StyleProp,
 	ViewStyle,
+	Switch as NativeSwitch,
 } from 'react-native';
-import type { App } from 'types/app';
 import type { AppIconName } from 'components/media/app-icon';
+import type { FormSchemaFieldType } from 'schemas/form-schema.class';
+import type { ZodTime } from 'helpers/schema';
+import type { z } from 'zod';
 
-type FormInputType =
-	| 'string'
-	| 'int'
-	| 'float'
-	| 'email'
-	| 'password'
-	| 'phone'
-	| 'search'
-	| 'date'
-	| 'time';
-
-const keyboardTypes: Record<FormInputProps['type'], KeyboardTypeOptions> = {
+const keyboardTypes: Record<FormSchemaFieldType, KeyboardTypeOptions> = {
 	email: 'email-address',
 	float: 'decimal-pad',
 	int: 'number-pad',
@@ -41,9 +34,10 @@ const keyboardTypes: Record<FormInputProps['type'], KeyboardTypeOptions> = {
 	search: 'default',
 	date: 'default',
 	time: 'default',
+	boolean: 'default',
 };
 
-const icons: Record<FormInputProps['type'], AppIconName> = {
+const icons: Record<FormSchemaFieldType, AppIconName> = {
 	email: 'email-at',
 	float: 'number',
 	int: 'number',
@@ -53,105 +47,153 @@ const icons: Record<FormInputProps['type'], AppIconName> = {
 	search: 'search',
 	date: 'date',
 	time: 'time',
+	boolean: 'check',
 };
 
-export type FormInputProps = Omit<
-	TextInputProps,
-	| 'onChangeText'
-	| 'onChange'
-	| 'value'
-	| 'error'
-	| 'left'
-	| 'right'
-	| 'disabled'
-> &
-	App.PropsWithStyle<{
-		/** the styles to apply to the component */
-		containerStyle?: StyleProp<ViewStyle>;
+export type FormInputProps = {
+	/** the styles to apply to the component */
+	containerStyle?: StyleProp<ViewStyle>;
 
-		/** the type of the input field */
-		type: FormInputType;
+	/** the type of the input field */
+	type: unknown;
 
-		/** the current value of the input field */
-		value: string;
+	/** the current value of the input field */
+	value: unknown;
 
-		/** the function to call when the input changes */
-		onChange: (value: string) => void;
+	/** the function to call when the input changes */
+	onChange: unknown;
 
-		/** the error message to show beneath the input */
-		error?: string;
+	/** the function to submit the function. Used to trigger form submission on the last input field submission */
+	onSubmit?: () => void;
 
-		/** the caption to show beneath the input */
-		caption?: string;
+	/** the label to show on the field */
+	label: string;
 
-		/** the button to show on the right side of the input */
-		button?: Pick<FormButtonProps, 'label' | 'onPress' | 'icon'>;
+	/** the error message to show beneath the input */
+	error?: string;
 
-		/** should the input have an icon to the left side */
-		hasIcon?: boolean;
+	/** the caption to show beneath the input */
+	caption?: string;
 
-		/** should the input have no vertical margins? */
-		noMargin?: boolean;
+	/** the button to show on the right side of the input */
+	button?: Pick<FormButtonProps, 'label' | 'onPress' | 'icon'>;
 
-		/** is the input the last in the form? */
-		isLast?: boolean;
+	/** should the input have an icon to the left side */
+	hasIcon?: boolean;
 
-		/** should the input be disabled? */
-		disabled?: boolean | ((value: string) => boolean);
-	}>;
+	/** should the input have no vertical margins? */
+	noMargin?: boolean;
 
-const FormInputComponent = (
-	{
-		containerStyle,
-		type,
-		value,
-		onChange,
-		error,
-		caption,
-		button,
-		hasIcon,
-		noMargin,
-		isLast,
-		disabled: disabledProp,
-		...textInputProps
-	}: FormInputProps,
-	ref: ForwardedRef<NativeTextInput>
-) => {
+	/** is the input the last in the form? */
+	isLast?: boolean;
+
+	/** should the input be disabled? */
+	disabled?: boolean;
+} & (
+	| {
+			type: 'date';
+			value: Dayjs | null;
+			onChange: (value: Dayjs | null) => void;
+	  }
+	| {
+			type: 'time';
+			value: z.infer<ZodTime> | null;
+			onChange: (value: z.infer<ZodTime> | null) => void;
+	  }
+	| {
+			type: 'boolean';
+			value: boolean;
+			onChange: (value: boolean) => void;
+	  }
+	| {
+			type: Exclude<FormSchemaFieldType, 'date' | 'time' | 'boolean'>;
+			value: string;
+			onChange: (value: string) => void;
+	  }
+);
+
+export const FormInput = ({
+	containerStyle,
+	type,
+	value,
+	onChange,
+	onSubmit,
+	label,
+	error,
+	caption,
+	button,
+	hasIcon,
+	noMargin,
+	isLast,
+	disabled,
+}: FormInputProps) => {
 	const [isSecret, setIsSecret] = useState<boolean>(true);
 	const [showingPicker, setShowingPicker] = useState<boolean>(false);
 
-	const disabled =
-		typeof disabledProp === 'function' ? disabledProp(value) : disabledProp;
+	const switchRef = useRef<NativeSwitch>(null);
+	const inputRef = useRef<NativeTextInput>(null);
 
-	const inputJsx = (
-		<TextInput
-			ref={ref}
-			{...textInputProps}
-			value={value}
-			keyboardType={keyboardTypes[type]}
-			returnKeyType={isLast ? 'done' : 'next'}
-			secureTextEntry={type === 'password' && isSecret}
-			error={Boolean(error)}
-			disabled={disabled}
-			editable={type === 'date' || type === 'time'}
-			left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
-			right={
-				type === 'password' ? (
-					<IconButton
-						icon={isSecret ? 'hidden' : 'visible'}
-						onPress={() => setIsSecret((prev) => !prev)}
-					/>
-				) : type === 'date' || type === 'time' ? (
-					<IconButton
-						icon={type}
-						disabled={disabled}
-						onPress={() => setShowingPicker(true)}
-					/>
-				) : undefined
-			}
-			onChangeText={onChange}
-		/>
-	);
+	const lineFlex = {
+		flexDirection: 'row',
+		alignItems: 'center',
+		flexWrap: 'nowrap',
+		alignContent: 'center',
+		gap: isSmallerScreen ? 5 : 10,
+	} satisfies StyleProp<ViewStyle>;
+
+	const inputJsx =
+		type === 'boolean' ? (
+			<View style={lineFlex}>
+				<Text variant='labelMedium'>{label}</Text>
+				<Switch
+					ref={switchRef}
+					value={value}
+					disabled={disabled}
+					onValueChange={onChange}
+				/>
+			</View>
+		) : (
+			<TextInput
+				ref={inputRef}
+				label={label}
+				keyboardType={keyboardTypes[type]}
+				returnKeyType={isLast ? 'done' : 'next'}
+				secureTextEntry={type === 'password' && isSecret}
+				error={Boolean(error)}
+				disabled={disabled}
+				editable={type === 'date' || type === 'time'}
+				left={hasIcon ? <AppIcon name={icons[type]} /> : undefined}
+				blurOnSubmit={isLast}
+				value={
+					isDayjs(value)
+						? value.format('YYYY-MM-DD')
+						: typeof value === 'string'
+						? value
+						: value
+						? `${value.hours}:${value.minutes}`
+						: ''
+				}
+				right={
+					type === 'password' ? (
+						<IconButton
+							icon={isSecret ? 'hidden' : 'visible'}
+							onPress={() => setIsSecret((prev) => !prev)}
+						/>
+					) : type === 'date' || type === 'time' ? (
+						<IconButton
+							icon={type}
+							disabled={disabled}
+							onPress={() => setShowingPicker(true)}
+						/>
+					) : undefined
+				}
+				onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
+				onSubmitEditing={() => {
+					if (!isLast) return;
+					onSubmit?.();
+				}}
+			/>
+		);
 
 	return (
 		<View
@@ -161,15 +203,7 @@ const FormInputComponent = (
 			]}
 		>
 			{button ? (
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						flexWrap: 'nowrap',
-						alignContent: 'center',
-						gap: isSmallerScreen ? 5 : 10,
-					}}
-				>
+				<View style={lineFlex}>
 					{inputJsx}
 					<FormButton
 						style={{ flex: 0 }}
@@ -193,9 +227,9 @@ const FormInputComponent = (
 					locale='en'
 					mode='single'
 					visible={showingPicker}
-					date={new Date(value)}
+					date={value?.toDate()}
 					onDismiss={() => setShowingPicker(false)}
-					onConfirm={(val) => onChange(val.date?.toISOString() ?? '')}
+					onConfirm={({ date }) => onChange(date ? dayjsUtc.utc(date) : null)}
 				/>
 			)}
 
@@ -203,14 +237,12 @@ const FormInputComponent = (
 				<TimePickerModal
 					locale='en'
 					visible={showingPicker}
-					hours={Number(value.split(':')[0] ?? '')}
-					minutes={Number(value.split(':')[1] ?? '')}
+					hours={value?.hours}
+					minutes={value?.minutes}
 					onDismiss={() => setShowingPicker(false)}
-					onConfirm={(val) => onChange(`${val.hours}:${val.minutes}`)}
+					onConfirm={(val) => onChange(val)}
 				/>
 			)}
 		</View>
 	);
 };
-
-export const FormInput = forwardRef(FormInputComponent);
