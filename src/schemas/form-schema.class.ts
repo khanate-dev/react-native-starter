@@ -20,7 +20,7 @@ export type FormSchemaMap = {
 	time: ZodTime | z.ZodNullable<ZodTime>;
 };
 
-export type SchemaFieldType = keyof FormSchemaMap;
+export type FormSchemaFieldType = keyof FormSchemaMap;
 
 type equal<T, U> = (<G>(x: G) => G extends T ? 1 : 2) extends <G>(
 	x: G
@@ -35,12 +35,10 @@ type matchInUnion<
 	? equal<z.infer<T>, z.infer<U>>
 	: never;
 
-export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
-	/** the zod schema for the field */
-	zod: Zod;
-
-	/** the type of the schema field */
-	type: keyof {
+export type FormSchemaTypeByZod<
+	Zod extends FormSchemaMap[keyof FormSchemaMap]
+> = FormSchemaFieldType &
+	keyof {
 		[k in keyof FormSchemaMap as matchInUnion<
 			Zod,
 			FormSchemaMap[k]
@@ -48,6 +46,13 @@ export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
 			? never
 			: k]: true;
 	};
+
+export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
+	/** the zod schema for the field */
+	zod: Zod;
+
+	/** the type of the schema field */
+	type: FormSchemaTypeByZod<Zod>;
 
 	/** label of the field */
 	label?: string;
@@ -63,16 +68,14 @@ export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
 
 export type FormSchemaWorkingType<
 	T extends FormSchemaMap[keyof FormSchemaMap]
-> = T extends FormSchemaMap['int'] | FormSchemaMap['float']
-	? string
-	: T extends FormSchemaMap['boolean']
+> = T extends FormSchemaMap['boolean']
 	? boolean
 	: T extends FormSchemaMap['date'] | FormSchemaMap['time']
 	? z.infer<T> | null
 	: string;
 
 export type FormSchemaWorkingObj<
-	T extends Record<string, FormSchemaMap[SchemaFieldType]>
+	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
 > = Utils.prettify<{
 	[k in keyof T]: FormSchemaWorkingType<T[k]>;
 }>;
@@ -124,7 +127,7 @@ export const formTypeDefaults: {
 	int: '25',
 	float: '25.255',
 	date: dayjsUtc.utc('2022-10-20T10:20:00.000Z'),
-	time: { hour: 10, minute: 20 },
+	time: { hours: 10, minutes: 20 },
 	email: 'testing@test.com',
 	password: '12345',
 	phone: '090078601',
@@ -133,7 +136,7 @@ export const formTypeDefaults: {
 };
 
 export class FormSchema<
-	T extends Record<string, FormSchemaMap[SchemaFieldType]>
+	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
 > {
 	/** the zod schema for the form */
 	zod: z.ZodObject<{ [k in keyof T]: T[k] }, 'strict', z.ZodUndefined>;

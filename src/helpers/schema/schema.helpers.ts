@@ -60,8 +60,8 @@ export const timeSchema = z.preprocess(
 		return { hour: parsed.hour(), minute: parsed.minute() };
 	},
 	z.object({
-		hour: z.number().min(0).max(23),
-		minute: z.number().min(0).max(59),
+		hours: z.number().min(0).max(23),
+		minutes: z.number().min(0).max(59),
 	})
 );
 
