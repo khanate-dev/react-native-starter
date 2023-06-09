@@ -2,7 +2,11 @@ import { dayjsUtc } from 'helpers/date';
 import { wait } from 'helpers/async';
 
 import type { User } from 'schemas/user';
-import type { DbId, DbMeta } from 'helpers/schema';
+import type { DbId, DbMeta, Jwt } from 'helpers/schema';
+
+export const mockToken =
+	/** cSpell: disable-next-line */
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c' as Jwt;
 
 export const createMockedData = <T extends DbMeta>(
 	data: Omit<T, keyof DbMeta>[]
