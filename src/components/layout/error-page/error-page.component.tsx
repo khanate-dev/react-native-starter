@@ -1,6 +1,6 @@
 import { Text, useTheme } from 'react-native-paper';
 
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 import { isSmallerScreen } from 'src/config';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { AppIcon } from 'components/media/app-icon';
@@ -68,7 +68,7 @@ export const ErrorPage = ({
 				{message ?? 'Something Went Wrong!'}
 			</Text>
 
-			<FormButton
+			<Button
 				label={buttonLabel ?? 'Back'}
 				style={{ minWidth: 150 }}
 				onPress={onBack}

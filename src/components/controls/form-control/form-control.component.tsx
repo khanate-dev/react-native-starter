@@ -7,11 +7,11 @@ import { isDayjs } from 'dayjs';
 import { IconButton } from 'components/controls/icon-button';
 import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 
 import type { Dayjs } from 'dayjs';
-import type { FormButtonProps } from 'components/controls/form-button';
+import type { ButtonProps } from 'components/controls/button';
 import type {
 	KeyboardTypeOptions,
 	TextInput as NativeTextInput,
@@ -76,7 +76,7 @@ export type FormControlProps = {
 	caption?: string;
 
 	/** the button to show on the right side of the input */
-	button?: Pick<FormButtonProps, 'label' | 'onPress' | 'icon'>;
+	button?: Pick<ButtonProps, 'label' | 'onPress' | 'icon'>;
 
 	/** should the input have an icon to the left side */
 	hasIcon?: boolean;
@@ -205,7 +205,7 @@ export const FormControl = ({
 			{button ? (
 				<View style={lineFlex}>
 					{inputJsx}
-					<FormButton
+					<Button
 						style={{ flex: 0 }}
 						{...button}
 					/>

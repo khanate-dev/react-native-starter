@@ -4,11 +4,11 @@ import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
 import { getThemeColor, themeColorIcons } from 'styles/theme';
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 import { AppIcon } from 'components/media/app-icon';
 import { isSmallerScreen } from 'src/config';
 
-import type { FormButtonProps } from 'components/controls/form-button';
+import type { ButtonProps } from 'components/controls/button';
 import type { ThemeColor } from 'styles/theme';
 
 export type AlertModalProps = {
@@ -25,7 +25,7 @@ export type AlertModalProps = {
 	closeLabel?: string;
 
 	/** the actions for the alert */
-	actions?: FormButtonProps[];
+	actions?: ButtonProps[];
 
 	/** the callback for when the alert is closed */
 	onClose?: () => void;
@@ -158,7 +158,7 @@ export const AlertModal = ({
 					}}
 				>
 					{actions.map((action, index) => (
-						<FormButton
+						<Button
 							key={index}
 							{...action}
 							mode={action.mode ?? 'contained'}

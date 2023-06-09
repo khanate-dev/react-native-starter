@@ -7,7 +7,7 @@ import { setUser } from 'contexts/user';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { Form } from 'components/controls/form';
 import { IconButton } from 'components/controls/icon-button';
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 
 import { loginStyles as styles } from './login.styles';
 
@@ -50,7 +50,7 @@ export const Login = ({ navigation, route }: AuthPageProps<'login'>) => {
 				}}
 			/>
 
-			<FormButton
+			<Button
 				style={styles.forgotButton}
 				label='Forgot Password?'
 				appearance='ghost'

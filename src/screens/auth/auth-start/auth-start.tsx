@@ -2,7 +2,7 @@ import { Text, useStyleSheet } from '@ui-kitten/components';
 import { ImageBackground, View } from 'react-native';
 
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 import { AppLogo } from 'components/media/app-logo';
 
 import { authStartStyles } from './auth-start.styles';
@@ -35,7 +35,7 @@ export const AuthStart = ({ navigation }: AuthPageProps<'auth-start'>) => {
 					</Text>
 
 					<View style={styles.buttons}>
-						<FormButton
+						<Button
 							style={styles.registerButton}
 							label='Register'
 							appearance='outline'
@@ -45,7 +45,7 @@ export const AuthStart = ({ navigation }: AuthPageProps<'auth-start'>) => {
 							onPress={() => navigation.navigate('register')}
 						/>
 
-						<FormButton
+						<Button
 							style={styles.loginButton}
 							appearance='ghost'
 							label='Login'

@@ -3,12 +3,12 @@ import { Keyboard, ScrollView, View } from 'react-native';
 import { ZodError } from 'zod';
 
 import { FormControl } from 'components/controls/form-control';
-import { FormButton } from 'components/controls/form-button';
+import { Button } from 'components/controls/button';
 import { Alert } from 'components/feedback/alert';
 import { getCatchMessage } from 'errors/errors';
 
 import type { z } from 'zod';
-import type { FormButtonProps } from 'components/controls/form-button';
+import type { ButtonProps } from 'components/controls/button';
 import type { App } from 'types/app';
 import type { AppIconName } from 'components/media/app-icon';
 import type { ThemeColor } from 'styles/theme';
@@ -53,7 +53,7 @@ export type FormProps<
 	submitIcon?: AppIconName;
 
 	/** the props to pass to the submit button */
-	submitProps?: Partial<FormButtonProps>;
+	submitProps?: Partial<ButtonProps>;
 
 	/** should the form fields and submit button show icons? */
 	hasIcons?: boolean;
@@ -169,7 +169,7 @@ export const Form = <
 				/>
 			)}
 
-			<FormButton
+			<Button
 				icon={submitIcon ?? hasIcons ? 'submit' : undefined}
 				label={
 					submitLabel
