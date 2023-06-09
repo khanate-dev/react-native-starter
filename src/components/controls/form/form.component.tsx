@@ -8,7 +8,6 @@ import { Alert } from 'components/feedback/alert';
 import { getCatchMessage } from 'errors/errors';
 
 import type { z } from 'zod';
-import type { FormErrors } from 'types/form';
 import type { FormButtonProps } from 'components/controls/form-button';
 import type { App } from 'types/app';
 import type { AppIconName } from 'components/media/app-icon';
@@ -66,7 +65,7 @@ export type FormProps<
 	disabled?: boolean | ((state: FormSchemaWorkingObj<T>) => boolean);
 }>;
 
-export type Status = null | string | { type: ThemeColor; text: string };
+type Status = null | string | { type: ThemeColor; text: string };
 
 export const Form = <
 	T extends Record<string, FormSchemaMap[FormSchemaFieldType]>
@@ -87,7 +86,7 @@ export const Form = <
 		...schema.defaultValues,
 		...defaultValues,
 	});
-	const [errors, setErrors] = useState<FormErrors<keyof T>>({});
+	const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
 	const [status, setStatus] = useState<Status>(null);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
