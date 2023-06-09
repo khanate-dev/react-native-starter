@@ -6,6 +6,7 @@ import { shouldAutoFill } from 'src/config';
 
 import type { ZodDate, ZodEmail, ZodPhone, ZodTime } from 'helpers/schema';
 import type { Utils } from 'types/utils';
+import type { FormControlProps } from 'components/controls/form-control';
 
 export type FormSchemaMap = {
 	string: z.ZodString | z.ZodNullable<z.ZodString>;
@@ -32,7 +33,7 @@ type matchInUnion<
 	T extends z.ZodSchema,
 	Union
 > = Union extends infer U extends z.ZodSchema
-	? equal<z.infer<T>, z.infer<U>>
+	? equal<T['_output'], U['_output']>
 	: never;
 
 export type FormSchemaTypeByZod<
@@ -57,6 +58,9 @@ export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
 	/** label of the field */
 	label?: string;
 
+	/** the button to show on the form control for the field */
+	button?: FormControlProps['button'];
+
 	/** is this field unavailable in update form? */
 	noUpdate?: boolean;
 
@@ -71,7 +75,7 @@ export type FormSchemaWorkingType<
 > = T extends FormSchemaMap['boolean']
 	? boolean
 	: T extends FormSchemaMap['date'] | FormSchemaMap['time']
-	? z.infer<T> | null
+	? T['_output'] | null
 	: string;
 
 export type FormSchemaWorkingObj<
@@ -161,7 +165,9 @@ export class FormSchema<
 	fieldsArray: (typeof this.fields)[keyof typeof this.fields][];
 
 	/** the default object for the schema */
-	defaultValues: FormSchemaWorkingObj<T>;
+	defaultValues: {
+		[k in keyof T]: FormSchemaWorkingType<T[k]>;
+	};
 
 	constructor(fields: { [k in keyof T]: FormSchemaField<T[k]> }) {
 		const zodObject = {} as { [k in keyof T]: T[k] };
