@@ -62,16 +62,16 @@ const config = {
 						message: 'Do not use parent imports',
 					},
 					{
-						group: ['@expo/vector-icons/*'],
+						group: ['@expo/vector-icons*'],
 						message: "Use 'components/media/app-icon' instead",
 					},
 					{
-						group: ['react-native-paper'],
+						group: ['react-native-paper*'],
 						importNames: ['IconButton'],
 						message: "Use 'components/forms/icon-button' instead",
 					},
 					{
-						group: ['react-native-paper'],
+						group: ['react-native-paper*', 'react-native*'],
 						importNames: ['Button'],
 						message: "Use 'components/forms/button' instead",
 					},
