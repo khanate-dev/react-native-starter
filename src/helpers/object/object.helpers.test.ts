@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+	deepMerge,
 	objectEntries,
 	objectKeys,
 	objectValues,
@@ -70,4 +71,18 @@ describe('testing pickKey', () => {
 		expect(result).toStrictEqual(picked);
 		z.util.assertIs<typeof picked>(result);
 	});
+});
+
+test('testing deepMerge', () => {
+	const first = { a: 1, b: 'old', nested: { d: 1, e: 'old' } } as const;
+	const second = { b: 'new', c: 3, nested: { e: 'new', f: 3 } } as const;
+	const merged = {
+		a: 1 as const,
+		b: 'new' as const,
+		c: 3 as const,
+		nested: { d: 1 as const, e: 'new' as const, f: 3 as const },
+	};
+	const result = deepMerge(first, second);
+	expect(result).toStrictEqual(merged);
+	z.util.assertEqual<typeof merged, typeof result>(true);
 });

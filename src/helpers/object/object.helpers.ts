@@ -1,47 +1,69 @@
+import { isObject } from 'helpers/type';
+
 import type { Utils } from 'types/utils';
 
-export const objectEntries = <Keys extends PropertyKey, Type>(
-	object: Record<Keys, Type>
-) => Object.entries(object) as [Keys, Type][];
+export const objectEntries = <T extends Record<string, unknown>>(
+	object: T
+): [keyof T, T[keyof T]][] => {
+	return Object.entries(object) as never;
+};
 
-export const objectKeys = <Keys extends PropertyKey, Values>(
-	object: Record<Keys, Values>
-) => Object.keys(object) as Keys[];
+export const objectKeys = <T extends Record<string, unknown>>(
+	object: T
+): (keyof T)[] => {
+	return Object.keys(object);
+};
 
-export const objectValues = <Keys extends PropertyKey, Values>(
-	object: Record<Keys, Values>
-) => Object.values<Values>(object);
+export const objectValues = <T extends Record<string, unknown>>(
+	object: T
+): T[keyof T][] => {
+	return Object.values(object) as never;
+};
 
 export const omit = <
 	Type extends Record<string, unknown>,
-	Key extends keyof Type
+	ToOmit extends keyof Type
 >(
 	object: Type,
-	keys: Key | Key[]
-): Utils.prettify<Omit<Type, Key>> => {
+	keys: ToOmit | ToOmit[]
+): Utils.prettify<Omit<Type, ToOmit>> => {
 	const keyArray = Array.isArray(keys) ? keys : [keys];
-	return objectEntries<Key, unknown>(object).reduce<Omit<Type, Key>>(
-		(obj, [key, value]) => {
-			if (keyArray.includes(key)) return obj;
-			return { ...obj, [key]: value };
-		},
-		{} as Omit<Type, Key>
-	);
+	return objectEntries(object).reduce((obj, [key, value]) => {
+		if (keyArray.includes(key as never)) return obj;
+		return { ...obj, [key]: value };
+	}, {}) as never;
 };
 
 export const pick = <
 	Type extends Record<string, unknown>,
-	Key extends keyof Type
+	ToPick extends keyof Type
 >(
 	object: Type,
-	keys: Key | Key[]
-): Utils.prettify<Pick<Type, Key>> => {
+	keys: ToPick | ToPick[]
+): Utils.prettify<Pick<Type, ToPick>> => {
 	const keyArray = Array.isArray(keys) ? keys : [keys];
-	return objectEntries<Key, unknown>(object).reduce<Pick<Type, Key>>(
-		(obj, [key, value]) => {
-			if (!keyArray.includes(key)) return obj;
-			return { ...obj, [key]: value };
-		},
-		{} as Pick<Type, Key>
-	);
+	return objectEntries(object).reduce((obj, [key, value]) => {
+		if (!keyArray.includes(key as never)) return obj;
+		return { ...obj, [key]: value };
+	}, {}) as never;
+};
+
+export const deepMerge = <
+	T extends Record<string, unknown>,
+	U extends Record<string, unknown>
+>(
+	first: T,
+	second: U
+): Utils.deepMerge<T, U> => {
+	const commonKeys = { ...first, ...second };
+	const merged: Record<string, unknown> = {};
+	for (const key of Object.keys(commonKeys)) {
+		const firstCurr = first[key];
+		const secondCurr = second[key];
+		merged[key] =
+			isObject(firstCurr) && isObject(secondCurr)
+				? deepMerge(firstCurr, secondCurr)
+				: secondCurr ?? firstCurr;
+	}
+	return merged as never;
 };
