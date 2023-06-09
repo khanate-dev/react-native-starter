@@ -48,7 +48,7 @@ export type FormSchemaTypeByZod<
 			: k]: true;
 	};
 
-export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
+type fieldConstructor<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
 	/** the zod schema for the field */
 	zod: Zod;
 
@@ -69,6 +69,15 @@ export type FormSchemaField<Zod extends FormSchemaMap[keyof FormSchemaMap]> = {
 } & (Zod extends z.ZodNullable<any>
 	? { notRequired: true }
 	: { notRequired?: false });
+
+export type FormSchemaField<
+	Zod extends FormSchemaMap[keyof FormSchemaMap],
+	Key extends PropertyKey
+> = fieldConstructor<Zod> & {
+	/** the name of the field */
+	name: Key;
+	label: string;
+};
 
 export type FormSchemaWorkingType<
 	T extends FormSchemaMap[keyof FormSchemaMap]
@@ -154,11 +163,7 @@ export class FormSchema<
 
 	/** list of schema fields */
 	fields: Utils.prettify<{
-		[k in keyof T]: FormSchemaField<T[k]> & {
-			/** the name of the field */
-			name: k;
-			label: string;
-		};
+		[k in keyof T]: FormSchemaField<T[k], k>;
 	}>;
 
 	/** the schema's fields in an array */
@@ -169,13 +174,13 @@ export class FormSchema<
 		[k in keyof T]: FormSchemaWorkingType<T[k]>;
 	};
 
-	constructor(fields: { [k in keyof T]: FormSchemaField<T[k]> }) {
+	constructor(fields: { [k in keyof T]: fieldConstructor<T[k]> }) {
 		const zodObject = {} as { [k in keyof T]: T[k] };
 		const defaultZodObject = {} as {
 			[k in keyof T]: z.ZodCatch<T[k]>;
 		};
 		this.fields = (
-			Object.entries(fields) as [keyof T, FormSchemaField<T[keyof T]>][]
+			Object.entries(fields) as [keyof T, fieldConstructor<T[keyof T]>][]
 		).reduce<typeof this.fields>((obj, [key, field]) => {
 			const zod = transformSchema(field.zod);
 			zodObject[key] = zod as never;
