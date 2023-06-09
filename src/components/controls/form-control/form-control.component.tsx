@@ -50,7 +50,7 @@ const icons: Record<FormSchemaFieldType, AppIconName> = {
 	boolean: 'check',
 };
 
-export type FormInputProps = {
+export type FormControlProps = {
 	/** the styles to apply to the component */
 	containerStyle?: StyleProp<ViewStyle>;
 
@@ -112,7 +112,7 @@ export type FormInputProps = {
 	  }
 );
 
-export const FormInput = ({
+export const FormControl = ({
 	containerStyle,
 	type,
 	value,
@@ -126,7 +126,7 @@ export const FormInput = ({
 	noMargin,
 	isLast,
 	disabled,
-}: FormInputProps) => {
+}: FormControlProps) => {
 	const [isSecret, setIsSecret] = useState<boolean>(true);
 	const [showingPicker, setShowingPicker] = useState<boolean>(false);
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { ZodError } from 'zod';
 
-import { FormInput } from 'components/controls/form-input';
+import { FormControl } from 'components/controls/form-control';
 import { FormButton } from 'components/controls/form-button';
 import { Alert } from 'components/feedback/alert';
 import { getCatchMessage } from 'errors/errors';
@@ -139,7 +139,7 @@ export const Form = <
 		<View style={[{ flexGrow: 1, flexShrink: 0 }, style]}>
 			<ScrollView style={{ flexGrow: 1, flexShrink: 0 }}>
 				{schema.fieldsArray.map((field, index) => (
-					<FormInput
+					<FormControl
 						key={String(field.name)}
 						type={field.type as never}
 						value={form[field.name]}
