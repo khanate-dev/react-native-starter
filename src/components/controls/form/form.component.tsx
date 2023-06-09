@@ -176,7 +176,7 @@ export const Form = <
 							button={field.button}
 							hasIcon={hasIcons}
 							isLast={index + 1 === schema.fieldsArray.length}
-							styles={props.style}
+							styles={props.style ?? {}}
 							disabled={
 								(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
 								isSubmitting ||

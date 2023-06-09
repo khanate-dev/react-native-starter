@@ -276,7 +276,8 @@ const config = {
 				'react/no-unstable-nested-components': ['warn', { allowAsProps: true }],
 				'react/self-closing-comp': 'warn',
 				'react/void-dom-elements-no-children': 'warn',
-				'react/style-prop-object': ['off', { allow: ['StatusBar'] }],
+				'react/style-prop-object': ['warn', { allow: ['StatusBar'] }],
+				'react/prop-types': 'off',
 			},
 		},
 		{
