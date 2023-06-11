@@ -15,11 +15,14 @@ import {
 	mockedUpdate,
 } from 'mocks';
 
-import type { User, Login, UserSansMeta, LoggedInUser } from 'schemas/user';
+import type { User, UserSansMeta, LoggedInUser } from 'schemas/user';
 import type { DbId } from 'helpers/schema';
 
 export const userEndpoints = {
-	login: async (body: Login): Promise<LoggedInUser> => {
+	login: async (body: {
+		email: string;
+		password: string;
+	}): Promise<LoggedInUser> => {
 		const response = await postRequest('user/login', body, true);
 		return loggedInUserSchema.parse(response);
 	},
