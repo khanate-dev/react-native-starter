@@ -1,25 +1,24 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { DeviceEventEmitter } from 'react-native';
 
 import { LoadingModal } from 'components/feedback/loading-modal';
+import { createEventHandlers } from 'helpers/events/events.helpers';
 
 import type { SetStateAction, PropsWithChildren } from 'react';
 
 const LoadingContext = createContext<boolean>(false);
 
+const { emit, listen } = createEventHandlers<{
+	'set-is-loading': [SetStateAction<boolean>];
+}>();
+
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		DeviceEventEmitter.addListener(
-			'set-is-loading',
-			(value: SetStateAction<boolean>) => {
-				setIsLoading(value);
-			}
-		);
+		const listener = listen('set-is-loading', setIsLoading);
 
 		return () => {
-			DeviceEventEmitter.removeAllListeners('set-is-loading');
+			listener.remove();
 		};
 	}, []);
 
@@ -40,7 +39,5 @@ export const useLoading = () => {
 	return isLoading;
 };
 
-/** fires the set-is-loading event to update the current loading state */
-export const setIsLoading = (value: SetStateAction<boolean>) => {
-	DeviceEventEmitter.emit('set-is-loading', value);
-};
+export const setIsLoading = (value: SetStateAction<boolean>) =>
+	emit('set-is-loading', value);
