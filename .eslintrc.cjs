@@ -307,6 +307,12 @@ const config = {
 				'import/no-commonjs': 'off',
 			},
 		},
+		{
+			files: ['app/**/*'],
+			rules: {
+				'import/no-default-export': 'off',
+			},
+		},
 	],
 };
 
