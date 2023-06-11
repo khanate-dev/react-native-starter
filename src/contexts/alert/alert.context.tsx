@@ -1,22 +1,25 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { DeviceEventEmitter } from 'react-native';
+import { createContext, useEffect, useState } from 'react';
 
 import { AlertModal } from 'components/feedback/alert-modal';
+import { createEventHandlers } from 'helpers/events/events.helpers';
 
-import type { Dispatch, SetStateAction, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import type { AlertModalProps } from 'components/feedback/alert-modal';
 
-const AlertContext = createContext<
-	Dispatch<SetStateAction<null | AlertModalProps>>
->(() => false);
+const AlertContext = createContext(undefined);
 
 type AddAlertInput = string | Error | AlertModalProps;
+
+const { emit, listen } = createEventHandlers<{
+	'add-alert': [AddAlertInput];
+	'remove-alert': [];
+}>();
 
 export const AlertProvider = ({ children }: PropsWithChildren) => {
 	const [alert, setAlert] = useState<null | AlertModalProps>(null);
 
 	useEffect(() => {
-		DeviceEventEmitter.addListener('add-alert', (data: AddAlertInput) => {
+		const addListener = listen('add-alert', (data) => {
 			setAlert(
 				typeof data === 'string'
 					? { text: data }
@@ -26,39 +29,24 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 			);
 		});
 
-		DeviceEventEmitter.addListener('remove-alert', () => {
-			setAlert(null);
-		});
+		const removeListener = listen('remove-alert', () => setAlert(null));
 
 		return () => {
-			DeviceEventEmitter.removeAllListeners('add-alert');
-			DeviceEventEmitter.removeAllListeners('remove-alert');
+			addListener.remove();
+			removeListener.remove();
 		};
 	}, []);
 
 	return (
-		<AlertContext.Provider value={setAlert}>
+		<AlertContext.Provider value={undefined}>
 			{alert && <AlertModal {...alert} />}
 			{children}
 		</AlertContext.Provider>
 	);
 };
 
-export const useAlert = () => {
-	const setAlert = useContext(AlertContext);
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (!setAlert)
-		throw new Error('useAlert must be used within an AlertProvider');
-
-	return { addAlert: setAlert };
-};
-
 /** fires the add-alert event to show the given alert */
-export const addAlert = (message: AddAlertInput) => {
-	DeviceEventEmitter.emit('add-alert', message);
-};
+export const addAlert = (message: AddAlertInput) => emit('add-alert', message);
 
 /** fires the remove-alert event to remove showing alerts */
-export const removeAlert = () => {
-	DeviceEventEmitter.emit('remove-alert');
-};
+export const removeAlert = () => emit('remove-alert');
