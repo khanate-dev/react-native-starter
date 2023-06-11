@@ -110,9 +110,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			foregroundImage: './assets/adaptive-icon.png',
 		},
 	},
-	web: {
-		bundler: 'metro',
-	},
+	// // web: {
+	// // 	bundler: 'metro',
+	// // },
 	plugins: ['sentry-expo'],
 	hooks: {
 		postPublish: [
