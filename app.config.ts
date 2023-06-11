@@ -56,50 +56,60 @@ export type Environment = typeof extra;
 
 const { sentry, googleMapsApiKey } = extra;
 
+const details = {
+	id: 'native-starter',
+	org: 'khanate',
+	name: 'React Native Starter',
+	description: 'React Native Starter',
+	github: 'https://github.com/kahante-dev/react-native-starter',
+	version: '0.0.1',
+	easProjectId: 'ea224914-8891-44d6-ad18-2a67bc487176',
+	primaryColor: '#B591DE',
+} as const;
+
+const semverToInt = (version: `${number}.${number}.${number}`): number => {
+	const [major, minor, patch] = version.split('.').map(Number);
+	return (major ?? 0) * 10000000 + (minor ?? 0) * 100000 + (patch ?? 0);
+};
+
 // eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
-	name: 'Compass Poultry App',
-	slug: 'compass-poultry',
-	description: 'Compass Poultry Mobile Application',
-	version: '1.0.1',
+	scheme: details.id,
+	name: details.name,
+	slug: details.id,
+	description: details.description,
+	version: details.version,
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'automatic',
 	extra: {
 		...extra,
 		eas: {
-			projectId: 'ea224914-8891-44d6-ad18-2a67bc487176',
+			projectId: details.easProjectId,
 		},
 	},
-	githubUrl: 'https://github.com/wimetrixdev/compass-poultry-app',
+	githubUrl: details.github,
 	platforms: ['android', 'ios'],
-	primaryColor: '#B591DE',
+	primaryColor: details.primaryColor,
 	splash: {
 		image: './assets/splash.png',
 		resizeMode: 'contain',
-		backgroundColor: '#B591DE',
+		backgroundColor: details.primaryColor,
 	},
 	updates: {
 		enabled: true,
 		fallbackToCacheTimeout: 0,
 	},
 	assetBundlePatterns: ['**/*'],
-	androidStatusBar: {
-		barStyle: 'light-content',
-	},
 	ios: {
-		bundleIdentifier: 'com.wimetrix.compasspoultry',
-		buildNumber: '1.0.1',
+		bundleIdentifier: `com.${details.org}.${details.id}`,
+		buildNumber: details.version,
 		supportsTablet: true,
-		infoPlist: {
-			NSLocationWhenInUseUsageDescription:
-				'Your location will be used by the application to refocus the map to your vicinity',
-		},
 	},
 	android: {
-		package: 'com.wimetrix.compasspoultry',
-		versionCode: 2,
+		package: `com.${details.org}.${details.id}`,
+		versionCode: semverToInt(details.version),
 		config: {
 			googleMaps: {
 				apiKey: googleMapsApiKey,
@@ -107,13 +117,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		},
 		adaptiveIcon: {
 			foregroundImage: './assets/adaptive-icon.png',
-			backgroundColor: '#FFFFFF',
 		},
-		permissions: [
-			'ACCESS_COARSE_LOCATION',
-			'ACCESS_FINE_LOCATION',
-			'FOREGROUND_SERVICE',
-		],
+	},
+	web: {
+		bundler: 'metro',
 	},
 	plugins: ['sentry-expo'],
 	hooks: {
