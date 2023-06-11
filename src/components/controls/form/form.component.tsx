@@ -17,6 +17,7 @@ import type {
 	FormSchemaFieldType,
 	FormSchemaWorkingObj,
 } from 'schemas';
+import type { Utils } from 'types/utils';
 
 type baseStyle = {
 	container?: StyleProp<ViewStyle>;
@@ -31,7 +32,7 @@ type componentProps<
 	button?: Partial<ButtonProps>;
 	control?: {
 		common: {
-			style?: {
+			styles?: {
 				container?: StyleProp<ViewStyle>;
 				icon?: StyleProp<ViewStyle>;
 				button?: StyleProp<ViewStyle>;
@@ -39,14 +40,16 @@ type componentProps<
 			};
 		};
 		fields: {
-			[k in keyof T]?: {
-				style?: baseStyle & {
-					control?: StyleProp<
-						T[k]['_output'] extends boolean | null ? ViewStyle : TextStyle
-					>;
-				};
-				dependsOn: keyof Omit<T, k>;
-			};
+			[k in keyof T]?: Utils.prettify<{
+				styles?: Utils.prettify<
+					baseStyle & {
+						control?: StyleProp<
+							T[k]['_output'] extends boolean | null ? ViewStyle : TextStyle
+						>;
+					}
+				>;
+				dependsOn?: keyof Omit<T, k>;
+			}>;
 		};
 	};
 };
@@ -164,7 +167,11 @@ export const Form = <
 					const props = deepMerge(
 						control?.common ?? {},
 						control?.fields[field.name] ?? {}
-					);
+					) as NonNullable<
+						NonNullable<
+							componentProps<any>['control']
+						>['fields'][typeof field.name]
+					>;
 					return (
 						<FormControl
 							{...props}
@@ -176,11 +183,10 @@ export const Form = <
 							button={field.button}
 							hasIcon={hasIcons}
 							isLast={index + 1 === schema.fieldsArray.length}
-							styles={props.style ?? {}}
 							disabled={
 								(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
 								isSubmitting ||
-								(props.dependsOn && !form[props.dependsOn]) ||
+								(props.dependsOn && !form[props.dependsOn as never]) ||
 								(typeof status === 'object' && status?.type === 'success')
 							}
 							onSubmit={handleSubmit}
