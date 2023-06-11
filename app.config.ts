@@ -20,7 +20,6 @@ export const parseEnvironment = (input: unknown) => {
 				z.enum(['development', 'production'])
 			),
 			BACKEND_API_PATH: z.string().url(),
-			GOGGLE_MAPS_API_KEY: z.string(),
 			SENTRY_ORG: z.string(),
 			SENTRY_PROJECT: z.string(),
 			SENTRY_AUTH_TOKEN: z.string(),
@@ -35,7 +34,6 @@ export const parseEnvironment = (input: unknown) => {
 				dsn: parsed.SENTRY_DSN,
 				project: parsed.SENTRY_PROJECT,
 			},
-			googleMapsApiKey: parsed.GOGGLE_MAPS_API_KEY,
 			backendApiEndpoint: parsed.BACKEND_API_PATH,
 		};
 	} catch (error: any) {
@@ -53,8 +51,6 @@ export const parseEnvironment = (input: unknown) => {
 const extra = parseEnvironment(process.env);
 
 export type Environment = typeof extra;
-
-const { sentry, googleMapsApiKey } = extra;
 
 const details = {
 	id: 'native-starter',
@@ -110,11 +106,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	android: {
 		package: `com.${details.org}.${details.id}`,
 		versionCode: semverToInt(details.version),
-		config: {
-			googleMaps: {
-				apiKey: googleMapsApiKey,
-			},
-		},
 		adaptiveIcon: {
 			foregroundImage: './assets/adaptive-icon.png',
 		},
@@ -128,8 +119,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			{
 				file: 'sentry-expo/upload-sourcemaps',
 				config: {
-					organization: sentry.organization,
-					project: sentry.project,
+					organization: extra.sentry.organization,
+					project: extra.sentry.project,
 					setCommits: true,
 				},
 			},

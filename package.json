@@ -1,7 +1,7 @@
 {
 	"name": "react-native-starter",
 	"version": "1.0.0",
-	"main": "node_modules/expo/AppEntry.js",
+	"main": "index.ts",
 	"scripts": {
 		"start": "cross-env ENV=development expo start",
 		"android": "cross-env ENV=development expo start --android",
@@ -92,6 +92,10 @@
 		"ts-jest": "^29.1.0",
 		"tsx": "^3.12.7",
 		"typescript": "^4.9.4"
+	},
+	"overrides": {
+		"metro": "0.76.0",
+		"metro-resolver": "0.76.0"
 	},
 	"private": true
 }

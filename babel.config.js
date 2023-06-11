@@ -6,6 +6,7 @@ module.exports = function (api) {
 		plugins: [
 			'react-native-reanimated/plugin',
 			'tsconfig-paths-module-resolver',
+			require.resolve('expo-router/babel'),
 		],
 	};
 };
