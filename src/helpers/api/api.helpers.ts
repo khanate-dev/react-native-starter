@@ -3,7 +3,7 @@ import { getNetworkStateAsync } from 'expo-network';
 
 import { disableAuth, isFetchMocked } from 'src/config';
 import { ApiError, AuthError, ConnectionError, getCatchMessage } from 'errors';
-import { logout } from 'contexts/user';
+import { logout } from 'contexts/auth';
 import { getSetting } from 'helpers/settings';
 
 import type { Utils } from 'types/utils';

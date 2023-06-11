@@ -38,6 +38,7 @@ type componentProps<
 				button?: StyleProp<ViewStyle>;
 				control?: StyleProp<ViewStyle>;
 			};
+			disabled?: boolean;
 		};
 		fields: {
 			[k in keyof T]?: Utils.prettify<{
@@ -49,6 +50,7 @@ type componentProps<
 					}
 				>;
 				dependsOn?: keyof Omit<T, k>;
+				disabled?: boolean;
 			}>;
 		};
 	};
@@ -75,7 +77,10 @@ export type FormProps<
 	/** the props to apply the components */
 	componentProps?:
 		| componentProps<T>
-		| ((state: FormSchemaWorkingObj<T>) => componentProps<T>);
+		| ((
+				state: FormSchemaWorkingObj<T>,
+				isSubmitting: boolean
+		  ) => componentProps<T>);
 
 	/** should the form fields and submit button show icons? */
 	hasIcons?: boolean;
@@ -154,7 +159,7 @@ export const Form = <
 
 	const { container, control, button } =
 		typeof componentProps === 'function'
-			? componentProps(form)
+			? componentProps(form, isSubmitting)
 			: componentProps ?? {};
 
 	return (
@@ -187,7 +192,8 @@ export const Form = <
 								(typeof isBusy === 'function' ? isBusy(form as any) : isBusy) ||
 								isSubmitting ||
 								(props.dependsOn && !form[props.dependsOn as never]) ||
-								(typeof status === 'object' && status?.type === 'success')
+								(typeof status === 'object' && status?.type === 'success') ||
+								props.disabled
 							}
 							onSubmit={handleSubmit}
 							onChange={(value: unknown) => {

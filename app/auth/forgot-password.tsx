@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { z } from 'zod';
+import { useRouter } from 'expo-router';
 
 import { wait } from 'helpers/async';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
@@ -10,8 +11,7 @@ import { userSchema } from 'schemas/user';
 import { FormSchema } from 'schemas/form-schema.class';
 import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
-
-import type { AuthPageProps } from '../auth.types';
+import { getThemeColor } from 'styles/theme';
 
 export type ResetCodeStatus =
 	| 'idle'
@@ -43,25 +43,14 @@ export const schema = new FormSchema({
 	},
 });
 
-export const ForgotPassword = ({
-	navigation,
-}: AuthPageProps<'forgot-password'>) => {
+export const ForgotPassword = () => {
 	const theme = useTheme();
+	const router = useRouter();
 
 	const [codeStatus, setCodeStatus] = useState<ResetCodeStatus>('idle');
 	const [isResetting, setIsResetting] = useState<boolean>(false);
 
-	fields.email.inputProps = {
-		status:
-			codeStatus === 'sendingFailed'
-				? 'danger'
-				: codeStatus && codeStatus !== 'sending'
-				? 'success'
-				: undefined,
-		disabled: codeStatus === 'sending',
-	};
 	fields.email.button = {
-		style: { width: isSmallerScreen ? 125 : 175 },
 		label:
 			codeStatus === 'sending'
 				? 'Sending...'
@@ -123,10 +112,14 @@ export const ForgotPassword = ({
 		disabled: codeStatus !== 'confirmed',
 	};
 
+	const changeEmailColor =
+		codeStatus === 'sendingFailed' ||
+		(codeStatus !== 'idle' && codeStatus !== 'sending');
+
 	return (
 		<ScreenWrapper
 			title='Reset Password'
-			onBack={() => navigation.goBack()}
+			onBack={() => router.back()}
 		>
 			<View
 				style={{
@@ -168,9 +161,43 @@ export const ForgotPassword = ({
 				schema={schema}
 				isBusy={isResetting}
 				submitLabel={isResetting ? 'Resetting...' : 'Reset Password'}
-				styles={{
-					container: { padding: isSmallerScreen ? 15 : 30 },
-				}}
+				componentProps={(state) => ({
+					container: {
+						style: {
+							padding: isSmallerScreen ? 15 : 30,
+						},
+					},
+					button: {
+						label: isResetting ? 'Resetting...' : 'Reset Password',
+					},
+					control: {
+						fields: {
+							email: {
+								styles: {
+									button: {
+										backgroundColor: changeEmailColor
+											? getThemeColor(
+													theme,
+													codeStatus === 'sendingFailed' ? 'error' : 'success',
+													'container'
+											  )
+											: undefined,
+										color: changeEmailColor
+											? getThemeColor(
+													theme,
+													codeStatus === 'sendingFailed' ? 'error' : 'success',
+													'container-contrast'
+											  )
+											: undefined,
+									},
+									width: isSmallerScreen ? 125 : 175,
+								},
+								dependsOn: 'code',
+								disabled: codeStatus === 'sending',
+							},
+						},
+					},
+				})}
 				disabled={(state) =>
 					!state.password ||
 					state.password !== state.confirmPassword ||
@@ -182,7 +209,7 @@ export const ForgotPassword = ({
 					await wait(1500).finally(() => setIsResetting(false));
 					setCodeStatus('idle');
 					setTimeout(() => {
-						navigation.goBack();
+						router.back();
 					}, 500);
 					return 'Password Reset Successful!';
 				}}
@@ -207,3 +234,5 @@ export const ForgotPassword = ({
 		</ScreenWrapper>
 	);
 };
+
+export default ForgotPassword;
