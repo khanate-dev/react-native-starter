@@ -19,11 +19,25 @@ import type {
 	TextStyle,
 } from 'react-native';
 import type { AppIconName } from 'components/media/app-icon';
-import type { FormSchemaFieldType } from 'schemas/form-schema.class';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
 
-const keyboardTypes: Record<FormSchemaFieldType, KeyboardTypeOptions> = {
+export const formControlType = [
+	'email',
+	'float',
+	'int',
+	'phone',
+	'password',
+	'string',
+	'search',
+	'date',
+	'time',
+	'boolean',
+] as const;
+
+export type FormControlType = (typeof formControlType)[number];
+
+const keyboardTypes: Record<FormControlType, KeyboardTypeOptions> = {
 	email: 'email-address',
 	float: 'decimal-pad',
 	int: 'number-pad',
@@ -36,7 +50,7 @@ const keyboardTypes: Record<FormSchemaFieldType, KeyboardTypeOptions> = {
 	boolean: 'default',
 };
 
-const icons: Record<FormSchemaFieldType, AppIconName> = {
+const icons: Record<FormControlType, AppIconName> = {
 	email: 'email-at',
 	float: 'number',
 	int: 'number',
@@ -81,7 +95,10 @@ export type FormControlProps = {
 	caption?: string;
 
 	/** the button to show on the right side of the input */
-	button?: Pick<ButtonProps, 'label' | 'onPress' | 'icon'>;
+	button?: Pick<
+		ButtonProps,
+		'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
+	>;
 
 	/** should the input have an icon to the left side */
 	hasIcon?: boolean;
@@ -114,7 +131,7 @@ export type FormControlProps = {
 			styles?: styles & { control?: StyleProp<ViewStyle> };
 	  }
 	| {
-			type: Exclude<FormSchemaFieldType, 'date' | 'time' | 'boolean'>;
+			type: Exclude<FormControlType, 'date' | 'time' | 'boolean'>;
 			value: string;
 			onChange: (value: string) => void;
 			styles?: styles & { control?: StyleProp<TextStyle> };
