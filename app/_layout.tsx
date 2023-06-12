@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
 import { PaperProvider } from 'react-native-paper';
+import { Slot } from 'expo-router';
 
 import { environment } from 'config';
 import { darkTheme, lightTheme } from 'styles/theme';
@@ -48,6 +49,7 @@ const Root = () => {
 								style='light'
 								backgroundColor='#000000'
 							/>
+							<Slot />
 						</LoadingProvider>
 					</AlertProvider>
 				</AuthProvider>
