@@ -44,7 +44,7 @@ export const ScreenWrapper = ({
 
 	const content = (
 		<>
-			{Boolean(onBack || title || user?.name) && (
+			{Boolean(onBack || title || user.name) && (
 				<View
 					style={{
 						flexDirection: 'row',
@@ -102,7 +102,7 @@ export const ScreenWrapper = ({
 							alignItems: 'center',
 						}}
 					>
-						{Boolean(user?.name) && (
+						{Boolean(user.name) && (
 							<>
 								<IconButton
 									style={{ padding: 5, borderRadius: 5 }}
