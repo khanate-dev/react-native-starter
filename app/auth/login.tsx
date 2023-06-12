@@ -6,20 +6,27 @@ import { userSchema } from 'schemas/user';
 import { endpoints } from 'endpoints';
 import { login } from 'contexts/auth';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Form } from 'components/controls/form';
 import { IconButton } from 'components/controls/icon-button';
 import { Button } from 'components/controls/button';
-import { FormSchema } from 'schemas/form-schema.class';
+import { useForm } from 'hooks/form';
+import { FormControl } from 'components/controls/form-control';
 
 const headerHeight = isSmallerScreen ? 250 : 300;
 
-const schema = new FormSchema({
-	email: { zod: userSchema.shape.email, type: 'email' },
-	password: { zod: userSchema.shape.password, type: 'password' },
-});
+const schema = userSchema.pick({ email: true, password: true });
 
 export const Login = () => {
 	const router = useRouter();
+
+	const { fields, status, statusJsx, buttonProps, handleSubmit } = useForm(
+		schema,
+		{ email: { type: 'email' }, password: { type: 'password' } },
+		async (state) => {
+			const user = await endpoints.user.login(state);
+			setTimeout(() => login(user), 1000);
+			return 'Logged In! Redirecting...';
+		}
+	);
 
 	return (
 		<ScreenWrapper>
@@ -51,25 +58,20 @@ export const Login = () => {
 				</Text>
 			</Surface>
 
-			<Form
-				schema={schema}
-				componentProps={(_, isSubmitting) => ({
-					container: {
-						style: {
-							flexGrow: 1,
-							flexShrink: 0,
-							padding: isSmallerScreen ? 10 : 30,
-						},
-					},
-					button: {
-						label: isSubmitting ? 'Logging In...' : 'Log In',
-					},
-				})}
-				onSubmit={async (state) => {
-					const user = await endpoints.user.login(state);
-					setTimeout(() => login(user), 1000);
-					return 'Logged In! Redirecting...';
-				}}
+			<FormControl {...fields.email} />
+
+			<FormControl
+				{...fields.password}
+				isLast
+				onSubmit={handleSubmit}
+			/>
+
+			{statusJsx}
+
+			<Button
+				{...buttonProps}
+				icon='submit'
+				label={status.type === 'submitting' ? 'Logging In...' : 'Log In'}
 			/>
 
 			<Button
