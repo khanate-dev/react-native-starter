@@ -11,6 +11,25 @@ import { DarkModeProvider, useDarkMode } from 'contexts/dark-mode';
 import { AuthProvider } from 'contexts/auth';
 import { LoadingProvider } from 'contexts/loading';
 
+const Providers = () => {
+	const isDarkMode = useDarkMode();
+	return (
+		<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
+			<AuthProvider>
+				<AlertProvider>
+					<LoadingProvider>
+						<StatusBar
+							style='light'
+							backgroundColor='#000000'
+						/>
+						<Slot />
+					</LoadingProvider>
+				</AlertProvider>
+			</AuthProvider>
+		</PaperProvider>
+	);
+};
+
 const Root = () => {
 	useEffect(() => {
 		if (
@@ -41,19 +60,7 @@ const Root = () => {
 
 	return (
 		<DarkModeProvider>
-			<PaperProvider theme={useDarkMode() ? darkTheme : lightTheme}>
-				<AuthProvider>
-					<AlertProvider>
-						<LoadingProvider>
-							<StatusBar
-								style='light'
-								backgroundColor='#000000'
-							/>
-							<Slot />
-						</LoadingProvider>
-					</AlertProvider>
-				</AuthProvider>
-			</PaperProvider>
+			<Providers />
 		</DarkModeProvider>
 	);
 };
