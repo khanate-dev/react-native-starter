@@ -58,6 +58,14 @@ export const logout = () => emit('logout');
 /** fires the login event to set the new user on login */
 export const login = (user: LoggedInUser) => emit('login', user);
 
+export const useUserOrNull = (): LoggedInUser | null => {
+	const user = useContext(UserContext);
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (user === undefined)
+		throw new Error('useUser must be used within a UserProvider');
+	return user;
+};
+
 export const useUser = (): LoggedInUser => {
 	const user = useContext(UserContext);
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
