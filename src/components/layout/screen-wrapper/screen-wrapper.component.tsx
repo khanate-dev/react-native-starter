@@ -3,7 +3,7 @@ import { Surface, Text, useTheme } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
-import { useUser, logout } from 'contexts/auth';
+import { logout, useUserOrNull } from 'contexts/auth';
 import { Background } from 'components/media/background';
 import { IconButton } from 'components/controls/icon-button';
 import { AppIcon } from 'components/media/app-icon';
@@ -36,7 +36,7 @@ export const ScreenWrapper = ({
 	onBack,
 	hasPlainBackground,
 }: ScreenWrapperProps) => {
-	const user = useUser();
+	const user = useUserOrNull();
 	const theme = useTheme();
 	const isDarkMode = useDarkMode();
 
@@ -44,7 +44,7 @@ export const ScreenWrapper = ({
 
 	const content = (
 		<>
-			{Boolean(onBack || title || user.name) && (
+			{Boolean(onBack || title || user?.name) && (
 				<View
 					style={{
 						flexDirection: 'row',
@@ -102,7 +102,7 @@ export const ScreenWrapper = ({
 							alignItems: 'center',
 						}}
 					>
-						{Boolean(user.name) && (
+						{Boolean(user?.name) && (
 							<>
 								<IconButton
 									style={{ padding: 5, borderRadius: 5 }}
