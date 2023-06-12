@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { isDayjs } from 'dayjs';
 
-import { CNIC_REGEX, JWT_REGEX, PHONE_REGEX } from 'config';
+import { JWT_REGEX, PHONE_REGEX } from 'config';
 import { dayjsUtc } from 'helpers/date';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbKey');
@@ -16,23 +16,9 @@ export type ZodJwt = typeof jwtSchema;
 
 export type Jwt = z.infer<typeof jwtSchema>;
 
-export const cnicSchema = z.string().regex(CNIC_REGEX).brand('cnic');
+export const emailSchema = z.string().email();
 
-export type ZodCnic = typeof cnicSchema;
-
-export type Cnic = z.infer<typeof cnicSchema>;
-
-export const emailSchema = z.string().email().brand('email');
-
-export type ZodEmail = typeof emailSchema;
-
-export type Email = z.infer<typeof emailSchema>;
-
-export const phoneSchema = z.string().regex(PHONE_REGEX).brand('phone');
-
-export type ZodPhone = typeof phoneSchema;
-
-export type Phone = z.infer<typeof phoneSchema>;
+export const phoneSchema = z.string().regex(PHONE_REGEX);
 
 export const dayjsSchema = z.instanceof(
 	dayjsUtc as unknown as typeof dayjsUtc.Dayjs
