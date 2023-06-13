@@ -33,6 +33,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 			setUser(null);
 		});
 
+		if (segments[0] === '[...404]') return;
+
 		const inAuthGroup = segments[0] === 'auth';
 
 		if (!user && !inAuthGroup) router.replace('/auth');
