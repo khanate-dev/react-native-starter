@@ -2,6 +2,7 @@
 import { Button as Component } from 'react-native-paper';
 
 import { isSmallerScreen } from 'src/config';
+import { appIconMap } from 'components/media/app-icon';
 
 import type { AppIconName } from 'components/media/app-icon';
 import type { ButtonProps as Props } from 'react-native-paper';
@@ -24,11 +25,14 @@ export const Button = ({
 	mode = 'contained',
 	noMargin,
 	disabled,
+	icon,
 	...restProps
 }: ButtonProps) => {
+	const name = icon && appIconMap[icon];
 	return (
 		<Component
 			{...restProps}
+			icon={name}
 			mode={mode}
 			disabled={disabled || restProps.loading}
 			style={[
