@@ -2,9 +2,9 @@
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 
 // eslint-disable-next-line no-restricted-imports
-import type { Icon as IconType } from '@expo/vector-icons/build/createIconSet';
+import type { IconProps } from '@expo/vector-icons/build/createIconSet';
 
-type map = typeof Icon extends IconType<infer T, any> ? T : never;
+type map = typeof Icon extends IconProps<infer T> ? T : never;
 
 export const appIconMap = {
 	logout: 'power',
@@ -37,14 +37,7 @@ export const appIconMap = {
 
 export type AppIconName = keyof typeof appIconMap;
 
-type GetConstructorParams<T> = T extends new (...args: infer I) => any
-	? I
-	: never;
-
-export type AppIconProps = Omit<
-	GetConstructorParams<typeof Icon>[0],
-	'name'
-> & {
+export type AppIconProps = Omit<IconProps<any>, 'name'> & {
 	name: AppIconName;
 };
 
