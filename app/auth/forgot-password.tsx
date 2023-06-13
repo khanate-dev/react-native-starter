@@ -12,6 +12,7 @@ import { AppIcon } from 'components/media/app-icon';
 import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
+import { Alert } from 'components/feedback/alert';
 
 export type ResetCodeStatus =
 	| 'idle'
@@ -22,34 +23,31 @@ export type ResetCodeStatus =
 	| 'confirmed'
 	| 'rejected';
 
-const schema = userSchema.pick({ email: true, password: true }).extend({
-	code: z.number().int().min(0).max(999999),
-	confirmPassword: userSchema.shape.password,
-});
-
 export const ForgotPassword = () => {
 	const theme = useTheme();
 	const router = useRouter();
 
-	const { fields, state, status, statusJsx, buttonProps, handleSubmit } =
-		useForm(
-			schema,
-			{
-				email: { type: 'email' },
-				code: { type: 'int' },
-				password: { type: 'password' },
-				confirmPassword: { type: 'password' },
-			},
-			async (_body) => {
-				setIsResetting(true);
-				await wait(1500).finally(() => setIsResetting(false));
-				setCodeStatus('idle');
-				setTimeout(() => {
-					router.back();
-				}, 500);
-				return 'Password Reset Successful!';
-			}
-		);
+	const { state, props } = useForm({
+		schema: userSchema.pick({ email: true, password: true }).extend({
+			code: z.number().int().min(0).max(999999),
+			confirmPassword: userSchema.shape.password,
+		}),
+		details: {
+			email: { type: 'email' },
+			code: { type: 'int' },
+			password: { type: 'password' },
+			confirmPassword: { type: 'password', isLast: true },
+		},
+		onSubmit: async (_body) => {
+			setIsResetting(true);
+			await wait(1500).finally(() => setIsResetting(false));
+			setCodeStatus('idle');
+			setTimeout(() => {
+				router.back();
+			}, 500);
+			return 'Password Reset Successful!';
+		},
+	});
 
 	const [codeStatus, setCodeStatus] = useState<ResetCodeStatus>('idle');
 	const [isResetting, setIsResetting] = useState<boolean>(false);
@@ -96,9 +94,9 @@ export const ForgotPassword = () => {
 			</View>
 
 			<FormControl
-				{...fields.email}
-				type={fields.email.type}
-				disabled={status.type === 'submitting'}
+				{...props.field.email}
+				type={props.field.email.type}
+				disabled={state.status.type === 'submitting'}
 				button={{
 					label:
 						codeStatus === 'sending'
@@ -114,7 +112,7 @@ export const ForgotPassword = () => {
 					loading: codeStatus === 'sending',
 					disabled:
 						['sending', 'verifying'].includes(codeStatus) ||
-						!state.email.trim(),
+						!state.values.email.trim(),
 					onPress: async () => {
 						setCodeStatus('sending');
 						await wait(1000);
@@ -122,14 +120,14 @@ export const ForgotPassword = () => {
 					},
 				}}
 				onChange={(value) => {
-					fields.email.onChange(value);
+					props.field.email.onChange(value);
 					if (!value.trim()) setCodeStatus('idle');
 				}}
 			/>
 
 			<FormControl
-				{...fields.code}
-				type={fields.code.type}
+				{...props.field.code}
+				type={props.field.code.type}
 				disabled={codeStatus === 'idle' || codeStatus === 'sending'}
 				button={{
 					label:
@@ -153,13 +151,13 @@ export const ForgotPassword = () => {
 						await wait(1000);
 						setCodeStatus(Math.round(Math.random()) ? 'confirmed' : 'rejected');
 					},
-					disabled: codeStatus === 'verifying' || !state.code.trim(),
+					disabled: codeStatus === 'verifying' || !state.values.code.trim(),
 				}}
 				onChange={(value) => {
-					fields.code.onChange(value);
+					props.field.code.onChange(value);
 					if (
 						!value.trim() &&
-						state.email.trim() &&
+						state.values.email.trim() &&
 						['verifying', 'confirmed', 'rejected'].includes(codeStatus)
 					)
 						setCodeStatus('sent');
@@ -167,27 +165,27 @@ export const ForgotPassword = () => {
 			/>
 
 			<FormControl
-				{...fields.password}
+				{...props.field.password}
 				disabled={codeStatus !== 'confirmed'}
 			/>
 
 			<FormControl
-				{...fields.confirmPassword}
+				{...props.field.confirmPassword}
 				disabled={codeStatus !== 'confirmed'}
-				isLast
-				onSubmit={handleSubmit}
 			/>
 
-			{statusJsx}
+			{props.status && <Alert {...props.status} />}
 
 			<Button
-				{...buttonProps}
-				label={status.type === 'success' ? 'Resetting...' : 'Reset Password'}
-				loading={buttonProps.loading || isResetting}
+				{...props.button}
+				loading={props.button.loading || isResetting}
+				label={
+					state.status.type === 'success' ? 'Resetting...' : 'Reset Password'
+				}
 				disabled={
-					buttonProps.disabled ||
-					!state.password ||
-					state.password !== state.confirmPassword ||
+					props.button.disabled ||
+					!state.values.password ||
+					state.values.password !== state.values.confirmPassword ||
 					codeStatus !== 'confirmed'
 				}
 			/>

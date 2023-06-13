@@ -1,4 +1,4 @@
-import { Surface, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
 import { isSmallerScreen } from 'src/config';
@@ -6,72 +6,49 @@ import { userSchema } from 'schemas/user';
 import { endpoints } from 'endpoints';
 import { login } from 'contexts/auth';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { IconButton } from 'components/controls/icon-button';
 import { Button } from 'components/controls/button';
 import { useForm } from 'hooks/form';
 import { FormControl } from 'components/controls/form-control';
-
-const headerHeight = isSmallerScreen ? 250 : 300;
-
-const schema = userSchema.pick({ email: true, password: true });
+import { Alert } from 'components/feedback/alert';
 
 const Login = () => {
 	const router = useRouter();
 
-	const { fields, status, statusJsx, buttonProps, handleSubmit } = useForm(
-		schema,
-		{ email: { type: 'email' }, password: { type: 'password' } },
-		async (state) => {
-			const user = await endpoints.user.login(state);
+	const { props, state } = useForm({
+		schema: userSchema.pick({ email: true, password: true }),
+		details: {
+			email: { type: 'email' },
+			password: { type: 'password', isLast: true },
+		},
+		onSubmit: async (values) => {
+			const user = await endpoints.user.login(values);
 			setTimeout(() => login(user), 1000);
 			return 'Logged In! Redirecting...';
-		}
-	);
+		},
+	});
 
 	return (
-		<ScreenWrapper>
-			<Surface
-				elevation={5}
-				style={{
-					height: headerHeight,
-					maxHeight: headerHeight,
-					position: 'relative',
-				}}
+		<ScreenWrapper
+			style={{ padding: 15 }}
+			onBack={() => router.back()}
+		>
+			<Text
+				variant='headlineMedium'
+				style={{ marginBottom: 'auto' }}
 			>
-				<IconButton
-					icon='arrow-back'
-					size={40}
-					style={{
-						marginTop: 30,
-						marginLeft: 30,
-						borderRadius: 5,
-						marginBottom: 15,
-					}}
-					onPress={() => router.back()}
-				/>
+				Hi, {'\n'}Please {'\n'}Login
+			</Text>
 
-				<Text
-					variant='headlineMedium'
-					style={{ marginLeft: 30 }}
-				>
-					Hi, {'\n'}Please {'\n'}Login
-				</Text>
-			</Surface>
+			<FormControl {...props.field.email} />
 
-			<FormControl {...fields.email} />
+			<FormControl {...props.field.password} />
 
-			<FormControl
-				{...fields.password}
-				isLast
-				onSubmit={handleSubmit}
-			/>
-
-			{statusJsx}
+			{props.status && <Alert {...props.status} />}
 
 			<Button
-				{...buttonProps}
+				{...props.button}
 				icon='submit'
-				label={status.type === 'submitting' ? 'Logging In...' : 'Log In'}
+				label={state.status.type === 'submitting' ? 'Logging In...' : 'Log In'}
 			/>
 
 			<Button

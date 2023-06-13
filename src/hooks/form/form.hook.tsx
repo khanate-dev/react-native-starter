@@ -116,8 +116,13 @@ type UseFormInput<
 	Zod extends validSchema,
 	FieldInput extends fieldInput<Zod>
 > = {
+	/** the zod schema for the form */
 	schema: Zod;
+
+	/** the details for form fields */
 	details: FieldInput;
+
+	/** the form submission handler. Return a string to show as success message */
 	onSubmit: (state: Zod['_output']) => Promise<string | undefined>;
 };
 

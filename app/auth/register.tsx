@@ -10,25 +10,24 @@ import { endpoints } from 'src/endpoints';
 import { FormControl } from 'components/controls/form-control';
 import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
-
-const schema = userSchema.pick({ email: true, name: true, password: true });
+import { Alert } from 'components/feedback/alert';
 
 const Register = () => {
 	const router = useRouter();
 
-	const { fields, buttonProps, statusJsx, status, handleSubmit } = useForm(
-		schema,
-		{
+	const { props, state } = useForm({
+		schema: userSchema.pick({ email: true, name: true, password: true }),
+		details: {
 			email: { type: 'email' },
 			name: { type: 'string' },
-			password: { type: 'password' },
+			password: { type: 'password', isLast: true },
 		},
-		async (state) => {
-			await endpoints.user.add(state);
+		onSubmit: async (values) => {
+			await endpoints.user.add(values);
 			setTimeout(() => router.push('/auth/login'), 1000);
 			return 'User Added! Please Wait...';
-		}
-	);
+		},
+	});
 
 	return (
 		<ScreenWrapper>
@@ -58,22 +57,19 @@ const Register = () => {
 				</Text>
 			</View>
 
-			<FormControl {...fields.email} />
+			<FormControl {...props.field.email} />
 
-			<FormControl {...fields.name} />
+			<FormControl {...props.field.name} />
 
-			<FormControl
-				{...fields.password}
-				isLast
-				onSubmit={handleSubmit}
-			/>
+			<FormControl {...props.field.password} />
 
-			{statusJsx}
+			{props.status && <Alert {...props.status} />}
 
 			<Button
-				{...buttonProps}
-				label={status.type === 'submitting' ? 'Submitting...' : 'Create User'}
-				onPress={handleSubmit}
+				{...props.button}
+				label={
+					state.status.type === 'submitting' ? 'Submitting...' : 'Create User'
+				}
 			/>
 		</ScreenWrapper>
 	);
