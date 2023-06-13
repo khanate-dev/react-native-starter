@@ -181,48 +181,12 @@ export const useForm = <
 
 	const { values, status } = state;
 
-	const fieldProps = fieldsArray.reduce(
-		(obj, [key, field]) => ({
-			...obj,
-			[key]: {
-				type: field.type,
-				label: humanizeToken(String(key)),
-				notRequired: field.notRequired ?? false,
-				value: values[key],
-				onChange: (value: unknown) =>
-					dispatch({ type: 'updateState', value: { [key]: value } }),
-				error: status.type === 'error' ? status.fieldErrors[key] : undefined,
-				isLast: field.isLast,
-				handleSubmit: field.isLast ? handleSubmit : undefined,
-			},
-		}),
-		{}
-	) as Utils.prettify<{
-		[k in keyof Details]: Utils.prettify<
-			{
-				type: Details[k]['type'];
-				label: string;
-				notRequired: Details[k]['notRequired'] extends true ? true : false;
-				value: workingTypeMap[Details[k]['type']];
-				onChange: (value: workingTypeMap[Details[k]['type']]) => void;
-				error: string | undefined;
-			} & (Details[k]['isLast'] extends true
-				? { isLast: true; onSubmit: () => void }
-				: {})
-		>;
-	}>;
-
-	const statusProps =
-		(status.type === 'error' || status.type === 'success') && status.message
-			? ({ type: status.type, text: status.message } satisfies AlertProps)
-			: null;
-
 	const handleSubmit = async () => {
 		try {
 			Keyboard.dismiss();
 			dispatch({ type: 'updateStatus', value: { type: 'submitting' } });
 
-			const parsed = schema.parse(state);
+			const parsed = schema.parse(state.values);
 			const result = await onSubmit(parsed);
 			const message = result ?? 'Submission Successful!';
 
@@ -267,11 +231,52 @@ export const useForm = <
 		}
 	};
 
+	const fieldProps = fieldsArray.reduce(
+		(obj, [key, field]) => ({
+			...obj,
+			[key]: {
+				type: field.type,
+				label: humanizeToken(String(key)),
+				notRequired: field.notRequired ?? false,
+				value: values[key],
+				onChange: (value: unknown) =>
+					dispatch({ type: 'updateState', value: { [key]: value } }),
+				error: status.type === 'error' ? status.fieldErrors[key] : undefined,
+				isLast: field.isLast,
+				onSubmit: field.isLast ? handleSubmit : undefined,
+			},
+		}),
+		{}
+	) as Utils.prettify<{
+		[k in keyof Details]: Utils.prettify<
+			{
+				type: Details[k]['type'];
+				label: string;
+				notRequired: Details[k]['notRequired'] extends true ? true : false;
+				value: workingTypeMap[Details[k]['type']];
+				onChange: (value: workingTypeMap[Details[k]['type']]) => void;
+				error: string | undefined;
+			} & (Details[k]['isLast'] extends true
+				? { isLast: true; onSubmit: () => void }
+				: {})
+		>;
+	}>;
+
+	const statusProps =
+		(status.type === 'error' || status.type === 'success') && status.message
+			? ({
+					type: status.type,
+					text: status.message,
+					onClose: () =>
+						dispatch({ type: 'updateStatus', value: { type: 'idle' } }),
+			  } satisfies AlertProps)
+			: null;
+
 	const buttonProps = {
 		icon: 'submit',
 		label: status.type === 'submitting' ? 'Submitting...' : 'Submit',
 		loading: status.type === 'submitting',
-		disabled: status.type !== 'idle',
+		disabled: ['success', 'submitting'].includes(status.type),
 		onPress: handleSubmit,
 	} satisfies ButtonProps;
 
