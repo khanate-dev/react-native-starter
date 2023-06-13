@@ -33,7 +33,7 @@ export const ErrorPage = ({
 			onBack={onBack}
 		>
 			<AppIcon
-				name='error-triangle'
+				name='error'
 				size={isSmallerScreen ? 130 : 150}
 				color={theme.colors.error}
 			/>
@@ -45,24 +45,21 @@ export const ErrorPage = ({
 					textAlign: 'center',
 					fontWeight: '400',
 					textTransform: 'capitalize',
-					fontSize: isSmallerScreen ? 28 : 30,
 					color: theme.colors.error,
-					opacity: 0.5,
 				}}
 			>
 				{heading ?? 'Oops!'}
 			</Text>
 
 			<Text
+				variant='bodyLarge'
 				style={{
 					maxWidth: '70%',
 					marginVertical: isSmallerScreen ? 20 : 30,
 					textAlign: 'center',
 					fontWeight: '400',
-					fontSize: isSmallerScreen ? 14 : 18,
 					textTransform: 'capitalize',
 					lineHeight: 25,
-					opacity: 0.5,
 				}}
 			>
 				{message ?? 'Something Went Wrong!'}
@@ -70,7 +67,8 @@ export const ErrorPage = ({
 
 			<Button
 				label={buttonLabel ?? 'Back'}
-				style={{ minWidth: 150 }}
+				mode='contained-tonal'
+				icon='arrow-back'
 				onPress={onBack}
 			/>
 		</ScreenWrapper>
