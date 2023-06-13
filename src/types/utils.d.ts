@@ -74,4 +74,16 @@ export namespace Utils {
 			? T[k]
 			: never;
 	}>;
+
+	/** creates a union of the given object or an object where all the keys of the object are undefined */
+	export type allOrNone<T extends Obj> = T | { [k in keyof T]?: never };
+
+	/** make keys that can be undefined optional in the object */
+	export type makeUndefinedOptional<T extends Obj> = Utils.prettify<
+		{
+			[k in keyof T as undefined extends T[k] ? k : never]?: T[k];
+		} & {
+			[k in keyof T as undefined extends T[k] ? never : k]: T[k];
+		}
+	>;
 }
