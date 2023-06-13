@@ -21,6 +21,7 @@ import type {
 import type { AppIconName } from 'components/media/app-icon';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
+import type { Utils } from 'types/utils';
 
 export const formControlType = [
 	'email',
@@ -79,9 +80,6 @@ export type FormControlProps = {
 	/** the function to call when the input changes */
 	onChange: unknown;
 
-	/** the function to submit the function. Used to trigger form submission on the last input field submission */
-	onSubmit?: () => void;
-
 	/** the styles to apply the control */
 	styles?: styles;
 
@@ -103,40 +101,41 @@ export type FormControlProps = {
 	/** should the input have an icon to the left side */
 	hasIcon?: boolean;
 
-	/** should the input have no vertical margins? */
-	noMargin?: boolean;
-
-	/** is the input the last in the form? */
-	isLast?: boolean;
-
 	/** should the input be disabled? */
 	disabled?: boolean;
-} & (
-	| {
-			type: 'date';
-			value: Dayjs | null;
-			onChange: (value: Dayjs | null) => void;
-			styles?: styles & { control?: StyleProp<TextStyle> };
-	  }
-	| {
-			type: 'time';
-			value: z.infer<ZodTime> | null;
-			onChange: (value: z.infer<ZodTime> | null) => void;
-			styles?: styles & { control?: StyleProp<TextStyle> };
-	  }
-	| {
-			type: 'boolean';
-			value: boolean;
-			onChange: (value: boolean) => void;
-			styles?: styles & { control?: StyleProp<ViewStyle> };
-	  }
-	| {
-			type: Exclude<FormControlType, 'date' | 'time' | 'boolean'>;
-			value: string;
-			onChange: (value: string) => void;
-			styles?: styles & { control?: StyleProp<TextStyle> };
-	  }
-);
+} & Utils.allOrNone<{
+	/** is the input the last in the form? */
+	isLast: boolean;
+
+	/** the function to submit the function. Used to trigger form submission on the last input field submission */
+	onSubmit: () => void;
+}> &
+	(
+		| {
+				type: 'date';
+				value: Dayjs | null;
+				onChange: (value: Dayjs | null) => void;
+				styles?: styles & { control?: StyleProp<TextStyle> };
+		  }
+		| {
+				type: 'time';
+				value: z.infer<ZodTime> | null;
+				onChange: (value: z.infer<ZodTime> | null) => void;
+				styles?: styles & { control?: StyleProp<TextStyle> };
+		  }
+		| {
+				type: 'boolean';
+				value: boolean;
+				onChange: (value: boolean) => void;
+				styles?: styles & { control?: StyleProp<ViewStyle> };
+		  }
+		| {
+				type: Exclude<FormControlType, 'date' | 'time' | 'boolean'>;
+				value: string;
+				onChange: (value: string) => void;
+				styles?: styles & { control?: StyleProp<TextStyle> };
+		  }
+	);
 
 export const FormControl = ({
 	type,
@@ -149,7 +148,6 @@ export const FormControl = ({
 	caption,
 	button,
 	hasIcon,
-	noMargin,
 	isLast,
 	disabled,
 }: FormControlProps) => {
@@ -221,18 +219,13 @@ export const FormControl = ({
 				onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
 				onSubmitEditing={() => {
 					if (!isLast) return;
-					onSubmit?.();
+					onSubmit();
 				}}
 			/>
 		);
 
 	return (
-		<View
-			style={[
-				{ marginBottom: noMargin ? 0 : isSmallerScreen ? 10 : 20 },
-				styles?.container,
-			]}
-		>
+		<View style={styles?.container}>
 			{button ? (
 				<View style={lineFlex}>
 					{inputJsx}
