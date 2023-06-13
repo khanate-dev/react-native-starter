@@ -1,15 +1,15 @@
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 
 import { ErrorPage } from 'components/layout/error-page';
 
 const NotFound = () => {
 	const router = useRouter();
+	const pathname = usePathname();
 
 	return (
 		<ErrorPage
-			title='Path not found!'
-			heading='404'
-			message='The page you are looking for does not exist.'
+			title='not found!'
+			message={`path ${pathname} does not exist!`}
 			onBack={() => router.push('/')}
 		/>
 	);
