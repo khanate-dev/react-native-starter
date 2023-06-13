@@ -1,7 +1,6 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-import { isSmallerScreen } from 'src/config';
 import { userSchema } from 'schemas/user';
 import { endpoints } from 'endpoints';
 import { login } from 'contexts/auth';
@@ -29,7 +28,7 @@ const Login = () => {
 
 	return (
 		<ScreenWrapper
-			style={{ padding: 15 }}
+			style={{ padding: 15, gap: 5 }}
 			onBack={() => router.back()}
 		>
 			<Text
@@ -43,7 +42,12 @@ const Login = () => {
 
 			<FormControl {...props.field.password} />
 
-			{props.status && <Alert {...props.status} />}
+			{props.status && (
+				<Alert
+					{...props.status}
+					style={{ marginBottom: 10 }}
+				/>
+			)}
 
 			<Button
 				{...props.button}
@@ -53,13 +57,12 @@ const Login = () => {
 
 			<Button
 				label='Forgot Password?'
+				mode='contained-tonal'
 				style={{
-					marginTop: 0,
-					marginBottom: isSmallerScreen ? 10 : 20,
-					padding: 0,
 					width: 200,
 					marginLeft: 'auto',
 					marginRight: 'auto',
+					marginTop: 10,
 				}}
 				onPress={() => router.push('/auth/forgot-password')}
 			/>
