@@ -28,6 +28,7 @@ const Login = () => {
 
 	return (
 		<ScreenWrapper
+			title='login'
 			style={{ padding: 15, gap: 5 }}
 			onBack={() => router.back()}
 		>

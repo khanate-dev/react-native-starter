@@ -1,10 +1,7 @@
-import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-import { isSmallerScreen } from 'src/config';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { IconButton } from 'components/controls/icon-button';
 import { userSchema } from 'schemas/user';
 import { endpoints } from 'src/endpoints';
 import { FormControl } from 'components/controls/form-control';
@@ -30,32 +27,18 @@ const Register = () => {
 	});
 
 	return (
-		<ScreenWrapper>
-			<View
-				style={{
-					paddingHorizontal: isSmallerScreen ? 10 : 30,
-					paddingVertical: isSmallerScreen ? 10 : 20,
-					flexDirection: 'row',
-					alignItems: 'center',
-				}}
+		<ScreenWrapper
+			title='register'
+			style={{ padding: 15, gap: 5 }}
+			onBack={() => router.back()}
+		>
+			<Text
+				variant='headlineMedium'
+				style={{ marginBottom: 'auto' }}
 			>
-				<IconButton
-					icon='arrow-back'
-					size={isSmallerScreen ? 35 : 40}
-					style={{
-						borderRadius: 5,
-						marginRight: isSmallerScreen ? 10 : 15,
-					}}
-					onPress={() => router.back()}
-				/>
-
-				<Text
-					style={{ marginBottom: 5 }}
-					variant={isSmallerScreen ? 'headlineMedium' : 'headlineSmall'}
-				>
-					{"Welcome! Let's Get Started"}
-				</Text>
-			</View>
+				Welcome! {'\n'}
+				{"Let's Get Started"}
+			</Text>
 
 			<FormControl {...props.field.email} />
 
@@ -63,7 +46,12 @@ const Register = () => {
 
 			<FormControl {...props.field.password} />
 
-			{props.status && <Alert {...props.status} />}
+			{props.status && (
+				<Alert
+					{...props.status}
+					style={{ marginBottom: 10 }}
+				/>
+			)}
 
 			<Button
 				{...props.button}
