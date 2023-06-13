@@ -13,7 +13,7 @@ import { Button } from 'components/controls/button';
 
 const schema = userSchema.pick({ email: true, name: true, password: true });
 
-export const Register = () => {
+const Register = () => {
 	const router = useRouter();
 
 	const { fields, buttonProps, statusJsx, status, handleSubmit } = useForm(
@@ -78,3 +78,5 @@ export const Register = () => {
 		</ScreenWrapper>
 	);
 };
+
+export default Register;

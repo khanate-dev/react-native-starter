@@ -30,12 +30,12 @@ const Auth = () => {
 
 			<Button
 				label='Register'
-				onPress={() => router.push('auth/register')}
+				onPress={() => router.push('/auth/register')}
 			/>
 
 			<Button
 				label='Login'
-				onPress={() => router.push('auth/login')}
+				onPress={() => router.push('/auth/login')}
 			/>
 		</ScreenWrapper>
 	);

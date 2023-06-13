@@ -15,7 +15,7 @@ const headerHeight = isSmallerScreen ? 250 : 300;
 
 const schema = userSchema.pick({ email: true, password: true });
 
-export const Login = () => {
+const Login = () => {
 	const router = useRouter();
 
 	const { fields, status, statusJsx, buttonProps, handleSubmit } = useForm(
@@ -89,3 +89,5 @@ export const Login = () => {
 		</ScreenWrapper>
 	);
 };
+
+export default Login;
