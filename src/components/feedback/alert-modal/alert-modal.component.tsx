@@ -167,7 +167,6 @@ export const AlertModal = ({
 								action.style,
 								index > 0 && { marginLeft: 15 },
 							]}
-							noMargin
 							onPress={(event) => {
 								action.onPress?.(event);
 								handleClose();
