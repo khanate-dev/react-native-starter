@@ -2,17 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, useSegments } from 'expo-router';
 
 import { getSetting, removeSetting, setSetting } from 'helpers/settings';
-import { createEventHandlers } from 'helpers/events/events.helpers';
+import { events } from 'helpers/events';
 
 import type { LoggedInUser } from 'schemas/user';
 import type { PropsWithChildren } from 'react';
 
 const UserContext = createContext<null | LoggedInUser>(null);
-
-const { emit, listen } = createEventHandlers<{
-	login: [LoggedInUser];
-	logout: [];
-}>();
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 	const router = useRouter();
@@ -26,13 +21,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 			setUser(storedUser);
 		})();
 
-		const loginListener = listen('login', async (newUser) => {
+		const loginListener = events.listen('login', async (newUser) => {
 			const added = await setSetting('user', newUser);
 			if (!added) return;
 			setUser(newUser);
 		});
 
-		const logoutListener = listen('logout', async () => {
+		const logoutListener = events.listen('logout', async () => {
 			const removed = await removeSetting('user');
 			if (!removed) return;
 			setUser(null);
@@ -53,10 +48,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 };
 
 /** fires the logout event to force logout on authentication errors */
-export const logout = () => emit('logout');
+export const logout = () => events.emit('logout');
 
 /** fires the login event to set the new user on login */
-export const login = (user: LoggedInUser) => emit('login', user);
+export const login = (user: LoggedInUser) => events.emit('login', user);
 
 export const useUserOrNull = (): LoggedInUser | null => {
 	const user = useContext(UserContext);

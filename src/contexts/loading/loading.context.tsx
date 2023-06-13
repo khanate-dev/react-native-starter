@@ -1,21 +1,17 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { LoadingModal } from 'components/feedback/loading-modal';
-import { createEventHandlers } from 'helpers/events/events.helpers';
+import { events } from 'helpers/events/events.helpers';
 
 import type { SetStateAction, PropsWithChildren } from 'react';
 
 const LoadingContext = createContext<boolean>(false);
 
-const { emit, listen } = createEventHandlers<{
-	'set-is-loading': [SetStateAction<boolean>];
-}>();
-
 export const LoadingProvider = ({ children }: PropsWithChildren) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		const listener = listen('set-is-loading', setIsLoading);
+		const listener = events.listen('setIsLoading', setIsLoading);
 
 		return () => {
 			listener.remove();
@@ -40,4 +36,4 @@ export const useLoading = () => {
 };
 
 export const setIsLoading = (value: SetStateAction<boolean>) =>
-	emit('set-is-loading', value);
+	events.emit('setIsLoading', value);
