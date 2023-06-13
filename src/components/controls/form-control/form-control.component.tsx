@@ -10,6 +10,7 @@ import { AppIcon } from 'components/media/app-icon';
 import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 
+import type { TextInputProps } from 'react-native-paper';
 import type { Dayjs } from 'dayjs';
 import type { ButtonProps } from 'components/controls/button';
 import type {
@@ -70,7 +71,7 @@ type styles = {
 	button?: StyleProp<ViewStyle>;
 };
 
-export type FormControlProps = {
+export type FormControlProps = Pick<TextInputProps, 'mode'> & {
 	/** the type of the input field */
 	type: unknown;
 
@@ -104,12 +105,12 @@ export type FormControlProps = {
 	/** should the input be disabled? */
 	disabled?: boolean;
 } & Utils.allOrNone<{
-	/** is the input the last in the form? */
-	isLast: boolean;
+		/** is the input the last in the form? */
+		isLast: boolean;
 
-	/** the function to submit the function. Used to trigger form submission on the last input field submission */
-	onSubmit: () => void;
-}> &
+		/** the function to submit the function. Used to trigger form submission on the last input field submission */
+		onSubmit: () => void;
+	}> &
 	(
 		| {
 				type: 'date';
@@ -138,6 +139,7 @@ export type FormControlProps = {
 	);
 
 export const FormControl = ({
+	mode = 'outlined',
 	type,
 	value,
 	onChange,
@@ -183,6 +185,7 @@ export const FormControl = ({
 			</View>
 		) : (
 			<TextInput
+				mode={mode}
 				style={styles?.control}
 				label={label}
 				keyboardType={keyboardTypes[type]}
@@ -190,7 +193,7 @@ export const FormControl = ({
 				secureTextEntry={type === 'password' && isSecret}
 				error={Boolean(error)}
 				disabled={disabled}
-				editable={type === 'date' || type === 'time'}
+				editable={!['date', 'time'].includes(type)}
 				left={iconJsx}
 				blurOnSubmit={isLast}
 				value={
@@ -216,6 +219,7 @@ export const FormControl = ({
 						/>
 					) : undefined
 				}
+				dense
 				onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
 				onSubmitEditing={() => {
 					if (!isLast) return;
