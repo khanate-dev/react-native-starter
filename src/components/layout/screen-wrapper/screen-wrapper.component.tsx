@@ -7,7 +7,6 @@ import { logout, useUserOrNull } from 'contexts/auth';
 import { Background } from 'components/media/background';
 import { IconButton } from 'components/controls/icon-button';
 import { AppIcon } from 'components/media/app-icon';
-import { isSmallerScreen } from 'src/config';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 
 import type { PropsWithChildren } from 'react';
@@ -40,126 +39,78 @@ export const ScreenWrapper = ({
 	const theme = useTheme();
 	const isDarkMode = useDarkMode();
 
-	const marginLeft = isSmallerScreen ? 10 : 15;
-
-	const content = (
-		<>
-			{Boolean(onBack || title || user?.name) && (
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						height: 50,
-						width: '100%',
-						padding: 5,
-						flexWrap: 'nowrap',
-					}}
-				>
-					<View
-						style={{
-							flex: 1,
-							flexShrink: 1,
-							height: '100%',
-							flexDirection: 'row',
-							justifyContent: 'flex-start',
-							alignItems: 'center',
-							overflow: 'hidden',
-						}}
-					>
-						{onBack && (
-							<IconButton
-								icon='arrow-back'
-								style={{ borderRadius: 5 }}
-								size={40}
-								onPress={onBack}
-							/>
-						)}
-
-						{Boolean(title) && (
-							<Text
-								variant='headlineLarge'
-								style={{
-									marginLeft,
-									fontWeight: 'bold',
-									color: theme.colors.primary,
-									fontSize: 14,
-									overflow: 'hidden',
-									textTransform: 'capitalize',
-								}}
-							>
-								{title}
-							</Text>
-						)}
-					</View>
-
-					<View
-						style={{
-							flex: 1,
-							flexShrink: 1,
-							height: '100%',
-							flexDirection: 'row',
-							justifyContent: 'flex-end',
-							alignItems: 'center',
-						}}
-					>
-						{Boolean(user?.name) && (
-							<>
-								<IconButton
-									style={{ padding: 5, borderRadius: 5 }}
-									icon='logout'
-									size={30}
-									iconColor={theme.colors.error}
-									mode='outlined'
-									onPress={logout}
-								/>
-								<AppIcon
-									name='user-account'
-									color={theme.colors.primary}
-									style={{
-										marginLeft,
-										width: 30,
-										height: 30,
-										borderColor: theme.colors.primary,
-										borderWidth: 3,
-										borderRadius: 20,
-									}}
-								/>
-							</>
-						)}
-
-						<IconButton
-							style={{ marginLeft, padding: 5, borderRadius: 5 }}
-							icon={isDarkMode ? 'dark-mode' : 'light-mode'}
-							onPress={toggleDarkMode}
-						/>
-					</View>
-				</View>
-			)}
-
-			<Animated.View
-				entering={SlideInLeft.springify()}
-				exiting={SlideOutRight.springify()}
-				style={[style, { flex: 1 }]}
-			>
-				{children}
-			</Animated.View>
-		</>
-	);
+	const borderRadius = 10;
 
 	return (
 		<SafeAreaView style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
 			<Surface style={{ flex: 1, position: 'relative' }}>
 				{!hasPlainBackground && (
-					<Background
-						style={{
-							position: 'absolute',
-							zIndex: 0,
-							width: '100%',
-							height: '100%',
-						}}
-					/>
+					<Background style={{ position: 'absolute', zIndex: 0 }} />
 				)}
-				{content}
+
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						height: 50,
+						flexWrap: 'nowrap',
+					}}
+				>
+					{onBack && (
+						<IconButton
+							icon='arrow-back'
+							style={{ borderRadius }}
+							onPress={onBack}
+						/>
+					)}
+
+					{Boolean(title) && (
+						<Text
+							variant='titleSmall'
+							style={{
+								color: theme.colors.primary,
+								textTransform: 'capitalize',
+								flexGrow: 1,
+							}}
+						>
+							{title}
+						</Text>
+					)}
+
+					{user && (
+						<IconButton
+							icon='logout'
+							iconColor={theme.colors.error}
+							style={{ borderRadius }}
+							onPress={logout}
+						/>
+					)}
+
+					<AppIcon
+						name='user-account'
+						color={theme.colors.primary}
+						style={{
+							borderRadius,
+							backgroundColor: theme.colors.primaryContainer,
+							padding: 10,
+						}}
+						size={30}
+					/>
+
+					<IconButton
+						style={{ borderRadius }}
+						icon={isDarkMode ? 'dark-mode' : 'light-mode'}
+						onPress={toggleDarkMode}
+					/>
+				</View>
+
+				<Animated.View
+					entering={SlideInLeft.springify()}
+					exiting={SlideOutRight.springify()}
+					style={[style, { flex: 1 }]}
+				>
+					{children}
+				</Animated.View>
 			</Surface>
 		</SafeAreaView>
 	);
