@@ -110,9 +110,9 @@ export type ThemeColor = keyof typeof themeColorMap;
 export const themeColorIcons: Record<ThemeColor, AppIconName> = {
 	primary: 'notifications',
 	secondary: 'notifications',
-	success: 'success-circle',
-	error: 'error-circle',
-	warning: 'error-circle',
+	success: 'success',
+	error: 'error',
+	warning: 'error',
 };
 
 export const getThemeColor = (

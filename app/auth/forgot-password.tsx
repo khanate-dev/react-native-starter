@@ -108,8 +108,8 @@ export const ForgotPassword = () => {
 						codeStatus === 'idle'
 							? 'email'
 							: codeStatus === 'sendingFailed'
-							? 'error-circle'
-							: 'success-circle',
+							? 'error'
+							: 'success',
 					style: { width: isSmallerScreen ? 125 : 175 },
 					loading: codeStatus === 'sending',
 					disabled:
@@ -142,9 +142,9 @@ export const ForgotPassword = () => {
 							: 'Verify Code',
 					icon:
 						codeStatus === 'rejected'
-							? 'error-circle'
+							? 'error'
 							: codeStatus === 'confirmed'
-							? 'success-circle'
+							? 'success'
 							: 'submit',
 					loading: codeStatus === 'verifying',
 					onPress: async () => {

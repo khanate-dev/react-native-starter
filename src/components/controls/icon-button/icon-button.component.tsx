@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { IconButton as Component } from 'react-native-paper';
 
-import { materialIconMap } from 'components/media/app-icon';
+import { appIconMap } from 'components/media/app-icon';
 
 import type { AppIconName } from 'components/media/app-icon';
 import type { IconButtonProps as Props } from 'react-native-paper';
@@ -15,7 +15,7 @@ export const IconButton = ({
 	mode = 'contained',
 	...props
 }: IconButtonProps) => {
-	const name = materialIconMap[icon];
+	const name = appIconMap[icon];
 	return (
 		<Component
 			icon={name}
