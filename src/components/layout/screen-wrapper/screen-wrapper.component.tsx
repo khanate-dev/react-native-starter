@@ -81,24 +81,26 @@ export const ScreenWrapper = ({
 						<IconButton
 							icon='logout'
 							iconColor={theme.colors.error}
-							style={{ borderRadius }}
+							style={{ borderRadius, marginLeft: 'auto' }}
 							onPress={logout}
 						/>
 					)}
 
-					<AppIcon
-						name='user-account'
-						color={theme.colors.primary}
-						style={{
-							borderRadius,
-							backgroundColor: theme.colors.primaryContainer,
-							padding: 10,
-						}}
-						size={30}
-					/>
+					{user && (
+						<AppIcon
+							name='user-account'
+							color={theme.colors.primary}
+							size={30}
+							style={{
+								borderRadius,
+								backgroundColor: theme.colors.primaryContainer,
+								padding: 5,
+							}}
+						/>
+					)}
 
 					<IconButton
-						style={{ borderRadius }}
+						style={{ borderRadius, marginLeft: user ? undefined : 'auto' }}
 						icon={isDarkMode ? 'dark-mode' : 'light-mode'}
 						onPress={toggleDarkMode}
 					/>
@@ -107,7 +109,7 @@ export const ScreenWrapper = ({
 				<Animated.View
 					entering={SlideInLeft.springify()}
 					exiting={SlideOutRight.springify()}
-					style={[style, { flex: 1 }]}
+					style={[{ flex: 1, padding: 10 }, style]}
 				>
 					{children}
 				</Animated.View>
