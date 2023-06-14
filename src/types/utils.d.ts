@@ -86,4 +86,23 @@ export namespace Utils {
 			[k in keyof T as undefined extends T[k] ? never : k]: T[k];
 		}
 	>;
+
+	/** convert a given union to a union of permutation of tuples */
+	export type unionToTuples<T, U = T> = [T] extends [never]
+		? []
+		: U extends U
+		? [U, ...unionToTuples<Exclude<T, U>>]
+		: [];
+
+	/** get the last element of a union */
+	export type lastInUnion<T> = Utils.unionToIntersection<
+		T extends unknown ? (x: T) => 0 : never
+	> extends (x: infer U) => 0
+		? U
+		: never;
+
+	/** convert a given union to a tuple of all the elements. order not guaranteed */
+	export type unionToTuple<T, U = Utils.lastInUnion<T>> = [U] extends [never]
+		? []
+		: [...unionToTuple<Exclude<T, U>>, U];
 }
