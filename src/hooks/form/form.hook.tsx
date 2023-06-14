@@ -90,9 +90,6 @@ type details<Zod extends validSchema> = {
 		/** the type of the schema field */
 		type: reverseMap<Raw<Zod>[k]>;
 
-		/** will this be the last field in the form? */
-		isLast?: true;
-
 		/** can the field's value be null?  */
 		notRequired?: boolean;
 	} & (notRequired<Raw<Zod>[k]> extends true
@@ -235,24 +232,18 @@ export const useForm = <
 				onChange: (value: unknown) =>
 					dispatch({ type: 'updateState', value: { [key]: value } }),
 				error: status.type === 'error' ? status.fieldErrors[key] : undefined,
-				isLast: field.isLast,
-				onSubmit: field.isLast ? handleSubmit : undefined,
 			},
 		}),
 		{}
 	) as Utils.prettify<{
-		[k in keyof Details]: Utils.prettify<
-			{
-				type: Details[k]['type'];
-				label: string;
-				notRequired: Details[k]['notRequired'] extends true ? true : false;
-				value: workingTypeMap[Details[k]['type']];
-				onChange: (value: workingTypeMap[Details[k]['type']]) => void;
-				error: string | undefined;
-			} & (Details[k]['isLast'] extends true
-				? { isLast: true; onSubmit: () => void }
-				: {})
-		>;
+		[k in keyof Details]: {
+			type: Details[k]['type'];
+			label: string;
+			notRequired: Details[k]['notRequired'] extends true ? true : false;
+			value: workingTypeMap[Details[k]['type']];
+			onChange: (value: workingTypeMap[Details[k]['type']]) => void;
+			error: string | undefined;
+		};
 	}>;
 
 	const statusProps =
