@@ -85,7 +85,7 @@ type Raw<T extends validSchema> = T extends
 	? R
 	: never;
 
-type fieldInput<Zod extends validSchema> = {
+type details<Zod extends validSchema> = {
 	[k in keyof Raw<Zod>]: {
 		/** the type of the schema field */
 		type: reverseMap<Raw<Zod>[k]>;
@@ -100,7 +100,7 @@ type fieldInput<Zod extends validSchema> = {
 		: { notRequired?: notRequired<Raw<Zod>[k]> });
 };
 
-type State<T extends fieldInput<any>> = {
+type State<T extends details<any>> = {
 	values: { [k in keyof T]: workingTypeMap[T[k]['type']] };
 	status:
 		| { type: 'idle' | 'submitting' }
@@ -112,28 +112,21 @@ type State<T extends fieldInput<any>> = {
 		| { type: 'success'; message: string };
 };
 
-type UseFormInput<
+export const useForm = <
 	Zod extends validSchema,
-	FieldInput extends fieldInput<Zod>
-> = {
+	Details extends details<Zod>
+>(input: {
 	/** the zod schema for the form */
 	schema: Zod;
 
 	/** the details for form fields */
-	details: FieldInput;
+	details: Details;
 
 	/** the form submission handler. Return a string to show as success message */
 	onSubmit: (state: Zod['_output']) => Promise<string | undefined>;
-};
+}) => {
+	const { schema, details, onSubmit } = input;
 
-export const useForm = <
-	Zod extends validSchema,
-	Details extends fieldInput<Zod>
->({
-	schema,
-	details,
-	onSubmit,
-}: UseFormInput<Zod, Details>) => {
 	const fieldsArray = Object.entries(details) as [
 		keyof typeof details,
 		(typeof details)[keyof typeof details]
