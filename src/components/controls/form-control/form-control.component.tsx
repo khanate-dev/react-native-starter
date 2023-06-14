@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { HelperText, Switch, Text, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { isDayjs } from 'dayjs';
 
@@ -9,20 +9,15 @@ import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
 import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
+import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 
 import type { TextInputProps } from 'react-native-paper';
 import type { Dayjs } from 'dayjs';
 import type { ButtonProps } from 'components/controls/button';
-import type {
-	KeyboardTypeOptions,
-	StyleProp,
-	ViewStyle,
-	TextStyle,
-} from 'react-native';
+import type { KeyboardTypeOptions, StyleProp, ViewStyle } from 'react-native';
 import type { AppIconName } from 'components/media/app-icon';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
-import type { Utils } from 'types/utils';
 
 export const formControlType = [
 	'email',
@@ -34,7 +29,6 @@ export const formControlType = [
 	'search',
 	'date',
 	'time',
-	'boolean',
 ] as const;
 
 export type FormControlType = (typeof formControlType)[number];
@@ -49,7 +43,6 @@ const keyboardTypes: Record<FormControlType, KeyboardTypeOptions> = {
 	search: 'default',
 	date: 'default',
 	time: 'default',
-	boolean: 'default',
 };
 
 const icons: Record<FormControlType, AppIconName> = {
@@ -62,16 +55,21 @@ const icons: Record<FormControlType, AppIconName> = {
 	search: 'search',
 	date: 'date',
 	time: 'time',
-	boolean: 'check',
 };
 
 type styles = {
 	container?: StyleProp<ViewStyle>;
 	icon?: StyleProp<ViewStyle>;
 	button?: StyleProp<ViewStyle>;
+	control?: {
+		style: TextInputProps['style'];
+		outline?: TextInputProps['outlineStyle'];
+		content?: TextInputProps['contentStyle'];
+		underline?: TextInputProps['underlineStyle'];
+	};
 };
 
-export type FormControlProps = Pick<TextInputProps, 'mode'> & {
+export type FormControlProps = Pick<TextInputProps, 'mode' | 'disabled'> & {
 	/** the type of the input field */
 	type: unknown;
 
@@ -101,40 +99,21 @@ export type FormControlProps = Pick<TextInputProps, 'mode'> & {
 
 	/** should the input have an icon to the left side */
 	hasIcon?: boolean;
-
-	/** should the input be disabled? */
-	disabled?: boolean;
-} & Utils.allOrNone<{
-		/** is the input the last in the form? */
-		isLast: boolean;
-
-		/** the function to submit the function. Used to trigger form submission on the last input field submission */
-		onSubmit: () => void;
-	}> &
-	(
+} & (
 		| {
 				type: 'date';
 				value: Dayjs | null;
 				onChange: (value: Dayjs | null) => void;
-				styles?: styles & { control?: StyleProp<TextStyle> };
 		  }
 		| {
 				type: 'time';
 				value: z.infer<ZodTime> | null;
 				onChange: (value: z.infer<ZodTime> | null) => void;
-				styles?: styles & { control?: StyleProp<TextStyle> };
-		  }
-		| {
-				type: 'boolean';
-				value: boolean;
-				onChange: (value: boolean) => void;
-				styles?: styles & { control?: StyleProp<ViewStyle> };
 		  }
 		| {
 				type: Exclude<FormControlType, 'date' | 'time' | 'boolean'>;
 				value: string;
 				onChange: (value: string) => void;
-				styles?: styles & { control?: StyleProp<TextStyle> };
 		  }
 	);
 
@@ -143,14 +122,12 @@ export const FormControl = ({
 	type,
 	value,
 	onChange,
-	onSubmit,
 	styles,
 	label,
 	error,
 	caption,
 	button,
 	hasIcon,
-	isLast,
 	disabled,
 }: FormControlProps) => {
 	const [isSecret, setIsSecret] = useState<boolean>(true);
@@ -171,65 +148,52 @@ export const FormControl = ({
 		/>
 	) : undefined;
 
-	const inputJsx =
-		type === 'boolean' ? (
-			<View style={lineFlex}>
-				{iconJsx}
-				<Text variant='labelMedium'>{label}</Text>
-				<Switch
-					style={styles?.control}
-					value={value}
-					disabled={disabled}
-					onValueChange={onChange}
-				/>
-			</View>
-		) : (
-			<TextInput
-				mode={mode}
-				style={styles?.control}
-				label={label}
-				keyboardType={keyboardTypes[type]}
-				returnKeyType={isLast ? 'done' : 'next'}
-				secureTextEntry={type === 'password' && isSecret}
-				error={Boolean(error)}
-				disabled={disabled}
-				editable={!['date', 'time'].includes(type)}
-				left={iconJsx}
-				blurOnSubmit={isLast}
-				value={
-					isDayjs(value)
-						? value.format('YYYY-MM-DD')
-						: typeof value === 'string'
-						? value
-						: value
-						? `${value.hours}:${value.minutes}`
-						: ''
-				}
-				right={
-					type === 'password' ? (
-						<IconButton
-							icon={isSecret ? 'hidden' : 'visible'}
-							onPress={() => setIsSecret((prev) => !prev)}
-						/>
-					) : type === 'date' || type === 'time' ? (
-						<IconButton
-							icon={type}
-							disabled={disabled}
-							onPress={() => setShowingPicker(true)}
-						/>
-					) : undefined
-				}
-				dense
-				onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
-				onSubmitEditing={() => {
-					if (!isLast) return;
-					onSubmit();
-				}}
-			/>
-		);
+	const inputJsx = (
+		<TextInput
+			{...styles?.control}
+			mode={mode}
+			label={label}
+			keyboardType={keyboardTypes[type]}
+			secureTextEntry={type === 'password' && isSecret}
+			error={Boolean(error)}
+			disabled={disabled}
+			editable={!['date', 'time'].includes(type)}
+			left={iconJsx}
+			value={
+				isDayjs(value)
+					? value.format('YYYY-MM-DD')
+					: typeof value === 'string'
+					? value
+					: value
+					? `${value.hours}:${value.minutes}`
+					: ''
+			}
+			right={
+				type === 'password' ? (
+					<IconButton
+						icon={isSecret ? 'hidden' : 'visible'}
+						onPress={() => setIsSecret((prev) => !prev)}
+					/>
+				) : type === 'date' || type === 'time' ? (
+					<IconButton
+						icon={type}
+						disabled={disabled}
+						onPress={() => setShowingPicker(true)}
+					/>
+				) : undefined
+			}
+			dense
+			onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
+		/>
+	);
 
 	return (
-		<View style={styles?.container}>
+		<FormControlWrapper
+			style={styles?.container}
+			caption={caption}
+			error={error}
+			disabled={disabled}
+		>
 			{button ? (
 				<View style={lineFlex}>
 					{inputJsx}
@@ -241,14 +205,6 @@ export const FormControl = ({
 			) : (
 				inputJsx
 			)}
-
-			<HelperText
-				type={error ? 'error' : 'info'}
-				visible={Boolean(error || caption)}
-				disabled={disabled}
-			>
-				{error || caption}
-			</HelperText>
 
 			{type === 'date' && (
 				<DatePickerModal
@@ -271,6 +227,6 @@ export const FormControl = ({
 					onConfirm={(val) => onChange(val)}
 				/>
 			)}
-		</View>
+		</FormControlWrapper>
 	);
 };
