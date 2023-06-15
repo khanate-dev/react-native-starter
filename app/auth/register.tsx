@@ -1,5 +1,6 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { useRef } from 'react';
 
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { userSchema } from 'schemas/user';
@@ -9,8 +10,12 @@ import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
 import { Alert } from 'components/feedback/alert';
 
+import type { TextInput } from 'react-native';
+
 const Register = () => {
 	const router = useRouter();
+	const nameRef = useRef<TextInput>(null);
+	const passwordRef = useRef<TextInput>(null);
 
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, name: true, password: true }),
@@ -40,11 +45,26 @@ const Register = () => {
 				{"Let's Get Started"}
 			</Text>
 
-			<FormControl {...props.field.email} />
+			<FormControl
+				{...props.field.email}
+				inputProps={{
+					returnKeyType: 'next',
+					onSubmitEditing: () => nameRef.current?.focus(),
+				}}
+			/>
 
-			<FormControl {...props.field.name} />
+			<FormControl
+				{...props.field.name}
+				inputProps={{
+					returnKeyType: 'next',
+					onSubmitEditing: () => passwordRef.current?.focus(),
+				}}
+			/>
 
-			<FormControl {...props.field.password} />
+			<FormControl
+				{...props.field.password}
+				inputProps={{ returnKeyType: 'done' }}
+			/>
 
 			{props.status && (
 				<Alert
