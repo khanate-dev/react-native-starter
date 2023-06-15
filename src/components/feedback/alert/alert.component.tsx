@@ -45,6 +45,7 @@ export const Alert = ({
 			numberOfLines={1}
 			style={{
 				color: foreground,
+				textTransform: 'capitalize',
 			}}
 		>
 			{text}
@@ -83,7 +84,11 @@ export const Alert = ({
 					<Text
 						variant='titleSmall'
 						numberOfLines={1}
-						style={{ color: foreground, padding: 5 }}
+						style={{
+							color: foreground,
+							padding: 5,
+							textTransform: 'capitalize',
+						}}
 					>
 						{title}
 					</Text>
