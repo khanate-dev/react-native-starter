@@ -45,16 +45,12 @@ const Login = () => {
 
 			<FormControl
 				{...props.field.email}
-				inputProps={{
-					returnKeyType: 'next',
-					onSubmitEditing: () => passwordRef.current?.focus(),
-				}}
+				next={passwordRef}
 			/>
 
 			<FormControl
 				{...props.field.password}
 				ref={passwordRef}
-				inputProps={{ returnKeyType: 'done' }}
 			/>
 
 			{props.status && (

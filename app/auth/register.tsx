@@ -47,24 +47,15 @@ const Register = () => {
 
 			<FormControl
 				{...props.field.email}
-				inputProps={{
-					returnKeyType: 'next',
-					onSubmitEditing: () => nameRef.current?.focus(),
-				}}
+				next={nameRef}
 			/>
 
 			<FormControl
 				{...props.field.name}
-				inputProps={{
-					returnKeyType: 'next',
-					onSubmitEditing: () => passwordRef.current?.focus(),
-				}}
+				next={passwordRef}
 			/>
 
-			<FormControl
-				{...props.field.password}
-				inputProps={{ returnKeyType: 'done' }}
-			/>
+			<FormControl {...props.field.password} />
 
 			{props.status && (
 				<Alert
