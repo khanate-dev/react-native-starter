@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
@@ -11,10 +11,16 @@ import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 
+import type { ForwardedRef } from 'react';
 import type { TextInputProps } from 'react-native-paper';
 import type { Dayjs } from 'dayjs';
 import type { ButtonProps } from 'components/controls/button';
-import type { KeyboardTypeOptions, StyleProp, ViewStyle } from 'react-native';
+import type {
+	KeyboardTypeOptions,
+	StyleProp,
+	ViewStyle,
+	TextInput as RefType,
+} from 'react-native';
 import type { AppIconName } from 'components/media/app-icon';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
@@ -69,7 +75,7 @@ type styles = {
 	};
 };
 
-export type FormControlProps = Pick<TextInputProps, 'mode' | 'disabled'> & {
+export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
 	/** the type of the input field */
 	type: unknown;
 
@@ -82,9 +88,6 @@ export type FormControlProps = Pick<TextInputProps, 'mode' | 'disabled'> & {
 	/** the styles to apply the control */
 	styles?: styles;
 
-	/** the label to show on the field */
-	label: string;
-
 	/** the error message to show beneath the input */
 	error?: string;
 
@@ -95,6 +98,27 @@ export type FormControlProps = Pick<TextInputProps, 'mode' | 'disabled'> & {
 	button?: Pick<
 		ButtonProps,
 		'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
+	>;
+
+	/** the props to apply to the TextInput */
+	inputProps?: Omit<
+		TextInputProps,
+		| 'disabled'
+		| 'label'
+		| 'underlineStyle'
+		| 'outlineStyle'
+		| 'contentStyle'
+		| 'style'
+		| 'type'
+		| 'value'
+		| 'onChangeText'
+		| 'left'
+		| 'right'
+		| 'keyboardType'
+		| 'secureTextEntry'
+		| 'error'
+		| 'dense'
+		| 'editable'
 	>;
 
 	/** should the input have an icon to the left side */
@@ -117,19 +141,22 @@ export type FormControlProps = Pick<TextInputProps, 'mode' | 'disabled'> & {
 		  }
 	);
 
-export const FormControl = ({
-	mode = 'outlined',
-	type,
-	value,
-	onChange,
-	styles,
-	label,
-	error,
-	caption,
-	button,
-	hasIcon,
-	disabled,
-}: FormControlProps) => {
+const FormControlComponent = (
+	{
+		type,
+		value,
+		onChange,
+		styles,
+		label,
+		error,
+		caption,
+		button,
+		inputProps,
+		hasIcon,
+		disabled,
+	}: FormControlProps,
+	ref: ForwardedRef<RefType>
+) => {
 	const [isSecret, setIsSecret] = useState<boolean>(true);
 	const [showingPicker, setShowingPicker] = useState<boolean>(false);
 
@@ -150,8 +177,10 @@ export const FormControl = ({
 
 	const inputJsx = (
 		<TextInput
+			{...inputProps}
 			{...styles?.control}
-			mode={mode}
+			ref={ref}
+			mode={inputProps?.mode ?? 'outlined'}
 			label={label}
 			keyboardType={keyboardTypes[type]}
 			secureTextEntry={type === 'password' && isSecret}
@@ -230,3 +259,5 @@ export const FormControl = ({
 		</FormControlWrapper>
 	);
 };
+
+export const FormControl = forwardRef(FormControlComponent);
