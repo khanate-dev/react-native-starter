@@ -64,7 +64,9 @@ export const FormSwitch = ({
 					alignContent: 'center',
 					gap: isSmallerScreen ? 5 : 10,
 					borderWidth: 1.5,
-					borderColor: value ? theme.colors.primary : theme.colors.,
+					borderColor: value
+						? theme.colors.primary
+						: theme.colors.inverseSurface,
 				}}
 			>
 				{hasIcon ? (
