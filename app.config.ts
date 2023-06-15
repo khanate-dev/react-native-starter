@@ -60,7 +60,7 @@ const details = {
 	github: 'https://github.com/kahante-dev/react-native-starter',
 	version: '0.0.1',
 	easProjectId: 'ea224914-8891-44d6-ad18-2a67bc487176',
-	primaryColor: '#B591DE',
+	primaryColor: '#6847c0',
 } as const;
 
 const semverToInt = (version: `${number}.${number}.${number}`): number => {
