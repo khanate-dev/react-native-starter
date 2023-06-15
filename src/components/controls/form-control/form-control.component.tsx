@@ -11,7 +11,7 @@ import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 
-import type { ForwardedRef } from 'react';
+import type { ForwardedRef, RefObject } from 'react';
 import type { TextInputProps } from 'react-native-paper';
 import type { Dayjs } from 'dayjs';
 import type { ButtonProps } from 'components/controls/button';
@@ -100,6 +100,9 @@ export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
 		'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
 	>;
 
+	/** the text input to select after this */
+	next?: RefObject<RefType>;
+
 	/** the props to apply to the TextInput */
 	inputProps?: Omit<
 		TextInputProps,
@@ -119,7 +122,12 @@ export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
 		| 'error'
 		| 'dense'
 		| 'editable'
+		| 'returnKeyType'
+		| 'onSubmitEditing'
 	>;
+
+	/** is the form field not required? */
+	notRequired?: boolean;
 
 	/** should the input have an icon to the left side */
 	hasIcon?: boolean;
@@ -152,6 +160,8 @@ const FormControlComponent = (
 		caption,
 		button,
 		inputProps,
+		next,
+		notRequired,
 		hasIcon,
 		disabled,
 	}: FormControlProps,
@@ -181,13 +191,20 @@ const FormControlComponent = (
 			{...styles?.control}
 			ref={ref}
 			mode={inputProps?.mode ?? 'outlined'}
-			label={label}
 			keyboardType={keyboardTypes[type]}
 			secureTextEntry={type === 'password' && isSecret}
 			error={Boolean(error)}
 			disabled={disabled}
 			editable={!['date', 'time'].includes(type)}
 			left={iconJsx}
+			returnKeyType={next ? 'next' : 'done'}
+			blurOnSubmit={!next}
+			label={
+				<>
+					{label}
+					{!notRequired ? ' *' : ''}
+				</>
+			}
 			value={
 				isDayjs(value)
 					? value.format('YYYY-MM-DD')
@@ -212,6 +229,7 @@ const FormControlComponent = (
 				) : undefined
 			}
 			dense
+			onSubmitEditing={() => next?.current?.focus()}
 			onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
 		/>
 	);
