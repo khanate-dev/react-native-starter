@@ -101,6 +101,9 @@ type details<Zod extends validSchema> = {
 		/** the type of the schema field */
 		type: reverseMap<Raw<Zod>[k]>;
 
+		/** the default value for the form state */
+		default?: Raw<Zod>[k]['_output'];
+
 		/** can the field's value be null?  */
 		notRequired?: boolean;
 	} & (notRequired<Raw<Zod>[k]> extends true
@@ -173,13 +176,15 @@ export const useForm = <
 			values: fieldsArray.reduce(
 				(obj, [key, field]) => ({
 					...obj,
-					[key]: shouldAutoFill
-						? formDefaults[field.type]
-						: field.type === 'boolean'
-						? false
-						: ['date', 'time'].includes(field.type)
-						? null
-						: '',
+					[key]:
+						field.default ??
+						(shouldAutoFill
+							? formDefaults[field.type]
+							: field.type === 'boolean'
+							? false
+							: ['date', 'time'].includes(field.type)
+							? null
+							: ''),
 				}),
 				{}
 			) as never,
