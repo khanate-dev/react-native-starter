@@ -24,6 +24,7 @@ import type {
 import type { AppIconName } from 'components/media/app-icon';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
+import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/src/components/TextInput/types';
 
 export const formControlType = [
 	'email',
@@ -75,7 +76,7 @@ type styles = {
 	};
 };
 
-export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
+export type FormControlProps = Pick<TextInputProps, 'disabled'> & {
 	/** the type of the input field */
 	type: unknown;
 
@@ -87,6 +88,8 @@ export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
 
 	/** the styles to apply the control */
 	styles?: styles;
+
+	label: TextInputLabelProp;
 
 	/** the error message to show beneath the input */
 	error?: string;
@@ -101,7 +104,7 @@ export type FormControlProps = Pick<TextInputProps, 'disabled' | 'label'> & {
 	>;
 
 	/** the text input to select after this */
-	next?: RefObject<RefType>;
+	next?: RefObject<RefType> | (() => RefType | null);
 
 	/** the props to apply to the TextInput */
 	inputProps?: Omit<
@@ -190,6 +193,7 @@ const FormControlComponent = (
 			{...inputProps}
 			{...styles?.control}
 			ref={ref}
+			style={[button && { flex: 1 }, styles?.control?.style]}
 			mode={inputProps?.mode ?? 'outlined'}
 			keyboardType={keyboardTypes[type]}
 			secureTextEntry={type === 'password' && isSecret}
@@ -202,7 +206,7 @@ const FormControlComponent = (
 			label={
 				<>
 					{label}
-					{!notRequired ? ' *' : ''}
+					{!notRequired && ' *'}
 				</>
 			}
 			value={
@@ -229,8 +233,10 @@ const FormControlComponent = (
 				) : undefined
 			}
 			dense
-			onSubmitEditing={() => next?.current?.focus()}
 			onChangeText={type === 'date' || type === 'time' ? undefined : onChange}
+			onSubmitEditing={() =>
+				(typeof next === 'function' ? next() : next?.current)?.focus()
+			}
 		/>
 	);
 
@@ -245,8 +251,14 @@ const FormControlComponent = (
 				<View style={lineFlex}>
 					{inputJsx}
 					<Button
-						style={[{ flex: 0 }, styles?.button]}
 						{...button}
+						labelStyle={{ fontSize: isSmallerScreen ? 11 : 14 }}
+						style={[
+							{ borderRadius: 5, marginTop: 5 },
+							styles?.button,
+							button.style,
+						]}
+						compact
 					/>
 				</View>
 			) : (
