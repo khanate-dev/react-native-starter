@@ -1,18 +1,17 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import { z } from 'zod';
 import { useRouter } from 'expo-router';
 
 import { wait } from 'helpers/async';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { userSchema } from 'schemas/user';
 import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
-import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
+
+import type { Utils } from 'types/utils';
 
 export type ResetCodeStatus =
 	| 'idle'
@@ -23,34 +22,97 @@ export type ResetCodeStatus =
 	| 'confirmed'
 	| 'rejected';
 
+type State = Utils.includeUnionKeys<
+	| {
+			status: 'idle';
+			email: string;
+	  }
+	| {
+			status: 'sending-code';
+			email: string;
+	  }
+	| {
+			status: 'sending-code-failed';
+			email: string;
+			error: string;
+	  }
+	| {
+			status: 'code-input';
+			email: string;
+			code: string;
+	  }
+	| {
+			status: 'verifying-code';
+			email: string;
+			code: string;
+	  }
+	| {
+			status: 'verifying-code-failed';
+			email: string;
+			code: string;
+			error: string;
+	  }
+	| {
+			status: 'password-input';
+			email: string;
+			code: string;
+			password: string;
+			confirmPassword: string;
+	  }
+	| {
+			status: 'resetting';
+			email: string;
+			code: string;
+			password: string;
+			confirmPassword: string;
+	  }
+	| {
+			status: 'resetting-failed';
+			email: string;
+			code: string;
+			password: string;
+			confirmPassword: string;
+			error: string;
+	  }
+	| {
+			status: 'resetting-success';
+			email: string;
+			code: string;
+			password: string;
+			confirmPassword: string;
+	  }
+>;
+
 export const ForgotPassword = () => {
 	const theme = useTheme();
 	const router = useRouter();
 
-	const { state, props } = useForm({
-		schema: userSchema.pick({ email: true, password: true }).extend({
-			code: z.number().int().min(0).max(999999),
-			confirmPassword: userSchema.shape.password,
-		}),
-		details: {
-			email: { type: 'email' },
-			code: { type: 'int' },
-			password: { type: 'password' },
-			confirmPassword: { type: 'password', isLast: true },
-		},
-		onSubmit: async (_body) => {
-			setIsResetting(true);
-			await wait(1500).finally(() => setIsResetting(false));
-			setCodeStatus('idle');
-			setTimeout(() => {
-				router.back();
-			}, 500);
-			return 'Password Reset Successful!';
-		},
+	const [state, setState] = useState<State>({
+		status: 'idle',
+		email: '',
 	});
+	const { status, email, code, password, confirmPassword, error } = state;
 
-	const [codeStatus, setCodeStatus] = useState<ResetCodeStatus>('idle');
-	const [isResetting, setIsResetting] = useState<boolean>(false);
+	const emailStage =
+		status === 'idle' ||
+		status === 'sending-code-failed' ||
+		status === 'sending-code';
+	const emailEnabled = emailStage && status !== 'sending-code';
+	const codeStage =
+		status === 'code-input' ||
+		status === 'verifying-code-failed' ||
+		status === 'verifying-code';
+	const codeEnabled = codeStage && status !== 'verifying-code';
+	const passwordStage =
+		status === 'password-input' ||
+		status === 'resetting-failed' ||
+		status === 'resetting';
+	const passwordEnabled = passwordStage && status !== 'resetting';
+	const alertShowing =
+		status === 'sending-code-failed' ||
+		status === 'verifying-code-failed' ||
+		status === 'resetting-failed' ||
+		status === 'resetting-success';
 
 	return (
 		<ScreenWrapper
@@ -86,7 +148,7 @@ export const ForgotPassword = () => {
 						style={{ color: theme.colors.onPrimary }}
 						variant='titleSmall'
 					>
-						{codeStatus === 'sent'
+						{status === 'code-input'
 							? 'A Reset Code Has Been Sent To Your Email'
 							: 'Enter The Email To Get The Reset Code'}
 					</Text>
@@ -94,100 +156,171 @@ export const ForgotPassword = () => {
 			</View>
 
 			<FormControl
-				{...props.field.email}
-				type={props.field.email.type}
-				disabled={state.status.type === 'submitting'}
+				type='email'
+				label='Email'
+				value={email}
+				error={status === 'sending-code-failed' ? error : undefined}
+				disabled={!emailEnabled}
 				button={{
-					label:
-						codeStatus === 'sending'
-							? 'Sending...'
-							: `${codeStatus !== 'idle' ? 'Re-' : ''}Send Code`,
+					label: !emailStage
+						? 'Code Sent!'
+						: status === 'sending-code'
+						? 'Sending...'
+						: `${status !== 'idle' ? 'Re-' : ''}Send Code`,
 					icon:
-						codeStatus === 'idle'
+						status === 'idle'
 							? 'email'
-							: codeStatus === 'sendingFailed'
+							: status === 'sending-code-failed'
 							? 'error'
 							: 'success',
 					style: { width: isSmallerScreen ? 125 : 175 },
-					loading: codeStatus === 'sending',
-					disabled:
-						['sending', 'verifying'].includes(codeStatus) ||
-						!state.values.email.trim(),
+					loading: status === 'sending-code',
+					disabled: !emailEnabled || !email.trim(),
 					onPress: async () => {
-						setCodeStatus('sending');
+						if (!emailEnabled) return;
+						setState({ ...state, status: 'sending-code', error: undefined });
 						await wait(1000);
-						setCodeStatus(Math.round(Math.random()) ? 'sent' : 'sendingFailed');
+						const success = Math.round(Math.random());
+						setState(
+							success
+								? { ...state, status: 'code-input', code: '', error: undefined }
+								: {
+										...state,
+										status: 'sending-code-failed',
+										error: 'Failed To Send Email!',
+								  }
+						);
 					},
 				}}
 				onChange={(value) => {
-					props.field.email.onChange(value);
-					if (!value.trim()) setCodeStatus('idle');
+					if (!emailEnabled) return;
+					setState({
+						...state,
+						status: 'idle',
+						email: value,
+						error: undefined,
+					});
 				}}
 			/>
 
 			<FormControl
-				{...props.field.code}
-				type={props.field.code.type}
-				disabled={codeStatus === 'idle' || codeStatus === 'sending'}
+				type='int'
+				label='Code'
+				value={code ?? ''}
+				error={status === 'verifying-code-failed' ? error : undefined}
+				disabled={!codeEnabled}
 				button={{
 					label:
-						codeStatus === 'verifying'
+						status === 'verifying-code'
 							? 'Verifying...'
-							: codeStatus === 'confirmed'
-							? 'Success'
-							: codeStatus === 'rejected'
+							: !codeEnabled && !emailStage
+							? 'Verified!'
+							: status === 'verifying-code-failed'
 							? 'Retry'
 							: 'Verify Code',
 					icon:
-						codeStatus === 'rejected'
+						status === 'verifying-code-failed'
 							? 'error'
-							: codeStatus === 'confirmed'
+							: !codeEnabled && !emailStage
 							? 'success'
 							: 'submit',
-					loading: codeStatus === 'verifying',
+					loading: status === 'verifying-code',
 					onPress: async () => {
-						if (codeStatus === 'confirmed') return;
-						setCodeStatus('verifying');
+						if (!codeEnabled) return;
+						setState({ ...state, status: 'verifying-code', error: undefined });
 						await wait(1000);
-						setCodeStatus(Math.round(Math.random()) ? 'confirmed' : 'rejected');
+						const success = Math.round(Math.random());
+						setState(
+							success
+								? {
+										...state,
+										status: 'password-input',
+										password: '',
+										confirmPassword: '',
+										error: undefined,
+								  }
+								: {
+										...state,
+										status: 'verifying-code-failed',
+										error: 'Invalid Code!',
+								  }
+						);
 					},
-					disabled: codeStatus === 'verifying' || !state.values.code.trim(),
+					disabled: !codeEnabled || !code?.trim(),
 				}}
 				onChange={(value) => {
-					props.field.code.onChange(value);
-					if (
-						!value.trim() &&
-						state.values.email.trim() &&
-						['verifying', 'confirmed', 'rejected'].includes(codeStatus)
-					)
-						setCodeStatus('sent');
+					if (!codeEnabled) return;
+					setState({
+						...state,
+						status: 'code-input',
+						code: value,
+						error: undefined,
+					});
 				}}
 			/>
 
 			<FormControl
-				{...props.field.password}
-				disabled={codeStatus !== 'confirmed'}
+				type='password'
+				value={password ?? ''}
+				error={status === 'resetting-failed' ? error : undefined}
+				disabled={!passwordEnabled}
+				onChange={(value) => {
+					if (!passwordEnabled) return;
+					setState({
+						...state,
+						status: 'password-input',
+						password: value,
+						error: undefined,
+					});
+				}}
 			/>
 
 			<FormControl
-				{...props.field.confirmPassword}
-				disabled={codeStatus !== 'confirmed'}
+				type='password'
+				value={confirmPassword ?? ''}
+				error={status === 'resetting-failed' ? error : undefined}
+				disabled={!passwordEnabled}
+				onChange={(value) => {
+					if (!passwordEnabled) return;
+					setState({
+						...state,
+						status: 'password-input',
+						confirmPassword: value,
+						error: undefined,
+					});
+				}}
 			/>
 
-			{props.status && <Alert {...props.status} />}
+			{alertShowing && (
+				<Alert
+					type={status === 'resetting-success' ? 'success' : 'error'}
+					text={error ?? 'Password Reset Successful!'}
+				/>
+			)}
 
 			<Button
-				{...props.button}
-				loading={props.button.loading || isResetting}
-				label={
-					state.status.type === 'success' ? 'Resetting...' : 'Reset Password'
-				}
+				icon='submit'
+				loading={status === 'resetting'}
+				label={status === 'resetting' ? 'Resetting...' : 'Reset Password'}
 				disabled={
-					props.button.disabled ||
-					!state.values.password ||
-					state.values.password !== state.values.confirmPassword ||
-					codeStatus !== 'confirmed'
+					!passwordEnabled || !password?.trim() || password !== confirmPassword
 				}
+				onPress={async () => {
+					if (!passwordEnabled) return;
+					setState({ ...state, status: 'resetting', error: undefined });
+					await wait(1500);
+					const success = Math.round(Math.random());
+					setState(
+						success
+							? { ...state, status: 'resetting-success', error: undefined }
+							: {
+									...state,
+									status: 'resetting-failed',
+									error: 'Failed To Reset Password!',
+							  }
+					);
+					if (success) setTimeout(() => router.back(), 500);
+				}}
 			/>
 		</ScreenWrapper>
 	);
