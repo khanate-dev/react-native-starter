@@ -1,6 +1,5 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useRef } from 'react';
 
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { userSchema } from 'schemas/user';
@@ -10,24 +9,20 @@ import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
 import { Alert } from 'components/feedback/alert';
 
-import type { TextInput } from 'react-native';
-
 const Register = () => {
 	const router = useRouter();
-	const nameRef = useRef<TextInput>(null);
-	const passwordRef = useRef<TextInput>(null);
 
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, name: true, password: true }),
 		details: {
-			email: { type: 'email' },
-			name: { type: 'string' },
-			password: { type: 'password', isLast: true },
+			email: { type: 'email', next: 'name' },
+			name: { type: 'string', next: 'password' },
+			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
 			await endpoints.user.add(values);
 			setTimeout(() => router.push('/auth/login'), 1000);
-			return 'User Added! Please Wait...';
+			return 'user added! please wait...';
 		},
 	});
 
@@ -45,15 +40,9 @@ const Register = () => {
 				{"Let's Get Started"}
 			</Text>
 
-			<FormControl
-				{...props.field.email}
-				next={nameRef}
-			/>
+			<FormControl {...props.field.email} />
 
-			<FormControl
-				{...props.field.name}
-				next={passwordRef}
-			/>
+			<FormControl {...props.field.name} />
 
 			<FormControl {...props.field.password} />
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -11,6 +11,7 @@ import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
 
+import type { TextInput } from 'react-native';
 import type { Utils } from 'types/utils';
 
 export type ResetCodeStatus =
@@ -86,6 +87,7 @@ type State = Utils.includeUnionKeys<
 export const ForgotPassword = () => {
 	const theme = useTheme();
 	const router = useRouter();
+	const confirmPasswordRef = useRef<TextInput>(null);
 
 	const [state, setState] = useState<State>({
 		status: 'idle',
@@ -108,11 +110,6 @@ export const ForgotPassword = () => {
 		status === 'resetting-failed' ||
 		status === 'resetting';
 	const passwordEnabled = passwordStage && status !== 'resetting';
-	const alertShowing =
-		status === 'sending-code-failed' ||
-		status === 'verifying-code-failed' ||
-		status === 'resetting-failed' ||
-		status === 'resetting-success';
 
 	return (
 		<ScreenWrapper
@@ -123,17 +120,17 @@ export const ForgotPassword = () => {
 				style={{
 					backgroundColor: theme.colors.primary,
 					flexDirection: 'row',
+					alignItems: 'center',
 					padding: isSmallerScreen ? 20 : 40,
+					borderRadius: isSmallerScreen ? 10 : 20,
+					gap: isSmallerScreen ? 10 : 20,
+					marginBottom: isSmallerScreen ? 10 : 20,
 				}}
 			>
 				<AppIcon
 					name='restore'
 					color={theme.colors.onPrimary}
-					style={{
-						width: isSmallerScreen ? 50 : 75,
-						height: isSmallerScreen ? 50 : 75,
-						marginRight: isSmallerScreen ? 10 : 20,
-					}}
+					size={isSmallerScreen ? 40 : 60}
 				/>
 
 				<View>
@@ -146,7 +143,7 @@ export const ForgotPassword = () => {
 
 					<Text
 						style={{ color: theme.colors.onPrimary }}
-						variant='titleSmall'
+						variant='labelSmall'
 					>
 						{status === 'code-input'
 							? 'A Reset Code Has Been Sent To Your Email'
@@ -173,7 +170,6 @@ export const ForgotPassword = () => {
 							: status === 'sending-code-failed'
 							? 'error'
 							: 'success',
-					style: { width: isSmallerScreen ? 125 : 175 },
 					loading: status === 'sending-code',
 					disabled: !emailEnabled || !email.trim(),
 					onPress: async () => {
@@ -260,9 +256,10 @@ export const ForgotPassword = () => {
 			/>
 
 			<FormControl
+				next={confirmPasswordRef}
 				type='password'
+				label='New Password'
 				value={password ?? ''}
-				error={status === 'resetting-failed' ? error : undefined}
 				disabled={!passwordEnabled}
 				onChange={(value) => {
 					if (!passwordEnabled) return;
@@ -276,10 +273,15 @@ export const ForgotPassword = () => {
 			/>
 
 			<FormControl
+				ref={confirmPasswordRef}
 				type='password'
+				label='Confirm New Password'
 				value={confirmPassword ?? ''}
 				error={status === 'resetting-failed' ? error : undefined}
 				disabled={!passwordEnabled}
+				styles={{
+					container: { marginBottom: 'auto' },
+				}}
 				onChange={(value) => {
 					if (!passwordEnabled) return;
 					setState({
@@ -291,10 +293,11 @@ export const ForgotPassword = () => {
 				}}
 			/>
 
-			{alertShowing && (
+			{status === 'resetting-success' && (
 				<Alert
-					type={status === 'resetting-success' ? 'success' : 'error'}
-					text={error ?? 'Password Reset Successful!'}
+					type='success'
+					text='Password Reset Successful!'
+					style={{ marginBottom: 10 }}
 				/>
 			)}
 

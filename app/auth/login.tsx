@@ -1,6 +1,5 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useRef } from 'react';
 
 import { userSchema } from 'schemas/user';
 import { endpoints } from 'endpoints';
@@ -11,17 +10,14 @@ import { useForm } from 'hooks/form';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
 
-import type { TextInput } from 'react-native';
-
 const Login = () => {
 	const router = useRouter();
-	const passwordRef = useRef<TextInput>(null);
 
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, password: true }),
 		details: {
-			email: { type: 'email' },
-			password: { type: 'password', isLast: true },
+			email: { type: 'email', next: 'password' },
+			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
 			const user = await endpoints.user.login(values);
@@ -43,15 +39,9 @@ const Login = () => {
 				Hi, {'\n'}Please {'\n'}Login
 			</Text>
 
-			<FormControl
-				{...props.field.email}
-				next={passwordRef}
-			/>
+			<FormControl {...props.field.email} />
 
-			<FormControl
-				{...props.field.password}
-				ref={passwordRef}
-			/>
+			<FormControl {...props.field.password} />
 
 			{props.status && (
 				<Alert
