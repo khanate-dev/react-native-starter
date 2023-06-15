@@ -20,8 +20,11 @@ const Register = () => {
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
-			await endpoints.user.add(values);
-			setTimeout(() => router.push('/auth/login'), 1000);
+			const { email } = await endpoints.user.add(values);
+			setTimeout(
+				() => router.push({ pathname: '/auth/login', params: { email } }),
+				1000
+			);
 			return 'user added! please wait...';
 		},
 	});

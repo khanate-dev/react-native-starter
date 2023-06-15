@@ -1,5 +1,5 @@
 import { Text } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import { userSchema } from 'schemas/user';
 import { endpoints } from 'endpoints';
@@ -12,11 +12,12 @@ import { Alert } from 'components/feedback/alert';
 
 const Login = () => {
 	const router = useRouter();
+	const { email } = useLocalSearchParams<{ email?: string }>();
 
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, password: true }),
 		details: {
-			email: { type: 'email', next: 'password' },
+			email: { type: 'email', next: 'password', default: email },
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
