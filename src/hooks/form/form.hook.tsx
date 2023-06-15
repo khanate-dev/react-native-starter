@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { useReducer } from 'react';
+import { useReducer, useRef } from 'react';
 import { Keyboard } from 'react-native';
 
 import { dayjsUtc } from 'helpers/date';
@@ -7,6 +7,8 @@ import { humanizeToken } from 'helpers/string';
 import { shouldAutoFill } from 'src/config';
 import { getCatchMessage } from 'errors/errors';
 
+import type { TextInput } from 'react-native';
+import type { RefObject } from 'react';
 import type { ZodDate, ZodTime } from 'helpers/schema';
 import type { Utils } from 'types/utils';
 import type { ButtonProps } from 'components/controls/button';
@@ -41,6 +43,11 @@ type workingTypeMap = {
 type fieldType = keyof fieldMap;
 
 type fieldZod = fieldMap[keyof fieldMap];
+
+type textFieldZod = Exclude<
+	fieldZod,
+	fieldMap['boolean'] | fieldMap['date'] | fieldMap['time']
+>;
 
 type reverseMap<T extends fieldZod> = fieldType &
 	keyof {
@@ -85,6 +92,10 @@ type Raw<T extends validSchema> = T extends
 	? R
 	: never;
 
+type textFields<Zod extends validSchema> = keyof {
+	[k in keyof Raw<Zod> as Raw<Zod>[k] extends textFieldZod ? k : never]: true;
+};
+
 type details<Zod extends validSchema> = {
 	[k in keyof Raw<Zod>]: {
 		/** the type of the schema field */
@@ -94,7 +105,10 @@ type details<Zod extends validSchema> = {
 		notRequired?: boolean;
 	} & (notRequired<Raw<Zod>[k]> extends true
 		? { notRequired: true }
-		: { notRequired?: notRequired<Raw<Zod>[k]> });
+		: { notRequired?: notRequired<Raw<Zod>[k]> }) &
+		(k extends textFields<Zod>
+			? { next?: Exclude<textFields<Zod>, k> }
+			: { next?: never });
 };
 
 type State<T extends details<any>> = {
@@ -122,6 +136,10 @@ export const useForm = <
 	/** the form submission handler. Return a string to show as success message */
 	onSubmit: (state: Zod['_output']) => Promise<string | undefined>;
 }) => {
+	const textRefs = useRef<Record<textFields<Zod>, TextInput | null>>(
+		{} as never
+	);
+
 	const { schema, details, onSubmit } = input;
 
 	const fieldsArray = Object.entries(details) as [
@@ -232,18 +250,31 @@ export const useForm = <
 				onChange: (value: unknown) =>
 					dispatch({ type: 'updateState', value: { [key]: value } }),
 				error: status.type === 'error' ? status.fieldErrors[key] : undefined,
+				ref: !['boolean', 'date', 'time'].includes(field.type)
+					? (element: TextInput | null) => {
+							textRefs.current[key as keyof typeof textRefs.current] = element;
+					  }
+					: undefined,
+				next: field.next
+					? () => textRefs.current[field.next as never]
+					: undefined,
 			},
 		}),
 		{}
 	) as Utils.prettify<{
-		[k in keyof Details]: {
-			type: Details[k]['type'];
-			label: string;
-			notRequired: Details[k]['notRequired'] extends true ? true : false;
-			value: workingTypeMap[Details[k]['type']];
-			onChange: (value: workingTypeMap[Details[k]['type']]) => void;
-			error: string | undefined;
-		};
+		[k in keyof Details]: Utils.prettify<
+			{
+				type: Details[k]['type'];
+				label: string;
+				notRequired: Details[k]['notRequired'] extends true ? true : false;
+				value: workingTypeMap[Details[k]['type']];
+				onChange: (value: workingTypeMap[Details[k]['type']]) => void;
+				error: string | undefined;
+			} & (k extends textFields<Zod> ? { ref: RefObject<TextInput> } : {}) &
+				(Details[k]['next'] extends textFields<Zod>
+					? { next: () => TextInput | null }
+					: {})
+		>;
 	}>;
 
 	const statusProps =
