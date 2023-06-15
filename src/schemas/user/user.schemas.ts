@@ -16,6 +16,8 @@ export type UserSansMeta = z.infer<typeof userSansMetaSchema>;
 
 export type User = z.infer<typeof userSchema>;
 
-export const loggedInUserSchema = userSchema.extend({ token: jwtSchema });
+export const loggedInUserSchema = userSchema
+	.omit({ password: true })
+	.extend({ token: jwtSchema });
 
 export type LoggedInUser = z.infer<typeof loggedInUserSchema>;

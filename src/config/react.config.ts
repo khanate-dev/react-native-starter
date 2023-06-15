@@ -41,7 +41,7 @@ const disableAuthConfig: Record<typeof environment, boolean> = {
 export const disableAuth: boolean = disableAuthConfig[environment];
 
 const shouldAutoFillConfig: Record<typeof environment, boolean> = {
-	development: false,
+	development: true,
 	production: false,
 };
 
