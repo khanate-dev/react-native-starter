@@ -40,9 +40,15 @@ const Login = () => {
 				Hi, {'\n'}Please {'\n'}Login
 			</Text>
 
-			<FormControl {...props.field.email} />
+			<FormControl
+				{...props.field.email}
+				hasIcon
+			/>
 
-			<FormControl {...props.field.password} />
+			<FormControl
+				{...props.field.password}
+				hasIcon
+			/>
 
 			{props.status && (
 				<Alert

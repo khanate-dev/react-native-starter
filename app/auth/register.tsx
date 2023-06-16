@@ -43,11 +43,20 @@ const Register = () => {
 				{"Let's Get Started"}
 			</Text>
 
-			<FormControl {...props.field.email} />
+			<FormControl
+				{...props.field.email}
+				hasIcon
+			/>
 
-			<FormControl {...props.field.name} />
+			<FormControl
+				{...props.field.name}
+				hasIcon
+			/>
 
-			<FormControl {...props.field.password} />
+			<FormControl
+				{...props.field.password}
+				hasIcon
+			/>
 
 			{props.status && (
 				<Alert
