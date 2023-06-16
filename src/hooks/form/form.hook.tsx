@@ -6,6 +6,7 @@ import { dayjsUtc } from 'helpers/date';
 import { humanizeToken } from 'helpers/string';
 import { shouldAutoFill } from 'src/config';
 import { getCatchMessage } from 'errors/errors';
+import { objectEntries } from 'helpers/object';
 
 import type { TextInput } from 'react-native';
 import type { RefObject } from 'react';
@@ -82,9 +83,7 @@ type notRequired<T extends fieldZod> = T extends z.ZodNullable<any>
 	? boolean
 	: false;
 
-type validSchema =
-	| z.ZodObject<Record<string, fieldZod>, 'strict'>
-	| z.ZodEffects<z.ZodObject<Record<string, fieldZod>, 'strict'>>;
+type validSchema = z.ZodObject<Record<string, fieldZod>, 'strict'>;
 
 type Raw<T extends validSchema> = T extends
 	| z.ZodObject<infer R>
@@ -199,7 +198,18 @@ export const useForm = <
 			Keyboard.dismiss();
 			dispatch({ type: 'updateStatus', value: { type: 'submitting' } });
 
-			const parsed = schema.parse(state.values);
+			const parsed = z
+				.strictObject(
+					objectEntries(schema.shape).reduce(
+						(obj, [key, zod]) => ({
+							...obj,
+							[key]:
+								zod instanceof z.ZodNumber ? z.preprocess(Number, zod) : zod,
+						}),
+						{}
+					)
+				)
+				.parse(state.values);
 			const result = await onSubmit(parsed);
 			const message = result ?? 'Submission Successful!';
 
