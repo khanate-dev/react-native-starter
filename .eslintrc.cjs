@@ -75,6 +75,11 @@ const config = {
 						importNames: ['Button'],
 						message: "Use 'components/forms/button' instead",
 					},
+					{
+						group: ['react-native-paper*'],
+						importNames: ['useTheme'],
+						message: "Use 'hooks/theme' instead",
+					},
 				],
 			},
 		],
