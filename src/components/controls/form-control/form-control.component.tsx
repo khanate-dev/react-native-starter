@@ -4,9 +4,8 @@ import { TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { isDayjs } from 'dayjs';
 
-import { IconButton } from 'components/controls/icon-button';
 import { isSmallerScreen } from 'src/config';
-import { AppIcon } from 'components/media/app-icon';
+import { appIconMap } from 'components/media/app-icon';
 import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
@@ -181,13 +180,6 @@ const FormControlComponent = (
 		gap: isSmallerScreen ? 5 : 10,
 	} satisfies StyleProp<ViewStyle>;
 
-	const iconJsx = hasIcon ? (
-		<AppIcon
-			style={styles?.icon}
-			name={icons[type]}
-		/>
-	) : undefined;
-
 	const inputJsx = (
 		<TextInput
 			{...inputProps}
@@ -200,9 +192,16 @@ const FormControlComponent = (
 			error={Boolean(error)}
 			disabled={disabled}
 			editable={!['date', 'time'].includes(type)}
-			left={iconJsx}
 			returnKeyType={next ? 'next' : 'done'}
 			blurOnSubmit={!next}
+			left={
+				hasIcon ? (
+					<TextInput.Icon
+						icon={appIconMap[icons[type]]}
+						style={styles?.icon}
+					/>
+				) : undefined
+			}
 			label={
 				<>
 					{label}
@@ -220,13 +219,14 @@ const FormControlComponent = (
 			}
 			right={
 				type === 'password' ? (
-					<IconButton
-						icon={isSecret ? 'hidden' : 'visible'}
+					<TextInput.Icon
+						icon={appIconMap[isSecret ? 'hidden' : 'visible']}
+						disabled={disabled}
 						onPress={() => setIsSecret((prev) => !prev)}
 					/>
 				) : type === 'date' || type === 'time' ? (
-					<IconButton
-						icon={type}
+					<TextInput.Icon
+						icon={appIconMap[type]}
 						disabled={disabled}
 						onPress={() => setShowingPicker(true)}
 					/>
@@ -271,19 +271,26 @@ const FormControlComponent = (
 					mode='single'
 					visible={showingPicker}
 					date={value?.toDate()}
+					inputEnabled={false}
+					disableStatusBar
 					onDismiss={() => setShowingPicker(false)}
-					onConfirm={({ date }) => onChange(date ? dayjsUtc.utc(date) : null)}
+					onConfirm={({ date }) => {
+						onChange(date ? dayjsUtc.utc(date) : null);
+						setShowingPicker(false);
+					}}
 				/>
 			)}
 
 			{type === 'time' && (
 				<TimePickerModal
-					locale='en'
 					visible={showingPicker}
 					hours={value?.hours}
 					minutes={value?.minutes}
 					onDismiss={() => setShowingPicker(false)}
-					onConfirm={(val) => onChange(val)}
+					onConfirm={(val) => {
+						onChange(val);
+						setShowingPicker(false);
+					}}
 				/>
 			)}
 		</FormControlWrapper>
