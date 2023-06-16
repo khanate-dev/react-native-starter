@@ -13,6 +13,7 @@
 		"lint": "eslint . --fix --report-unused-disable-directives",
 		"format": "prettier --write .",
 		"generate-icons": "tsx ./scripts/generate-icons.ts",
+		"theme-hsl": "tsx ./scripts/colors-to-hsl.ts",
 		"env:new": "dotenv-vault new",
 		"env:push": "npm run env:push:development && npm run env:push:production",
 		"env:push:development": "dotenv-vault push development .env.development",
