@@ -1,9 +1,12 @@
+// eslint-disable-next-line no-restricted-imports
+import { useTheme as usePaperTheme } from 'react-native-paper';
+
 import { formatToken } from 'helpers/string';
 
 import type { AppTheme, ThemeColor } from 'styles/theme';
 
 export const useTheme = () => {
-	const theme = useTheme() as AppTheme;
+	const theme = usePaperTheme<AppTheme>();
 
 	return {
 		...theme,
