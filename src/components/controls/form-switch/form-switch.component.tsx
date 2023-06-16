@@ -1,12 +1,12 @@
+import { Switch, Text, TouchableRipple, useTheme } from 'react-native-paper';
 import { View } from 'react-native';
-import { Switch, Text, useTheme } from 'react-native-paper';
+import { useRef } from 'react';
 
-import { isSmallerScreen } from 'src/config';
 import { AppIcon } from 'components/media/app-icon';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 
+import type { StyleProp, ViewStyle, Switch as RefType } from 'react-native';
 import type { SwitchProps } from 'react-native-paper';
-import type { StyleProp, ViewStyle } from 'react-native';
 
 type styles = {
 	container?: StyleProp<ViewStyle>;
@@ -49,6 +49,10 @@ export const FormSwitch = ({
 	disabled,
 }: FormSwitchProps) => {
 	const theme = useTheme();
+	const switchRef = useRef<RefType>(null);
+
+	const color = value ? theme.colors.primary : theme.colors.inverseSurface;
+
 	return (
 		<FormControlWrapper
 			style={styles?.container}
@@ -56,33 +60,55 @@ export const FormSwitch = ({
 			error={error}
 			disabled={disabled}
 		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					flexWrap: 'nowrap',
-					alignContent: 'center',
-					gap: isSmallerScreen ? 5 : 10,
-					borderWidth: 1.5,
-					borderColor: value
-						? theme.colors.primary
-						: theme.colors.inverseSurface,
-				}}
-			>
-				{hasIcon ? (
-					<AppIcon
-						style={styles?.icon}
-						name={'check'}
+			<TouchableRipple onPress={() => onChange(!value)}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						flexWrap: 'nowrap',
+						alignContent: 'center',
+						paddingVertical: 0,
+						paddingHorizontal: 15,
+						gap: 15,
+						borderWidth: 1.5,
+						borderColor: color,
+						borderRadius: 5,
+						backgroundColor: value
+							? theme.colors.primaryContainer
+							: theme.colors.surface,
+					}}
+				>
+					{hasIcon ? (
+						<AppIcon
+							style={styles?.icon}
+							name={'check'}
+							size={20}
+							color={theme.colors.onPrimaryContainer}
+						/>
+					) : undefined}
+					<Text
+						variant='bodyMedium'
+						style={{
+							fontWeight: '300',
+							color: theme.colors.onPrimaryContainer,
+							flexGrow: 1,
+						}}
+					>
+						{label}
+					</Text>
+					<Switch
+						ref={switchRef}
+						value={value}
+						disabled={disabled}
+						style={{
+							padding: 0,
+							margin: 0,
+							height: 40,
+						}}
+						onValueChange={onChange}
 					/>
-				) : undefined}
-				<Text variant='labelMedium'>{label}</Text>
-				<Switch
-					style={styles?.control}
-					value={value}
-					disabled={disabled}
-					onValueChange={onChange}
-				/>
-			</View>
+				</View>
+			</TouchableRipple>
 		</FormControlWrapper>
 	);
 };
