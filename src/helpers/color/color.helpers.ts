@@ -76,8 +76,8 @@ const rgbToHsl = (
 
 	return [
 		Math.round(hue),
-		Math.round(saturation * 100),
-		Math.round(lightness * 100),
+		Math.round(saturation * 100) || 0,
+		Math.round(lightness * 100) || 0,
 	];
 };
 
