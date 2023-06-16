@@ -39,7 +39,7 @@ export const timeSchema = z.preprocess(
 		const parsed = isDayjs(value)
 			? value
 			: dayjsUtc.utc(value as never, 'HH:mm');
-		if (!parsed.isValid()) return null;
+		if (!parsed.isValid()) return value;
 		return { hour: parsed.hour(), minute: parsed.minute() };
 	},
 	z.object({
