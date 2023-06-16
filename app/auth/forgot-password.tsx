@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
 import { wait } from 'helpers/async';
@@ -10,6 +10,7 @@ import { AppIcon } from 'components/media/app-icon';
 import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
+import { useTheme } from 'hooks/theme';
 
 import type { TextInput } from 'react-native';
 import type { Utils } from 'types/utils';

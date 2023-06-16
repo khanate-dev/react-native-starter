@@ -1,9 +1,10 @@
-import { Switch, Text, TouchableRipple, useTheme } from 'react-native-paper';
+import { Switch, Text, TouchableRipple } from 'react-native-paper';
 import { View } from 'react-native';
 import { useRef } from 'react';
 
 import { AppIcon } from 'components/media/app-icon';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
+import { useTheme } from 'hooks/theme';
 
 import type { StyleProp, ViewStyle, Switch as RefType } from 'react-native';
 import type { SwitchProps } from 'react-native-paper';

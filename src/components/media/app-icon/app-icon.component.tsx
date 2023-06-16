@@ -2,6 +2,7 @@
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import { z } from 'zod';
 
+// eslint-disable-next-line no-restricted-imports
 import type {
 	Icon as Type,
 	IconProps,
