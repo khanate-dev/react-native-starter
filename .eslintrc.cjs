@@ -314,6 +314,12 @@ const config = {
 				'import/prefer-default-export': ['error', { target: 'any' }],
 			},
 		},
+		{
+			files: ['scripts/**/*'],
+			rules: {
+				'import/no-nodejs-modules': 'off',
+			},
+		},
 	],
 };
 
