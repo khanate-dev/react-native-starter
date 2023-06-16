@@ -1,10 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import { z } from 'zod';
 
-// eslint-disable-next-line no-restricted-imports
-import type { IconProps } from '@expo/vector-icons/build/createIconSet';
+import type {
+	Icon as Type,
+	IconProps,
+} from '@expo/vector-icons/build/createIconSet';
 
-type map = typeof Icon extends IconProps<infer T> ? T : never;
+type map = typeof Icon extends Type<infer T, any> ? T : never;
 
 export const appIconMap = {
 	logout: 'power',
@@ -20,6 +23,8 @@ export const appIconMap = {
 	notifications: 'bell-ring-outline',
 	error: 'alert-circle-outline',
 	success: 'check-circle-outline',
+	info: 'information-outline',
+	warning: 'alert-circle-outline',
 	email: 'email-outline',
 	'email-at': 'at',
 	phone: 'phone',
@@ -33,7 +38,17 @@ export const appIconMap = {
 	submit: 'arrow-up-circle-outline',
 	check: 'check-all',
 	restore: 'history',
-} as const satisfies Record<string, map>;
+} as const;
+
+type _ =
+	//   ^?
+	keyof {
+		[k in keyof typeof appIconMap as (typeof appIconMap)[k] extends map
+			? never
+			: k]: true;
+	};
+
+z.util.assertEqual<_, never>(true);
 
 export type AppIconName = keyof typeof appIconMap;
 
@@ -45,7 +60,7 @@ export const AppIcon = ({ name: mapName, ...props }: AppIconProps) => {
 	const name = appIconMap[mapName];
 	return (
 		<Icon
-			name={name}
+			name={name as never}
 			{...props}
 		/>
 	);

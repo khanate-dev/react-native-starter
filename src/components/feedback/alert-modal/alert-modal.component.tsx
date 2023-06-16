@@ -1,12 +1,12 @@
 import { DeviceEventEmitter, Dimensions, View } from 'react-native';
-import { Dialog, Portal, Text, useTheme } from 'react-native-paper';
+import { Dialog, Portal, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
-import { getThemeColor, themeColorIcons } from 'styles/theme';
 import { Button } from 'components/controls/button';
 import { AppIcon } from 'components/media/app-icon';
 import { isSmallerScreen } from 'src/config';
+import { useTheme } from 'hooks/theme';
 
 import type { ButtonProps } from 'components/controls/button';
 import type { ThemeColor } from 'styles/theme';
@@ -89,7 +89,7 @@ export const AlertModal = ({
 						flexDirection: 'row',
 						justifyContent: 'center',
 						alignItems: 'center',
-						backgroundColor: getThemeColor(theme, type, 'container'),
+						backgroundColor: theme.getColor(type, 'container'),
 						padding: 15,
 					}}
 				>
@@ -103,7 +103,7 @@ export const AlertModal = ({
 							}}
 						>
 							<AppIcon
-								name={themeColorIcons[type]}
+								name={theme.icons[type]}
 								size={25}
 								color='#fff'
 							/>
@@ -116,7 +116,7 @@ export const AlertModal = ({
 						style={{
 							textAlign: 'center',
 							marginLeft: !noIcon ? 15 : undefined,
-							color: getThemeColor(theme, type, 'container-contrast'),
+							color: theme.getColor(type, 'on-container'),
 						}}
 					>
 						{title}
@@ -139,7 +139,7 @@ export const AlertModal = ({
 						style={{
 							textAlign: 'center',
 							fontWeight: 'normal',
-							color: getThemeColor(theme, type, 'container-contrast'),
+							color: theme.getColor(type, 'on-container'),
 							lineHeight: 25,
 						}}
 					>

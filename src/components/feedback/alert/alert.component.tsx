@@ -1,10 +1,10 @@
-import { Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import { View } from 'react-native';
 
-import { getThemeColor, themeColorIcons } from 'styles/theme';
 import { AppIcon } from 'components/media/app-icon';
 import { IconButton } from 'components/controls/icon-button';
+import { useTheme } from 'hooks/theme';
 
 import type { ThemeColor } from 'styles/theme';
 import type { App } from 'types/app';
@@ -36,8 +36,8 @@ export const Alert = ({
 }: AlertProps) => {
 	const theme = useTheme();
 
-	const background = getThemeColor(theme, type, 'container');
-	const foreground = getThemeColor(theme, type, 'container-contrast');
+	const background = theme.getColor(type, 'container');
+	const foreground = theme.getColor(type, 'on-container');
 
 	const textJsx = (
 		<Text
@@ -72,7 +72,7 @@ export const Alert = ({
 		>
 			{!noIcon && (
 				<AppIcon
-					name={themeColorIcons[type]}
+					name={theme.icons[type]}
 					size={25}
 					color={foreground}
 					style={{ padding: 5 }}

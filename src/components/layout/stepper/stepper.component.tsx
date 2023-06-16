@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
-import { getThemeColor } from 'styles/theme';
+import { useTheme } from 'hooks/theme';
 
 import type { App } from 'types/app';
 
@@ -46,8 +46,7 @@ export const Stepper = <T extends readonly string[]>({
 						style={{
 							textTransform: 'capitalize',
 							opacity: 0.5,
-							color: getThemeColor(
-								theme,
+							color: theme.getColor(
 								step === currentStep
 									? 'primary'
 									: steps.indexOf(currentStep) > index
@@ -64,8 +63,7 @@ export const Stepper = <T extends readonly string[]>({
 							{
 								height: 3,
 								opacity: 0.5,
-								backgroundColor: getThemeColor(
-									theme,
+								backgroundColor: theme.getColor(
 									step === currentStep
 										? 'primary'
 										: steps.indexOf(currentStep) > index
