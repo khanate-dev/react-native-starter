@@ -271,7 +271,9 @@ export const useForm = <
 					  }
 					: undefined,
 				next: field.next
-					? () => textRefs.current[field.next as never]
+					? () =>
+							textRefs.current[field.next as keyof typeof textRefs.current] ??
+							null
 					: undefined,
 			},
 		}),
