@@ -22,7 +22,7 @@ export type ButtonProps = Omit<Props, 'icon' | 'children'> & {
 
 export const Button = ({
 	style,
-	color,
+	color = 'primary',
 	label,
 	mode = 'contained',
 	disabled,
@@ -40,22 +40,18 @@ export const Button = ({
 			mode={mode}
 			disabled={disabled || restProps.loading}
 			style={style}
-			theme={
-				color
-					? {
-							colors: {
-								primary: theme.getColor(color, 'normal'),
-								onPrimary: theme.getColor(color, 'on-normal'),
-								primaryContainer: theme.getColor(color, 'container'),
-								onPrimaryContainer: theme.getColor(color, 'on-container'),
-								secondary: theme.getColor(color, 'normal'),
-								onSecondary: theme.getColor(color, 'on-normal'),
-								secondaryContainer: theme.getColor(color, 'container'),
-								onSecondaryContainer: theme.getColor(color, 'on-container'),
-							},
-					  }
-					: undefined
-			}
+			theme={{
+				colors: {
+					primary: theme.getColor(color, 'normal'),
+					onPrimary: theme.getColor(color, 'on-normal'),
+					primaryContainer: theme.getColor(color, 'container'),
+					onPrimaryContainer: theme.getColor(color, 'on-container'),
+					secondary: theme.getColor(color, 'normal'),
+					onSecondary: theme.getColor(color, 'on-normal'),
+					secondaryContainer: theme.getColor(color, 'container'),
+					onSecondaryContainer: theme.getColor(color, 'on-container'),
+				},
+			}}
 		>
 			{label}
 		</Component>
