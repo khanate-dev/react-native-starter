@@ -46,6 +46,7 @@ export const Alert = ({
 			style={{
 				color: foreground,
 				textTransform: 'capitalize',
+				lineHeight: 13,
 			}}
 		>
 			{text}
@@ -80,14 +81,15 @@ export const Alert = ({
 			)}
 
 			{title ? (
-				<View style={{ gap: 5 }}>
+				<View>
 					<Text
-						variant='titleSmall'
+						variant='bodyMedium'
 						numberOfLines={1}
 						style={{
 							color: foreground,
-							padding: 5,
 							textTransform: 'capitalize',
+							lineHeight: 15,
+							fontWeight: 'bold',
 						}}
 					>
 						{title}
