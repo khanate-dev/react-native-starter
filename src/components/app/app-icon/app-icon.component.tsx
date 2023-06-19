@@ -39,6 +39,9 @@ export const appIconMap = {
 	submit: 'arrow-up-circle-outline',
 	check: 'check-all',
 	restore: 'history',
+	language: 'translate',
+	unchecked: 'check-circle-outline',
+	checked: 'check-circle',
 } as const;
 
 type _ =
