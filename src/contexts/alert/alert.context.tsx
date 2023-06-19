@@ -7,7 +7,7 @@ import type { EventMap } from 'helpers/events';
 import type { PropsWithChildren } from 'react';
 import type { AlertModalProps } from 'components/feedback/alert-modal';
 
-const AlertContext = createContext(undefined);
+const AlertContext = createContext(null);
 
 export const AlertProvider = ({ children }: PropsWithChildren) => {
 	const [alert, setAlert] = useState<null | AlertModalProps>(null);
@@ -32,7 +32,7 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 	}, []);
 
 	return (
-		<AlertContext.Provider value={undefined}>
+		<AlertContext.Provider value={null}>
 			{alert && <AlertModal {...alert} />}
 			{children}
 		</AlertContext.Provider>
