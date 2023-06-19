@@ -1,14 +1,14 @@
 // eslint-disable-next-line no-restricted-imports
-import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import Component from '@expo/vector-icons/MaterialCommunityIcons';
 import { z } from 'zod';
 
 // eslint-disable-next-line no-restricted-imports
 import type {
 	Icon as Type,
-	IconProps,
+	IconProps as Props,
 } from '@expo/vector-icons/build/createIconSet';
 
-type map = typeof Icon extends Type<infer T, any> ? T : never;
+type map = typeof Component extends Type<infer T, any> ? T : never;
 
 export const appIconMap = {
 	logout: 'power',
@@ -54,16 +54,16 @@ type _ =
 
 z.util.assertEqual<_, never>(true);
 
-export type AppIconName = keyof typeof appIconMap;
+export type IconName = keyof typeof appIconMap;
 
-export type AppIconProps = Omit<IconProps<any>, 'name'> & {
-	name: AppIconName;
+export type IconProps = Omit<Props<any>, 'name'> & {
+	name: IconName;
 };
 
-export const AppIcon = ({ name: mapName, ...props }: AppIconProps) => {
+export const Icon = ({ name: mapName, ...props }: IconProps) => {
 	const name = appIconMap[mapName];
 	return (
-		<Icon
+		<Component
 			name={name as never}
 			{...props}
 		/>

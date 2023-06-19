@@ -5,7 +5,7 @@ import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { isDayjs } from 'dayjs';
 
 import { isSmallerScreen } from 'src/config';
-import { appIconMap } from 'components/app/app-icon';
+import { appIconMap } from 'components/app/icon';
 import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
@@ -20,7 +20,7 @@ import type {
 	ViewStyle,
 	TextInput as RefType,
 } from 'react-native';
-import type { AppIconName } from 'components/app/app-icon';
+import type { IconName } from 'components/app/icon';
 import type { ZodTime } from 'helpers/schema';
 import type { z } from 'zod';
 import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/src/components/TextInput/types';
@@ -51,7 +51,7 @@ const keyboardTypes: Record<FormControlType, KeyboardTypeOptions> = {
 	time: 'default',
 };
 
-const icons: Record<FormControlType, AppIconName> = {
+const icons: Record<FormControlType, IconName> = {
 	email: 'email-at',
 	float: 'number',
 	int: 'number',

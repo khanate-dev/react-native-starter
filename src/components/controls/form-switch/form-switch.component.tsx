@@ -2,7 +2,7 @@ import { Switch, Text, TouchableRipple } from 'react-native-paper';
 import { View } from 'react-native';
 import { useRef } from 'react';
 
-import { AppIcon } from 'components/app/app-icon';
+import { Icon } from 'components/app/icon';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 import { useTheme } from 'hooks/theme';
 
@@ -80,7 +80,7 @@ export const FormSwitch = ({
 					}}
 				>
 					{hasIcon ? (
-						<AppIcon
+						<Icon
 							style={styles?.icon}
 							name={'check'}
 							size={20}

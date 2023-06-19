@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { wait } from 'helpers/async';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { isSmallerScreen } from 'src/config';
-import { AppIcon } from 'components/app/app-icon';
+import { Icon } from 'components/app/icon';
 import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
@@ -128,7 +128,7 @@ export const ForgotPassword = () => {
 					marginBottom: isSmallerScreen ? 10 : 20,
 				}}
 			>
-				<AppIcon
+				<Icon
 					name='restore'
 					color={theme.colors.onPrimary}
 					size={isSmallerScreen ? 40 : 60}

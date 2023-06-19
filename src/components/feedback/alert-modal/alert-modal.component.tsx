@@ -4,7 +4,7 @@ import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
 import { Button } from 'components/controls/button';
-import { AppIcon } from 'components/app/app-icon';
+import { Icon } from 'components/app/icon';
 import { isSmallerScreen } from 'src/config';
 import { useTheme } from 'hooks/theme';
 
@@ -102,7 +102,7 @@ export const AlertModal = ({
 								borderRadius: 25,
 							}}
 						>
-							<AppIcon
+							<Icon
 								name={theme.icons[type]}
 								size={25}
 								color='#fff'

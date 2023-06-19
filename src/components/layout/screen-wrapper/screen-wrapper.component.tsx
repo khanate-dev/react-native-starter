@@ -6,7 +6,7 @@ import Constants from 'expo-constants';
 import { logout, useUserOrNull } from 'contexts/auth';
 import { Background } from 'components/app/background';
 import { IconButton } from 'components/controls/icon-button';
-import { AppIcon } from 'components/app/app-icon';
+import { Icon } from 'components/app/icon';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 import { useTheme } from 'hooks/theme';
 
@@ -88,7 +88,7 @@ export const ScreenWrapper = ({
 					)}
 
 					{user && (
-						<AppIcon
+						<Icon
 							name='user-account'
 							color={theme.colors.primary}
 							size={30}

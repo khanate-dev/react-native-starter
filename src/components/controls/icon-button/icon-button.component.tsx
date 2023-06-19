@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import { IconButton as Component } from 'react-native-paper';
 
-import { appIconMap } from 'components/app/app-icon';
+import { appIconMap } from 'components/app/icon';
 
-import type { AppIconName } from 'components/app/app-icon';
+import type { IconName } from 'components/app/icon';
 import type { IconButtonProps as Props } from 'react-native-paper';
 
 export type IconButtonProps = Omit<Props, 'icon'> & {
-	icon: AppIconName;
+	icon: IconName;
 };
 
 export const IconButton = ({

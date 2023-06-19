@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
 import { Button as Component } from 'react-native-paper';
 
-import { appIconMap } from 'components/app/app-icon';
+import { appIconMap } from 'components/app/icon';
 import { useTheme } from 'hooks/theme';
 
-import type { AppIconName } from 'components/app/app-icon';
+import type { IconName } from 'components/app/icon';
 import type { ButtonProps as Props } from 'react-native-paper';
 import type { ReactNode } from 'react';
 import type { ThemeColor } from 'styles/theme';
@@ -14,7 +14,7 @@ export type ButtonProps = Omit<Props, 'icon' | 'children'> & {
 	label: ReactNode;
 
 	/** the icon to show to the left of the button label */
-	icon?: AppIconName;
+	icon?: IconName;
 
 	/** the theme color of the button */
 	color?: ThemeColor;
