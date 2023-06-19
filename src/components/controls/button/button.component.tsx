@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-restricted-imports
 import { Button as Component } from 'react-native-paper';
 
-import { appIconMap } from 'components/media/app-icon';
+import { appIconMap } from 'components/app/app-icon';
 import { useTheme } from 'hooks/theme';
 
-import type { AppIconName } from 'components/media/app-icon';
+import type { AppIconName } from 'components/app/app-icon';
 import type { ButtonProps as Props } from 'react-native-paper';
 import type { ReactNode } from 'react';
 import type { ThemeColor } from 'styles/theme';

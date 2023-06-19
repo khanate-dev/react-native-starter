@@ -63,7 +63,7 @@ const config = {
 					},
 					{
 						group: ['@expo/vector-icons*'],
-						message: "Use 'components/media/app-icon' instead",
+						message: "Use 'components/app/app-icon' instead",
 					},
 					{
 						group: ['react-native-paper*'],

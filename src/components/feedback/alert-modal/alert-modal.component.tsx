@@ -4,7 +4,7 @@ import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
 import { Button } from 'components/controls/button';
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { isSmallerScreen } from 'src/config';
 import { useTheme } from 'hooks/theme';
 

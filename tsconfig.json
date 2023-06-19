@@ -29,6 +29,7 @@
 			"errors": ["src/errors/"],
 			"mocks": ["src/mocks/"],
 			"endpoints": ["src/endpoints/"],
+			"i18n": ["src/i18n"],
 			"components/*": ["src/components/*"],
 			"contexts/*": ["src/contexts/*"],
 			"errors/*": ["src/errors/*"],

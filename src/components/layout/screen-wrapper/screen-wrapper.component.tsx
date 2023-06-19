@@ -4,9 +4,9 @@ import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
 import { logout, useUserOrNull } from 'contexts/auth';
-import { Background } from 'components/media/background';
+import { Background } from 'components/app/background';
 import { IconButton } from 'components/controls/icon-button';
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 import { useTheme } from 'hooks/theme';
 

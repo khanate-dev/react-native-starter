@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { wait } from 'helpers/async';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { isSmallerScreen } from 'src/config';
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';

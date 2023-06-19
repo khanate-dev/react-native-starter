@@ -3,7 +3,7 @@ import { Text } from 'react-native-paper';
 import { Button } from 'components/controls/button';
 import { isSmallerScreen } from 'src/config';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { useTheme } from 'hooks/theme';
 
 export type ErrorPageProps = {

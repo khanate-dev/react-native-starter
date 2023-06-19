@@ -2,7 +2,7 @@ import { Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import { View } from 'react-native';
 
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { IconButton } from 'components/controls/icon-button';
 import { useTheme } from 'hooks/theme';
 

@@ -15,7 +15,7 @@ const colors = {
 };
 
 const sourceFolder = './src/assets/icons';
-const targetFolder = './src/components/media/icons';
+const targetFolder = './src/components/app/icons';
 
 const config: Config = {
 	expandProps: 'end',

@@ -2,7 +2,7 @@ import { Switch, Text, TouchableRipple } from 'react-native-paper';
 import { View } from 'react-native';
 import { useRef } from 'react';
 
-import { AppIcon } from 'components/media/app-icon';
+import { AppIcon } from 'components/app/app-icon';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
 import { useTheme } from 'hooks/theme';
 
