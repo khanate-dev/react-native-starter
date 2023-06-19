@@ -3,6 +3,7 @@ import { DeviceEventEmitter } from 'react-native';
 import type { SetStateAction } from 'react';
 import type { LoggedInUser } from 'schemas/user';
 import type { AlertModalProps } from 'components/feedback/alert-modal';
+import type { Language } from 'i18n';
 
 export type EventMap = {
 	login: [LoggedInUser];
@@ -12,6 +13,7 @@ export type EventMap = {
 	addAlert: [string | Error | AlertModalProps];
 	removeAlert: [];
 	setIsLoading: [SetStateAction<boolean>];
+	updateLanguage: [SetStateAction<Language>];
 };
 
 export const events = {

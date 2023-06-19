@@ -4,10 +4,12 @@ import { z } from 'zod';
 import { loggedInUserSchema } from 'schemas/user';
 import { addAlert } from 'contexts/alert';
 import { getCatchMessage } from 'errors/errors';
+import { languages } from 'src/i18n';
 
 const schemas = {
 	user: loggedInUserSchema,
 	isDarkMode: z.boolean(),
+	language: z.enum(languages),
 } satisfies Record<string, z.Schema>;
 
 type Schemas = typeof schemas;
