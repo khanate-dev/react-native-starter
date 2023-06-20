@@ -20,7 +20,10 @@ const Register = () => {
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
-			const { email } = await endpoints.user.add(values);
+			const { email } = await endpoints.user.add({
+				...values,
+				image_url: null,
+			});
 			setTimeout(
 				() => router.push({ pathname: '/auth/login', params: { email } }),
 				1000

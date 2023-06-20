@@ -10,6 +10,7 @@ export const [userSansMetaSchema, userSchema] = createSchema({
 	email: emailSchema,
 	name: z.string(),
 	password: passwordSchema,
+	image_url: z.string().url().nullable(),
 });
 
 export type UserSansMeta = z.infer<typeof userSansMetaSchema>;
