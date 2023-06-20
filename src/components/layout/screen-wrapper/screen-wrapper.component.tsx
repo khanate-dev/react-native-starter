@@ -3,12 +3,13 @@ import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
-import { logout, useUserOrNull } from 'contexts/auth';
 import { Background } from 'components/app/background';
 import { IconButton } from 'components/controls/icon-button';
-import { Icon } from 'components/app/icon';
 import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 import { useTheme } from 'hooks/theme';
+import { LanguageControl } from 'components/app/language-control';
+import { UserControl } from 'components/app/user-control';
+import { sharedStyles } from 'styles/shared';
 
 import type { PropsWithChildren } from 'react';
 import type { App } from 'types/app';
@@ -36,11 +37,8 @@ export const ScreenWrapper = ({
 	onBack,
 	hasPlainBackground,
 }: ScreenWrapperProps) => {
-	const user = useUserOrNull();
 	const theme = useTheme();
 	const isDarkMode = useDarkMode();
-
-	const borderRadius = 10;
 
 	return (
 		<SafeAreaView style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
@@ -52,57 +50,41 @@ export const ScreenWrapper = ({
 				<View
 					style={{
 						flexDirection: 'row',
-						alignItems: 'center',
 						height: 50,
 						flexWrap: 'nowrap',
+						alignItems: 'center',
 					}}
 				>
-					{onBack && (
-						<IconButton
-							icon='arrow-back'
-							style={{ borderRadius }}
-							onPress={onBack}
-						/>
-					)}
+					<View style={sharedStyles.rowFlex}>
+						{onBack && (
+							<IconButton
+								icon='arrow-back'
+								onPress={onBack}
+							/>
+						)}
 
-					{Boolean(title) && (
-						<Text
-							variant='titleSmall'
-							style={{
-								color: theme.colors.primary,
-								textTransform: 'capitalize',
-								flexGrow: 1,
-							}}
-						>
-							{title}
-						</Text>
-					)}
+						{Boolean(title) && (
+							<Text
+								variant='titleSmall'
+								style={{
+									color: theme.colors.primary,
+									textTransform: 'capitalize',
+									flexGrow: 1,
+									marginLeft: 5,
+								}}
+							>
+								{title}
+							</Text>
+						)}
+					</View>
 
-					{user && (
-						<IconButton
-							icon='logout'
-							iconColor={theme.colors.error}
-							style={{ borderRadius, marginLeft: 'auto' }}
-							onPress={logout}
-						/>
-					)}
+					<UserControl iconStyle={{ marginLeft: 0 }} />
 
-					{user && (
-						<Icon
-							name='user-account'
-							color={theme.colors.primary}
-							size={30}
-							style={{
-								borderRadius,
-								backgroundColor: theme.colors.primaryContainer,
-								padding: 5,
-							}}
-						/>
-					)}
+					<LanguageControl iconStyle={{ marginLeft: 0 }} />
 
 					<IconButton
-						style={{ borderRadius, marginLeft: user ? undefined : 'auto' }}
 						icon={isDarkMode ? 'dark-mode' : 'light-mode'}
+						style={{ marginLeft: 0 }}
 						onPress={toggleDarkMode}
 					/>
 				</View>
