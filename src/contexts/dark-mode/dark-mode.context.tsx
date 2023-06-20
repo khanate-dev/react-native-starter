@@ -62,5 +62,6 @@ export const useDarkMode = () => {
 
 export const toggleDarkMode = () => events.emit('toggleDarkMode');
 
-export const updateDarkMode = (isDarkMode: SetStateAction<boolean>) =>
+export const updateDarkMode = (isDarkMode: SetStateAction<boolean>) => {
 	events.emit('updateDarkMode', isDarkMode);
+};

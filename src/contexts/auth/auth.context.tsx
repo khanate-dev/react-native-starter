@@ -33,17 +33,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 			setUser(null);
 		});
 
-		if (segments[0] === '[...404]') return;
-
-		const inAuthGroup = segments[0] === 'auth';
-
-		if (!user && !inAuthGroup) router.replace('/auth');
-		else if (user && inAuthGroup) router.replace('/');
-
 		return () => {
 			loginListener.remove();
 			logoutListener.remove();
 		};
+	}, []);
+
+	useEffect(() => {
+		if (segments[0] === '[...404]') return;
+		const inAuthGroup = segments[0] === 'auth';
+		if (!user && !inAuthGroup) router.replace('/auth');
+		else if (user && inAuthGroup) router.replace('/');
 	}, [router, segments, user]);
 
 	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
