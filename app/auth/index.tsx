@@ -4,9 +4,11 @@ import { useRouter } from 'expo-router';
 import { ScreenWrapper } from 'components/layout/screen-wrapper';
 import { Button } from 'components/controls/button';
 import { useTheme } from 'hooks/theme';
+import { useI18n } from 'contexts/i18n';
 
 const Auth = () => {
 	const theme = useTheme();
+	const { content } = useI18n();
 	const router = useRouter();
 
 	return (
@@ -24,18 +26,16 @@ const Auth = () => {
 					marginBottom: 'auto',
 				}}
 			>
-				Welcome to
-				{'\n'}
-				React Native Starter
+				{content.welcome}
 			</Text>
 
 			<Button
-				label='Register'
+				label={content.register}
 				onPress={() => router.push('/auth/register')}
 			/>
 
 			<Button
-				label='Login'
+				label={content.login}
 				onPress={() => router.push('/auth/login')}
 			/>
 		</ScreenWrapper>
