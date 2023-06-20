@@ -10,21 +10,25 @@ import { addAlert, AlertProvider } from 'contexts/alert';
 import { DarkModeProvider, useDarkMode } from 'contexts/dark-mode';
 import { AuthProvider } from 'contexts/auth';
 import { LoadingProvider } from 'contexts/loading';
+import { I18nProvider } from 'contexts/i18n';
 
 const Providers = () => {
 	const isDarkMode = useDarkMode();
+
 	return (
 		<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
 			<AuthProvider>
-				<AlertProvider>
-					<LoadingProvider>
-						<StatusBar
-							style='light'
-							backgroundColor='#000000'
-						/>
-						<Slot />
-					</LoadingProvider>
-				</AlertProvider>
+				<I18nProvider>
+					<AlertProvider>
+						<LoadingProvider>
+							<StatusBar
+								style='light'
+								backgroundColor='#000000'
+							/>
+							<Slot />
+						</LoadingProvider>
+					</AlertProvider>
+				</I18nProvider>
 			</AuthProvider>
 		</PaperProvider>
 	);

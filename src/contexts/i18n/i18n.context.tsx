@@ -45,5 +45,6 @@ export const useI18n = () => {
 	return { language, content: content[language] };
 };
 
-export const updateLanguage = (language: SetStateAction<Language>) =>
+export const updateLanguage = (language: SetStateAction<Language>) => {
 	events.emit('updateLanguage', language);
+};
