@@ -39,7 +39,11 @@ export const Button = ({
 			icon={name}
 			mode={mode}
 			disabled={disabled || restProps.loading}
-			style={style}
+			labelStyle={{ textTransform: 'capitalize' }}
+			style={[
+				{ borderRadius: 10, borderColor: theme.getColor(color, 'normal') },
+				style,
+			]}
 			theme={{
 				colors: {
 					primary: theme.getColor(color, 'normal'),

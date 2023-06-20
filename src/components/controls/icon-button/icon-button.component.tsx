@@ -21,6 +21,7 @@ export const IconButton = ({
 			icon={name}
 			mode={mode}
 			{...props}
+			style={[{ borderRadius: 10 }, props.style]}
 		/>
 	);
 };
