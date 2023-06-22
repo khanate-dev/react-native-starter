@@ -1,17 +1,20 @@
-import { DeviceEventEmitter, Dimensions, View } from 'react-native';
+import { DeviceEventEmitter, Dimensions, View, ScrollView } from 'react-native';
 import { Dialog, Portal, Text } from 'react-native-paper';
-import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
-import Constants from 'expo-constants';
 
 import { Button } from '~/components/controls/button';
 import { Icon } from '~/components/app/icon';
 import { useTheme } from '~/hooks/theme';
 import { isSmallerScreen } from '~/config';
+import { useI18n } from '~/contexts/i18n';
 
+import type { DialogProps } from 'react-native-paper';
 import type { ButtonProps } from '~/components/controls/button';
 import type { ThemeColor } from '~/theme';
 
-export type AlertModalProps = {
+export type AlertModalProps = Pick<
+	DialogProps,
+	'dismissable' | 'dismissableBackButton'
+> & {
 	/** the title of the dialog */
 	title?: string;
 
@@ -34,9 +37,6 @@ export type AlertModalProps = {
 	noIcon?: boolean;
 };
 
-const screenWidth = Dimensions.get('screen').width;
-const screenHeight = Dimensions.get('screen').height;
-
 export const AlertModal = ({
 	title: passedTitle,
 	text,
@@ -45,14 +45,18 @@ export const AlertModal = ({
 	actions: passedActions,
 	onClose,
 	noIcon,
+	dismissable,
+	dismissableBackButton,
 }: AlertModalProps) => {
 	const theme = useTheme();
+	const { content } = useI18n();
 
 	const actions: AlertModalProps['actions'] = [
 		...(passedActions ?? []),
 		{
-			label: closeLabel ?? 'Close',
-			mode: 'outlined',
+			label: closeLabel ?? content.action.close,
+			color: 'error',
+			icon: 'close',
 			onPress: onClose,
 		},
 	];
@@ -64,78 +68,69 @@ export const AlertModal = ({
 
 	const title = passedTitle ?? (type === 'error' ? 'Error' : 'Alert');
 
+	const screenWidth = Dimensions.get('screen').width;
+	const screenHeight = Dimensions.get('screen').height;
+
 	return (
 		<Portal>
 			<Dialog
+				dismissable={dismissable}
+				dismissableBackButton={dismissableBackButton}
 				style={{
-					width: screenWidth - (isSmallerScreen ? 50 : 150),
-					maxHeight:
-						screenHeight -
-						Constants.statusBarHeight -
-						(isSmallerScreen ? 50 : 120),
-					marginTop: 10,
-					flex: 1,
-					borderRadius: 15,
-					opacity: 0.9,
+					width: screenWidth - (isSmallerScreen ? 50 : 100),
+					height: screenHeight - (isSmallerScreen ? 80 : 160),
+					marginTop: 'auto',
+					marginBottom: 'auto',
+					marginLeft: 'auto',
+					marginRight: 'auto',
+					borderRadius: 10,
 					overflow: 'hidden',
+					opacity: 0.95,
 				}}
 				visible
 				onDismiss={handleClose}
 			>
-				<Animated.View
-					entering={SlideInLeft}
-					exiting={SlideOutRight}
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'center',
-						alignItems: 'center',
-						backgroundColor: theme.getColor(type, 'container'),
-						padding: 15,
-					}}
+				<View
+					style={[
+						theme.styles.view.row,
+						{
+							backgroundColor: theme.getColor(type),
+							padding: 10,
+							marginTop: 0,
+							gap: 10,
+						},
+					]}
 				>
 					{!noIcon && (
-						<View
-							style={{
-								width: 35,
-								height: 35,
-								padding: 5,
-								borderRadius: 25,
-							}}
-						>
-							<Icon
-								name={theme.icons[type]}
-								size={25}
-								color='#fff'
-							/>
-						</View>
+						<Icon
+							name={theme.icons[type]}
+							size={25}
+							color={theme.getColor(type, 'on-normal')}
+						/>
 					)}
-
 					<Text
-						variant='titleSmall'
+						variant='titleMedium'
 						numberOfLines={1}
 						style={{
 							textAlign: 'center',
-							marginLeft: !noIcon ? 15 : undefined,
-							color: theme.getColor(type, 'on-container'),
+							textTransform: 'capitalize',
+							color: theme.getColor(type, 'on-normal'),
 						}}
 					>
 						{title}
 					</Text>
-				</Animated.View>
+				</View>
 
-				<Animated.ScrollView
-					entering={SlideInLeft}
-					exiting={SlideOutRight}
+				<ScrollView
 					contentContainerStyle={{
 						padding: 15,
-						flex: 1,
+						flexGrow: 1,
 						justifyContent: 'center',
 						alignItems: 'center',
-						minHeight: 200,
 					}}
 				>
 					<Text
-						variant='bodyMedium'
+						variant='bodyLarge'
 						style={{
 							textAlign: 'center',
 							fontWeight: 'normal',
@@ -145,35 +140,26 @@ export const AlertModal = ({
 					>
 						{text}
 					</Text>
-				</Animated.ScrollView>
+				</ScrollView>
 
-				<Animated.View
-					entering={SlideInLeft}
-					exiting={SlideOutRight}
-					style={{
-						flexDirection: 'row',
-						justifyContent: 'center',
-						alignItems: 'center',
-						padding: 15,
-					}}
+				<View
+					style={[
+						theme.styles.view.row,
+						{ justifyContent: 'center', padding: 10, gap: 10 },
+					]}
 				>
 					{actions.map((action, index) => (
 						<Button
 							key={index}
 							{...action}
-							mode={action.mode ?? 'contained'}
-							style={[
-								{ flex: 1, maxWidth: 200 },
-								action.style,
-								index > 0 && { marginLeft: 15 },
-							]}
+							style={[{ flex: 1, maxWidth: 200 }, action.style]}
 							onPress={(event) => {
 								action.onPress?.(event);
 								handleClose();
 							}}
 						/>
 					))}
-				</Animated.View>
+				</View>
 			</Dialog>
 		</Portal>
 	);
