@@ -9,7 +9,7 @@ import { isSmallerScreen } from 'src/config';
 import { useTheme } from 'hooks/theme';
 
 import type { ButtonProps } from 'components/controls/button';
-import type { ThemeColor } from 'styles/theme';
+import type { ThemeColor } from 'src/theme';
 
 export type AlertModalProps = {
 	/** the title of the dialog */

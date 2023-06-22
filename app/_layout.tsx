@@ -4,8 +4,8 @@ import * as Updates from 'expo-updates';
 import { PaperProvider } from 'react-native-paper';
 import { Slot } from 'expo-router';
 
+import { darkTheme, lightTheme } from 'theme';
 import { environment } from 'config';
-import { darkTheme, lightTheme } from 'styles/theme';
 import { addAlert, AlertProvider } from 'contexts/alert';
 import { DarkModeProvider, useDarkMode } from 'contexts/dark-mode';
 import { AuthProvider } from 'contexts/auth';

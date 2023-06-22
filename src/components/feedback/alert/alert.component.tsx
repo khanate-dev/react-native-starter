@@ -6,7 +6,7 @@ import { Icon } from 'components/app/icon';
 import { IconButton } from 'components/controls/icon-button';
 import { useTheme } from 'hooks/theme';
 
-import type { ThemeColor } from 'styles/theme';
+import type { ThemeColor } from 'src/theme';
 import type { App } from 'types/app';
 
 export type AlertProps = App.PropsWithStyle<{
