@@ -13,39 +13,38 @@ const dotenvConfig = dotenv.config({
 dotenvExpand.expand(dotenvConfig);
 
 export const parseEnvironment = (input: unknown) => {
-	try {
-		const environmentSchema = z.object({
-			ENV: z.preprocess(
-				(value) => (value === 'development' ? 'development' : 'production'),
-				z.enum(['development', 'production'])
-			),
-			BACKEND_API_PATH: z.string().url(),
-			SENTRY_ORG: z.string(),
-			SENTRY_PROJECT: z.string(),
-			SENTRY_AUTH_TOKEN: z.string(),
-			SENTRY_DSN: z.string(),
-		});
-		const parsed = environmentSchema.parse(input);
-		return {
-			environment: parsed.ENV,
-			sentry: {
-				organization: parsed.SENTRY_ORG,
-				authToken: parsed.SENTRY_AUTH_TOKEN,
-				dsn: parsed.SENTRY_DSN,
-				project: parsed.SENTRY_PROJECT,
-			},
-			backendApiEndpoint: parsed.BACKEND_API_PATH,
-		};
-	} catch (error: any) {
-		if (error instanceof z.ZodError) {
-			throw new Error(
-				`Invalid Environment:\n${error.errors
-					.map((err) => `'${String(err.path[0])}': ${err.message}`)
-					.join('\n')}`
-			);
-		}
-		throw new Error(`Invalid Environment: ${error.message ?? error}`);
+	const environmentSchema = z.object({
+		ENV: z.preprocess(
+			(value) => (value === 'development' ? 'development' : 'production'),
+			z.enum(['development', 'production'])
+		),
+		BACKEND_API_PATH: z.string().url(),
+		SENTRY_ORG: z.string(),
+		SENTRY_PROJECT: z.string(),
+		SENTRY_AUTH_TOKEN: z.string(),
+		SENTRY_DSN: z.string(),
+	});
+	const parsed = environmentSchema.safeParse(input);
+	if (!parsed.success) {
+		console.error(
+			'🔥 Invalid environment variables:',
+			parsed.error.flatten().fieldErrors,
+			`\n🔥 Fix the issues in .env.${environment} file.`,
+			`\n💡 Tip: If you recently updated the .env.${environment} file and the error still persists, try restarting the server with the -cc flag to clear the cache.`
+		);
+		throw new Error('Invalid environment, Check terminal for more details ');
 	}
+
+	return {
+		environment: parsed.data.ENV,
+		sentry: {
+			organization: parsed.data.SENTRY_ORG,
+			authToken: parsed.data.SENTRY_AUTH_TOKEN,
+			dsn: parsed.data.SENTRY_DSN,
+			project: parsed.data.SENTRY_PROJECT,
+		},
+		backendApiEndpoint: parsed.data.BACKEND_API_PATH,
+	};
 };
 
 const extra = parseEnvironment(process.env);
