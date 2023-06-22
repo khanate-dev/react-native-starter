@@ -33,7 +33,12 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 
 	return (
 		<AlertContext.Provider value={null}>
-			{alert && <AlertModal {...alert} />}
+			{alert && (
+				<AlertModal
+					{...alert}
+					onClose={() => setAlert(null)}
+				/>
+			)}
 			{children}
 		</AlertContext.Provider>
 	);
