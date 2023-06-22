@@ -9,7 +9,6 @@ import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
 import { useTheme } from 'hooks/theme';
 import { LanguageControl } from 'components/app/language-control';
 import { UserControl } from 'components/app/user-control';
-import { sharedStyles } from 'styles/shared';
 
 import type { PropsWithChildren } from 'react';
 import type { App } from 'types/app';
@@ -40,6 +39,8 @@ export const ScreenWrapper = ({
 	const theme = useTheme();
 	const isDarkMode = useDarkMode();
 
+	const iconMargin = theme.rtl ? { marginRight: 0 } : { marginLeft: 0 };
+
 	return (
 		<SafeAreaView style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
 			<Surface style={{ flex: 1, position: 'relative' }}>
@@ -49,16 +50,18 @@ export const ScreenWrapper = ({
 
 				<View
 					style={{
-						flexDirection: 'row',
+						flexDirection: theme.rtl ? 'row-reverse' : 'row',
 						height: 50,
+						flexShrink: 1,
 						flexWrap: 'nowrap',
 						alignItems: 'center',
+						justifyContent: 'flex-end',
 					}}
 				>
-					<View style={sharedStyles.rowFlex}>
+					<View style={[theme.styles.view.row, { flexShrink: 1 }]}>
 						{onBack && (
 							<IconButton
-								icon='arrow-back'
+								icon={theme.rtl ? 'arrow-next' : 'arrow-back'}
 								onPress={onBack}
 							/>
 						)}
@@ -69,6 +72,7 @@ export const ScreenWrapper = ({
 								style={{
 									color: theme.colors.primary,
 									textTransform: 'capitalize',
+									textAlign: theme.rtl ? 'right' : 'left',
 									flexGrow: 1,
 									marginLeft: 5,
 								}}
@@ -78,13 +82,13 @@ export const ScreenWrapper = ({
 						)}
 					</View>
 
-					<UserControl iconStyle={{ marginLeft: 0 }} />
+					<UserControl buttonStyle={iconMargin} />
 
-					<LanguageControl iconStyle={{ marginLeft: 0 }} />
+					<LanguageControl buttonStyle={iconMargin} />
 
 					<IconButton
 						icon={isDarkMode ? 'dark-mode' : 'light-mode'}
-						style={{ marginLeft: 0 }}
+						style={iconMargin}
 						onPress={toggleDarkMode}
 					/>
 				</View>
