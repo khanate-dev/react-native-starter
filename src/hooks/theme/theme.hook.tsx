@@ -2,11 +2,14 @@
 import { useTheme as usePaperTheme } from 'react-native-paper';
 
 import { formatToken } from 'helpers/string';
+import { useI18n } from 'contexts/i18n';
 
-import type { AppTheme, ThemeColor } from 'styles/theme';
+import type { AppTheme, ThemeColor } from 'src/theme';
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 export const useTheme = () => {
 	const theme = usePaperTheme<AppTheme>();
+	const { direction, rtl } = useI18n();
 
 	return {
 		...theme,
@@ -35,6 +38,25 @@ export const useTheme = () => {
 			success: 'success',
 			info: 'info',
 			warning: 'warning',
+		},
+		direction,
+		rtl,
+		styles: {
+			view: {
+				row: {
+					flexDirection: rtl ? 'row-reverse' : 'row',
+					flexWrap: 'nowrap',
+					alignItems: 'center',
+				},
+			} satisfies Record<string, StyleProp<ViewStyle>>,
+			text: {
+				heading: {
+					textAlign: rtl ? 'right' : 'left',
+					color: theme.colors.primary,
+					marginBottom: 'auto',
+					textTransform: 'capitalize',
+				},
+			} satisfies Record<string, StyleProp<TextStyle>>,
 		},
 	} as const;
 };
