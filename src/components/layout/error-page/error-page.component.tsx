@@ -5,6 +5,7 @@ import { isSmallerScreen } from '~/config';
 import { ScreenWrapper } from '~/components/layout/screen-wrapper';
 import { Icon } from '~/components/app/icon';
 import { useTheme } from '~/hooks/theme';
+import { useI18n } from '~/contexts/i18n';
 
 export type ErrorPageProps = {
 	title?: string;
@@ -22,10 +23,11 @@ export const ErrorPage = ({
 	onBack,
 }: ErrorPageProps) => {
 	const theme = useTheme();
+	const { content } = useI18n();
 
 	return (
 		<ScreenWrapper
-			title={title ?? 'Error'}
+			title={title ?? content.error}
 			style={{
 				flex: 1,
 				justifyContent: 'center',
@@ -48,7 +50,7 @@ export const ErrorPage = ({
 					color: theme.colors.error,
 				}}
 			>
-				{heading ?? 'oops!'}
+				{heading ?? content.oops}
 			</Text>
 
 			<Text
@@ -60,11 +62,11 @@ export const ErrorPage = ({
 					paddingVertical: 20,
 				}}
 			>
-				{message ?? 'something went wrong!'}
+				{message ?? content.genericError}
 			</Text>
 
 			<Button
-				label={buttonLabel ?? 'Back'}
+				label={buttonLabel ?? content.action.back}
 				icon='arrow-back'
 				style={{ width: 150 }}
 				onPress={onBack}
