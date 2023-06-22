@@ -32,50 +32,40 @@ export const Stepper = <T extends readonly string[]>({
 					flexDirection: 'row',
 					alignItems: 'stretch',
 					justifyContent: 'space-between',
+					flexWrap: 'nowrap',
+					gap: 5,
 				},
 				style,
 			]}
 		>
-			{steps.map((step, index) => (
-				<View
-					key={step}
-					style={{ flex: 1, padding: 5, opacity: 0.8 }}
-				>
-					<Text
-						variant='headlineMedium'
-						style={{
-							textTransform: 'capitalize',
-							opacity: 0.5,
-							color: theme.getColor(
-								step === currentStep
-									? 'primary'
-									: steps.indexOf(currentStep) > index
-									? 'success'
-									: 'error'
-							),
-						}}
-					>
-						{removePrefix ? step.replace(removePrefix, '') : step}
-					</Text>
-
+			{steps.map((step, index) => {
+				const color = theme.getColor(
+					step === currentStep
+						? 'primary'
+						: steps.indexOf(currentStep) > index
+						? 'success'
+						: 'error'
+				);
+				return (
 					<View
-						style={[
-							{
-								height: 3,
-								opacity: 0.5,
-								backgroundColor: theme.getColor(
-									step === currentStep
-										? 'primary'
-										: steps.indexOf(currentStep) > index
-										? 'success'
-										: 'error',
-									'container'
-								),
-							},
-						]}
-					/>
-				</View>
-			))}
+						key={step}
+						style={{ flex: 1, gap: 2 }}
+					>
+						<Text
+							variant='labelMedium'
+							style={{
+								textTransform: 'capitalize',
+								color,
+								textAlign: 'center',
+							}}
+						>
+							{removePrefix ? step.replace(removePrefix, '') : step}
+						</Text>
+
+						<View style={{ height: 3, backgroundColor: color }} />
+					</View>
+				);
+			})}
 		</View>
 	);
 };
