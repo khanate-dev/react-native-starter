@@ -16,9 +16,9 @@ const Providers = () => {
 	const isDarkMode = useDarkMode();
 
 	return (
-		<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
-			<AuthProvider>
-				<I18nProvider>
+		<I18nProvider>
+			<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
+				<AuthProvider>
 					<AlertProvider>
 						<LoadingProvider>
 							<StatusBar
@@ -28,9 +28,9 @@ const Providers = () => {
 							<Slot />
 						</LoadingProvider>
 					</AlertProvider>
-				</I18nProvider>
-			</AuthProvider>
-		</PaperProvider>
+				</AuthProvider>
+			</PaperProvider>
+		</I18nProvider>
 	);
 };
 
