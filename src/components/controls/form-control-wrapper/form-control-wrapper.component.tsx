@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { HelperText } from 'react-native-paper';
 
 import type { PropsWithChildren } from 'react';
-import type { App } from 'types/app';
+import type { App } from '~/types/app';
 
 export type FormControlWrapperProps = PropsWithChildren<
 	App.PropsWithStyle<{

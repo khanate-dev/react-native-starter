@@ -1,9 +1,9 @@
 import { DeviceEventEmitter } from 'react-native';
 
 import type { SetStateAction } from 'react';
-import type { LoggedInUser } from 'schemas/user';
-import type { AlertModalProps } from 'components/feedback/alert-modal';
-import type { Language } from 'i18n';
+import type { LoggedInUser } from '~/schemas/user';
+import type { AlertModalProps } from '~/components/feedback/alert-modal';
+import type { Language } from '~/i18n';
 
 export type EventMap = {
 	login: [LoggedInUser];

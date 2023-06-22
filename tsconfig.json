@@ -25,22 +25,7 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"paths": {
-			"config": ["src/config"],
-			"errors": ["src/errors"],
-			"mocks": ["src/mocks"],
-			"endpoints": ["src/endpoints"],
-			"i18n": ["src/i18n"],
-			"theme": ["src/theme"],
-			"components/*": ["src/components/*"],
-			"contexts/*": ["src/contexts/*"],
-			"errors/*": ["src/errors/*"],
-			"helpers/*": ["src/helpers/*"],
-			"hooks/*": ["src/hooks/*"],
-			"assets/*": ["src/assets/*"],
-			"navigation/*": ["src/navigation/*"],
-			"screens/*": ["src/screens/*"],
-			"types/*": ["src/types/*"],
-			"schemas/*": ["src/schemas/*"]
+			"~/*": ["src/*"]
 		},
 
 		// emit

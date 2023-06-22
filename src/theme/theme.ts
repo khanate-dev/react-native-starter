@@ -1,7 +1,7 @@
 import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 
 import type { MD3Theme } from 'react-native-paper';
-import type { Utils } from 'types/utils';
+import type { Utils } from '~/types/utils';
 
 type ColorObj<T extends string> = {
 	[k in

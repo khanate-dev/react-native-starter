@@ -1,23 +1,23 @@
 import { z } from 'zod';
 
-import { loggedInUserSchema, userSchema } from 'schemas/user';
+import { loggedInUserSchema, userSchema } from '~/schemas/user';
 import {
 	postRequest,
 	getRequest,
 	putRequest,
 	deleteRequest,
-} from 'helpers/api';
+} from '~/helpers/api';
 import {
 	mockToken,
 	mockedAdd,
 	mockedDelete,
 	mockedGet,
 	mockedUpdate,
-} from 'mocks';
-import { omit } from 'helpers/object';
+} from '~/mocks';
+import { omit } from '~/helpers/object';
 
-import type { User, UserSansMeta, LoggedInUser } from 'schemas/user';
-import type { DbId } from 'helpers/schema';
+import type { User, UserSansMeta, LoggedInUser } from '~/schemas/user';
+import type { DbId } from '~/helpers/schema';
 
 export const userEndpoints = {
 	login: async (body: {

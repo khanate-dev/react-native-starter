@@ -1,10 +1,10 @@
 import * as SecureStore from 'expo-secure-store';
 import { z } from 'zod';
 
-import { loggedInUserSchema } from 'schemas/user';
-import { addAlert } from 'contexts/alert';
-import { getCatchMessage } from 'errors/errors';
-import { languages } from 'src/i18n';
+import { loggedInUserSchema } from '~/schemas/user';
+import { languages } from '~/i18n';
+import { events } from '~/helpers/events';
+import { getCatchMessage } from '~/errors';
 
 const schemas = {
 	user: loggedInUserSchema,
@@ -24,10 +24,10 @@ export const removeSetting = async <Key extends keyof Settings>(
 	try {
 		await SecureStore.deleteItemAsync(key);
 		return true;
-	} catch (error: any) {
-		addAlert({
-			title: 'Error Removing From SecureStore',
-			text: error.message ?? error,
+	} catch (error) {
+		events.emit('addAlert', {
+			title: 'error removing from secure store',
+			text: getCatchMessage(error),
 		});
 		return false;
 	}
@@ -43,7 +43,7 @@ export const getSetting = async <Key extends keyof Settings>(
 		const parsed = schemas[key].parse(JSON.parse(result)) as never;
 		return parsed;
 	} catch (error) {
-		addAlert({
+		events.emit('addAlert', {
 			title: 'error reading from secure store',
 			text: getCatchMessage(error),
 		});
@@ -59,10 +59,10 @@ export const setSetting = async <Key extends keyof Settings>(
 	try {
 		await SecureStore.setItemAsync(key, JSON.stringify(value));
 		return true;
-	} catch (error: any) {
-		addAlert({
-			title: 'Error Writing To SecureStore',
-			text: error.message ?? error,
+	} catch (error) {
+		events.emit('addAlert', {
+			title: 'error writing to secure store',
+			text: getCatchMessage(error),
 		});
 		return false;
 	}

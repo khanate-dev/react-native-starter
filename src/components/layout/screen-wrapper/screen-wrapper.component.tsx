@@ -3,15 +3,15 @@ import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
-import { Background } from 'components/app/background';
-import { IconButton } from 'components/controls/icon-button';
-import { toggleDarkMode, useDarkMode } from 'contexts/dark-mode';
-import { useTheme } from 'hooks/theme';
-import { LanguageControl } from 'components/app/language-control';
-import { UserControl } from 'components/app/user-control';
+import { Background } from '~/components/app/background';
+import { IconButton } from '~/components/controls/icon-button';
+import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode';
+import { useTheme } from '~/hooks/theme';
+import { LanguageControl } from '~/components/app/language-control';
+import { UserControl } from '~/components/app/user-control';
 
 import type { PropsWithChildren } from 'react';
-import type { App } from 'types/app';
+import type { App } from '~/types/app';
 
 export type ScreenWrapperProps = PropsWithChildren<
 	App.PropsWithStyle<{

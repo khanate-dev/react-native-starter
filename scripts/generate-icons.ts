@@ -4,7 +4,7 @@ import { spawnSync } from 'child_process';
 
 import { transform } from '@svgr/core';
 
-import { formatToken } from 'helpers/string';
+import { formatToken } from '~/helpers/string';
 
 import type { Config } from '@svgr/core';
 

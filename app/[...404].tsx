@@ -1,6 +1,6 @@
 import { usePathname, useRouter } from 'expo-router';
 
-import { ErrorPage } from 'components/layout/error-page';
+import { ErrorPage } from '~/components/layout/error-page';
 
 const NotFound = () => {
 	const router = useRouter();

@@ -2,10 +2,10 @@ import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import { Image, View } from 'react-native';
 
-import { useTheme } from 'hooks/theme';
-import { Icon } from 'components/app/icon';
-import { useUserOrNull } from 'contexts/auth';
-import { Button } from 'components/controls/button';
+import { useTheme } from '~/hooks/theme';
+import { Icon } from '~/components/app/icon';
+import { useUserOrNull } from '~/contexts/auth';
+import { Button } from '~/components/controls/button';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 

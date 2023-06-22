@@ -1,6 +1,6 @@
-import { getCatchMessage } from 'errors';
+import { getCatchMessage } from '~/errors';
 
-import type { Utils } from 'types/utils';
+import type { Utils } from '~/types/utils';
 
 export const readableTypeOf = (value: unknown) => {
 	if (typeof value !== 'object') return typeof value;

@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { useTheme } from 'hooks/theme';
+import { useTheme } from '~/hooks/theme';
 
-import type { App } from 'types/app';
+import type { App } from '~/types/app';
 
 export type StepperProps<T extends readonly string[]> = App.PropsWithStyle<{
 	/** the list of step names */

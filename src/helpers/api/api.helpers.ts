@@ -1,12 +1,17 @@
 import { z } from 'zod';
 import { getNetworkStateAsync } from 'expo-network';
 
-import { disableAuth, isFetchMocked } from 'src/config';
-import { ApiError, AuthError, ConnectionError, getCatchMessage } from 'errors';
-import { logout } from 'contexts/auth';
-import { getSetting } from 'helpers/settings';
+import { disableAuth, isFetchMocked } from '~/config';
+import {
+	ApiError,
+	AuthError,
+	ConnectionError,
+	getCatchMessage,
+} from '~/errors';
+import { logout } from '~/contexts/auth';
+import { getSetting } from '~/helpers/settings';
 
-import type { Utils } from 'types/utils';
+import type { Utils } from '~/types/utils';
 
 const responseSchema = z.strictObject({
 	errorCode: z.string(),

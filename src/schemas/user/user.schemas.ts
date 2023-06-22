@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { createSchema, emailSchema, jwtSchema } from 'helpers/schema';
+import { createSchema, emailSchema, jwtSchema } from '~/helpers/schema';
 
 const passwordSchema = z
 	.string()

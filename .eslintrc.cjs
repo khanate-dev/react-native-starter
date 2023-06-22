@@ -80,6 +80,10 @@ const config = {
 						importNames: ['useTheme'],
 						message: "Use 'hooks/theme' instead",
 					},
+					{
+						group: ['src/*'],
+						message: "Use '~/' path aliases",
+					},
 				],
 			},
 		],

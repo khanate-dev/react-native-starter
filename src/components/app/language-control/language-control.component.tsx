@@ -1,11 +1,11 @@
 import { Menu } from 'react-native-paper';
 import { useState } from 'react';
 
-import { languages } from 'i18n';
-import { updateLanguage, useI18n } from 'contexts/i18n';
-import { IconButton } from 'components/controls/icon-button';
-import { useTheme } from 'hooks/theme';
-import { appIconMap } from 'components/app/icon';
+import { languages } from '~/i18n';
+import { updateLanguage, useI18n } from '~/contexts/i18n';
+import { IconButton } from '~/components/controls/icon-button';
+import { useTheme } from '~/hooks/theme';
+import { appIconMap } from '~/components/app/icon';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 

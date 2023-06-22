@@ -1,10 +1,10 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Button } from 'components/controls/button';
-import { useTheme } from 'hooks/theme';
-import { useI18n } from 'contexts/i18n';
+import { useTheme } from '~/hooks/theme';
+import { useI18n } from '~/contexts/i18n';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { Button } from '~/components/controls/button';
 
 const Auth = () => {
 	const theme = useTheme();

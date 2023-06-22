@@ -3,13 +3,13 @@ import { Dialog, Portal, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
 
-import { Button } from 'components/controls/button';
-import { Icon } from 'components/app/icon';
-import { isSmallerScreen } from 'src/config';
-import { useTheme } from 'hooks/theme';
+import { Button } from '~/components/controls/button';
+import { Icon } from '~/components/app/icon';
+import { useTheme } from '~/hooks/theme';
+import { isSmallerScreen } from '~/config';
 
-import type { ButtonProps } from 'components/controls/button';
-import type { ThemeColor } from 'src/theme';
+import type { ButtonProps } from '~/components/controls/button';
+import type { ThemeColor } from '~/theme';
 
 export type AlertModalProps = {
 	/** the title of the dialog */

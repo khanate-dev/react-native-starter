@@ -3,18 +3,18 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-import { wait } from 'helpers/async';
-import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { isSmallerScreen } from 'src/config';
-import { Icon } from 'components/app/icon';
-import { Button } from 'components/controls/button';
-import { FormControl } from 'components/controls/form-control';
-import { Alert } from 'components/feedback/alert';
-import { useTheme } from 'hooks/theme';
-import { useI18n } from 'contexts/i18n';
+import { useTheme } from '~/hooks/theme';
+import { useI18n } from '~/contexts/i18n';
+import { wait } from '~/helpers/async';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { isSmallerScreen } from '~/config';
+import { Icon } from '~/components/app/icon';
+import { Button } from '~/components/controls/button';
+import { FormControl } from '~/components/controls/form-control';
+import { Alert } from '~/components/feedback/alert';
 
 import type { TextInput } from 'react-native';
-import type { Utils } from 'types/utils';
+import type { Utils } from '~/types/utils';
 
 export type ResetCodeStatus =
 	| 'idle'

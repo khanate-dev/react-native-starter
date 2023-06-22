@@ -1,16 +1,16 @@
 import { Text } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { userSchema } from 'schemas/user';
-import { endpoints } from 'endpoints';
-import { login } from 'contexts/auth';
-import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { Button } from 'components/controls/button';
-import { useForm } from 'hooks/form';
-import { FormControl } from 'components/controls/form-control';
-import { Alert } from 'components/feedback/alert';
-import { useI18n } from 'contexts/i18n';
-import { useTheme } from 'hooks/theme';
+import { userSchema } from '~/schemas/user';
+import { endpoints } from '~/endpoints';
+import { login } from '~/contexts/auth';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { Button } from '~/components/controls/button';
+import { useForm } from '~/hooks/form';
+import { FormControl } from '~/components/controls/form-control';
+import { Alert } from '~/components/feedback/alert';
+import { useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
 
 const Login = () => {
 	const theme = useTheme();

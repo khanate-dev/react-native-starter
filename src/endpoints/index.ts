@@ -1,4 +1,4 @@
-import { isFetchMocked } from 'src/config';
+import { isFetchMocked } from '~/config';
 
 import { userEndpoints, userMocks } from './user';
 

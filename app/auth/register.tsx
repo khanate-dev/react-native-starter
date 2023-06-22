@@ -1,15 +1,15 @@
 import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 
-import { ScreenWrapper } from 'components/layout/screen-wrapper';
-import { userSchema } from 'schemas/user';
-import { endpoints } from 'src/endpoints';
-import { FormControl } from 'components/controls/form-control';
-import { useForm } from 'hooks/form';
-import { Button } from 'components/controls/button';
-import { Alert } from 'components/feedback/alert';
-import { useI18n } from 'contexts/i18n';
-import { useTheme } from 'hooks/theme';
+import { userSchema } from '~/schemas/user';
+import { useForm } from '~/hooks/form';
+import { useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { endpoints } from '~/endpoints';
+import { FormControl } from '~/components/controls/form-control';
+import { Button } from '~/components/controls/button';
+import { Alert } from '~/components/feedback/alert';
 
 const Register = () => {
 	const theme = useTheme();

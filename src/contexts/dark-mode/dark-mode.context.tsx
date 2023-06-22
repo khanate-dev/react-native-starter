@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Appearance } from 'react-native';
 
-import { getSetting, setSetting } from 'helpers/settings';
-import { events } from 'helpers/events';
+import { getSetting, setSetting } from '~/helpers/settings';
+import { events } from '~/helpers/events';
 
 import type { PropsWithChildren, SetStateAction } from 'react';
 

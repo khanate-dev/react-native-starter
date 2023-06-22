@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { isDayjs } from 'dayjs';
 
-import { JWT_REGEX, PHONE_REGEX } from 'config';
-import { dayjsUtc } from 'helpers/date';
+import { JWT_REGEX, PHONE_REGEX } from '~/config';
+import { dayjsUtc } from '~/helpers/date';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbKey');
 

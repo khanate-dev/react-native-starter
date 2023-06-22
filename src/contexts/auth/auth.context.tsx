@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, useSegments } from 'expo-router';
 
-import { getSetting, removeSetting, setSetting } from 'helpers/settings';
-import { events } from 'helpers/events';
+import { getSetting, removeSetting, setSetting } from '~/helpers/settings';
+import { events } from '~/helpers/events';
 
-import type { LoggedInUser } from 'schemas/user';
+import type { LoggedInUser } from '~/schemas/user';
 import type { PropsWithChildren } from 'react';
 
 const UserContext = createContext<null | LoggedInUser>(null);
