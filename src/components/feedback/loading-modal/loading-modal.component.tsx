@@ -9,20 +9,21 @@ export const LoadingModal = () => {
 			<Modal
 				dismissable={false}
 				style={{
-					backgroundColor: theme.colors.primaryContainer,
-					opacity: 0.7,
+					justifyContent: 'center',
+					alignItems: 'center',
+					backgroundColor: theme.colors.backdrop,
 				}}
 				contentContainerStyle={{
 					padding: 10,
 					borderRadius: 100,
-					backgroundColor: theme.colors.inversePrimary,
-					opacity: 0.6,
+					backgroundColor: theme.colors.primary,
+					opacity: 0.75,
 					shadowRadius: 6.27,
 				}}
 				visible
 			>
 				<ActivityIndicator
-					color={theme.colors.primary}
+					color={theme.colors.onPrimary}
 					size='large'
 				/>
 			</Modal>
