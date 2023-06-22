@@ -9,8 +9,12 @@ import { Button } from 'components/controls/button';
 import { useForm } from 'hooks/form';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
+import { useI18n } from 'contexts/i18n';
+import { useTheme } from 'hooks/theme';
 
 const Login = () => {
+	const theme = useTheme();
+	const { content } = useI18n();
 	const router = useRouter();
 	const { email } = useLocalSearchParams<{ email?: string }>();
 
@@ -29,15 +33,15 @@ const Login = () => {
 
 	return (
 		<ScreenWrapper
-			title='login'
+			title={content.pages.login}
 			style={{ padding: 15, gap: 5 }}
 			onBack={() => router.back()}
 		>
 			<Text
 				variant='headlineMedium'
-				style={{ marginBottom: 'auto' }}
+				style={theme.styles.text.heading}
 			>
-				Hi, {'\n'}Please {'\n'}Login
+				{content.headings.login}
 			</Text>
 
 			<FormControl
@@ -60,11 +64,12 @@ const Login = () => {
 			<Button
 				{...props.button}
 				icon='submit'
-				label={state.status.type === 'submitting' ? 'Logging In...' : 'Log In'}
+				loading={state.status.type === 'submitting'}
+				label={content.action.login}
 			/>
 
 			<Button
-				label='Forgot Password?'
+				label={content.action.forgotPassword}
 				mode='contained-tonal'
 				style={{
 					width: 200,

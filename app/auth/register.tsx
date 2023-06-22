@@ -8,8 +8,12 @@ import { FormControl } from 'components/controls/form-control';
 import { useForm } from 'hooks/form';
 import { Button } from 'components/controls/button';
 import { Alert } from 'components/feedback/alert';
+import { useI18n } from 'contexts/i18n';
+import { useTheme } from 'hooks/theme';
 
 const Register = () => {
+	const theme = useTheme();
+	const { content } = useI18n();
 	const router = useRouter();
 
 	const { props, state } = useForm({
@@ -34,16 +38,15 @@ const Register = () => {
 
 	return (
 		<ScreenWrapper
-			title='register'
+			title={content.pages.register}
 			style={{ padding: 15, gap: 5 }}
 			onBack={() => router.back()}
 		>
 			<Text
 				variant='headlineMedium'
-				style={{ marginBottom: 'auto' }}
+				style={theme.styles.text.heading}
 			>
-				Welcome! {'\n'}
-				{"Let's Get Started"}
+				{content.headings.register}
 			</Text>
 
 			<FormControl
@@ -70,9 +73,8 @@ const Register = () => {
 
 			<Button
 				{...props.button}
-				label={
-					state.status.type === 'submitting' ? 'Submitting...' : 'Create User'
-				}
+				loading={state.status.type === 'submitting'}
+				label={content.action.register}
 			/>
 		</ScreenWrapper>
 	);

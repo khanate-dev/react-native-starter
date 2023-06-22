@@ -21,21 +21,18 @@ const Auth = () => {
 		>
 			<Text
 				variant='headlineLarge'
-				style={{
-					color: theme.colors.primary,
-					marginBottom: 'auto',
-				}}
+				style={theme.styles.text.heading}
 			>
-				{content.welcome}
+				{content.headings.welcome}
 			</Text>
 
 			<Button
-				label={content.register}
+				label={content.action.register}
 				onPress={() => router.push('/auth/register')}
 			/>
 
 			<Button
-				label={content.login}
+				label={content.action.login}
 				onPress={() => router.push('/auth/login')}
 			/>
 		</ScreenWrapper>

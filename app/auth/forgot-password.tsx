@@ -11,6 +11,7 @@ import { Button } from 'components/controls/button';
 import { FormControl } from 'components/controls/form-control';
 import { Alert } from 'components/feedback/alert';
 import { useTheme } from 'hooks/theme';
+import { useI18n } from 'contexts/i18n';
 
 import type { TextInput } from 'react-native';
 import type { Utils } from 'types/utils';
@@ -87,6 +88,7 @@ type State = Utils.includeUnionKeys<
 
 export const ForgotPassword = () => {
 	const theme = useTheme();
+	const { content } = useI18n();
 	const router = useRouter();
 	const confirmPasswordRef = useRef<TextInput>(null);
 
@@ -114,19 +116,20 @@ export const ForgotPassword = () => {
 
 	return (
 		<ScreenWrapper
-			title='Reset Password'
+			title={content.pages.resetPassword}
 			onBack={() => router.back()}
 		>
 			<View
-				style={{
-					backgroundColor: theme.colors.primary,
-					flexDirection: 'row',
-					alignItems: 'center',
-					padding: isSmallerScreen ? 20 : 40,
-					borderRadius: isSmallerScreen ? 10 : 20,
-					gap: isSmallerScreen ? 10 : 20,
-					marginBottom: isSmallerScreen ? 10 : 20,
-				}}
+				style={[
+					theme.styles.view.row,
+					{
+						backgroundColor: theme.colors.primary,
+						padding: isSmallerScreen ? 20 : 40,
+						borderRadius: isSmallerScreen ? 10 : 20,
+						gap: isSmallerScreen ? 10 : 20,
+						marginBottom: isSmallerScreen ? 10 : 20,
+					},
+				]}
 			>
 				<Icon
 					name='restore'
@@ -136,19 +139,25 @@ export const ForgotPassword = () => {
 
 				<View>
 					<Text
-						style={{ color: theme.colors.onPrimary }}
 						variant='titleLarge'
+						style={[
+							theme.styles.text.heading,
+							{ color: theme.colors.onPrimary },
+						]}
 					>
-						Reset Password
+						{content.pages.resetPassword}
 					</Text>
 
 					<Text
-						style={{ color: theme.colors.onPrimary }}
 						variant='labelSmall'
+						style={[
+							theme.styles.text.heading,
+							{ color: theme.colors.onPrimary },
+						]}
 					>
 						{status === 'code-input'
-							? 'A Reset Code Has Been Sent To Your Email'
-							: 'Enter The Email To Get The Reset Code'}
+							? content.resetSent
+							: content.resetDescription}
 					</Text>
 				</View>
 			</View>
@@ -160,17 +169,11 @@ export const ForgotPassword = () => {
 				error={status === 'sending-code-failed' ? error : undefined}
 				disabled={!emailEnabled}
 				button={{
-					label: !emailStage
-						? 'Code Sent!'
-						: status === 'sending-code'
-						? 'Sending...'
-						: `${status !== 'idle' ? 'Re-' : ''}Send Code`,
-					icon:
-						status === 'idle'
-							? 'email'
-							: status === 'sending-code-failed'
-							? 'error'
-							: 'success',
+					label:
+						content.action.code[
+							!emailStage ? 'success' : status !== 'idle' ? 'error' : 'normal'
+						],
+					color: status === 'sending-code-failed' ? 'error' : 'primary',
 					loading: status === 'sending-code',
 					disabled: !emailEnabled || !email.trim(),
 					onPress: async () => {
@@ -208,19 +211,14 @@ export const ForgotPassword = () => {
 				disabled={!codeEnabled}
 				button={{
 					label:
-						status === 'verifying-code'
-							? 'Verifying...'
-							: !codeEnabled && !emailStage
-							? 'Verified!'
-							: status === 'verifying-code-failed'
-							? 'Retry'
-							: 'Verify Code',
-					icon:
-						status === 'verifying-code-failed'
-							? 'error'
-							: !codeEnabled && !emailStage
-							? 'success'
-							: 'submit',
+						content.action.verify[
+							!codeEnabled && !emailStage
+								? 'success'
+								: status !== 'verifying-code-failed'
+								? 'error'
+								: 'normal'
+						],
+					color: status === 'verifying-code-failed' ? 'error' : 'primary',
 					loading: status === 'verifying-code',
 					onPress: async () => {
 						if (!codeEnabled) return;
@@ -305,7 +303,7 @@ export const ForgotPassword = () => {
 			<Button
 				icon='submit'
 				loading={status === 'resetting'}
-				label={status === 'resetting' ? 'Resetting...' : 'Reset Password'}
+				label={content.action.resetPassword}
 				disabled={
 					!passwordEnabled || !password?.trim() || password !== confirmPassword
 				}
