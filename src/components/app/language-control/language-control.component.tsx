@@ -10,10 +10,10 @@ import { appIconMap } from 'components/app/icon';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 export type LanguageControlProps = {
-	iconStyle?: StyleProp<ViewStyle>;
+	buttonStyle?: StyleProp<ViewStyle>;
 };
 
-export const LanguageControl = ({ iconStyle }: LanguageControlProps) => {
+export const LanguageControl = ({ buttonStyle }: LanguageControlProps) => {
 	const { language } = useI18n();
 	const theme = useTheme();
 
@@ -27,7 +27,7 @@ export const LanguageControl = ({ iconStyle }: LanguageControlProps) => {
 			contentStyle={{ padding: 8, borderRadius: 10 }}
 			anchor={
 				<IconButton
-					style={iconStyle}
+					style={buttonStyle}
 					icon={'language'}
 					onPress={() => setVisible(true)}
 				/>
@@ -47,7 +47,10 @@ export const LanguageControl = ({ iconStyle }: LanguageControlProps) => {
 								: undefined,
 						borderRadius: 6,
 					}}
-					onPress={() => updateLanguage(lang)}
+					onPress={() => {
+						updateLanguage(lang);
+						setVisible(false);
+					}}
 				/>
 			))}
 		</Menu>
