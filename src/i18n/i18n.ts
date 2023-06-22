@@ -15,7 +15,10 @@ const english = {
 	},
 	action: {
 		login: 'login',
+		logout: 'logout',
 		register: 'register',
+		close: 'close',
+		back: 'back',
 		forgotPassword: 'forgot password?',
 		resetPassword: 'reset password',
 		code: {
@@ -29,9 +32,14 @@ const english = {
 			success: 'verified!',
 		},
 	},
+	error: 'error',
+	oops: 'oops',
+	genericError: 'something went wrong',
 	resetDescription: 'enter the email to get the reset code',
 	resetSent: 'a reset code has been sent to your email',
+	pathNotFound: (pathname: string) => `path ${pathname} does not exist`,
 	pages: {
+		notFound: 'not found',
 		login: 'login',
 		register: 'register',
 		resetPassword: 'reset password',
@@ -49,7 +57,10 @@ const urdu: Content = {
 	},
 	action: {
 		login: 'داخل ہوں',
+		logout: 'خارج ہوں',
 		register: 'اندراج',
+		close: 'بند کریں',
+		back: 'واپس',
 		forgotPassword: 'پاسورڈ بھول گئے؟',
 		resetPassword: 'پاسورڈ بدلیں',
 		code: {
@@ -63,9 +74,14 @@ const urdu: Content = {
 			success: 'تصدیق شدہ!',
 		},
 	},
+	error: 'غلطی',
+	oops: 'اوہو',
+	genericError: 'نامعلوم مسئلہ درپیش آیا',
 	resetDescription: 'تبدیلی کے کوڈ کیلئے ای میل درج کریں',
 	resetSent: 'تبدیلی کا کوڈ آپ کو بھیج دیا گیا ہے',
+	pathNotFound: (pathname: string) => `نامعلوم صفحہ: ${pathname}`,
 	pages: {
+		notFound: 'نامعلوم صفحہ',
 		login: 'داخلہ',
 		register: 'اندراج',
 		resetPassword: 'پاسورڈ تبدیلی',
