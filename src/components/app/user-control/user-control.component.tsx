@@ -10,10 +10,10 @@ import { Button } from 'components/controls/button';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 export type UserControlProps = {
-	iconStyle?: StyleProp<ViewStyle>;
+	buttonStyle?: StyleProp<ViewStyle>;
 };
 
-export const UserControl = ({ iconStyle }: UserControlProps) => {
+export const UserControl = ({ buttonStyle }: UserControlProps) => {
 	const user = useUserOrNull();
 	const theme = useTheme();
 
@@ -57,7 +57,7 @@ export const UserControl = ({ iconStyle }: UserControlProps) => {
 							padding: 2.5,
 							backgroundColor: theme.colors.primaryContainer,
 						},
-						iconStyle,
+						buttonStyle,
 					]}
 					borderless
 					onPress={() => setVisible(true)}
