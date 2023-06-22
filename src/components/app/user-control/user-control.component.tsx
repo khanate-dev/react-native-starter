@@ -6,8 +6,50 @@ import { useTheme } from '~/hooks/theme';
 import { Icon } from '~/components/app/icon';
 import { useUserOrNull } from '~/contexts/auth';
 import { Button } from '~/components/controls/button';
+import { useI18n } from '~/contexts/i18n';
 
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle, ImageStyle } from 'react-native';
+
+const Avatar = (props: {
+	size: number;
+	style?: StyleProp<ImageStyle>;
+	url: string | null;
+}) => {
+	const theme = useTheme();
+
+	if (props.url) {
+		return (
+			<Image
+				style={[
+					{
+						width: props.size,
+						height: props.size,
+						borderRadius: 10,
+						marginLeft: 'auto',
+						marginRight: 'auto',
+					},
+					props.style,
+				]}
+				source={{
+					uri: props.url,
+					width: props.size,
+					height: props.size,
+				}}
+			/>
+		);
+	}
+	return (
+		<Icon
+			name='user-account'
+			color={theme.colors.primary}
+			size={props.size - 5}
+			style={[
+				{ padding: 2.5, marginLeft: 'auto', marginRight: 'auto' },
+				props.style,
+			]}
+		/>
+	);
+};
 
 export type UserControlProps = {
 	buttonStyle?: StyleProp<ViewStyle>;
@@ -16,32 +58,11 @@ export type UserControlProps = {
 export const UserControl = ({ buttonStyle }: UserControlProps) => {
 	const user = useUserOrNull();
 	const theme = useTheme();
+	const { content } = useI18n();
 
 	const [visible, setVisible] = useState(false);
 
 	if (!user) return null;
-
-	const avatar = user.image_url ? (
-		<Image
-			style={{
-				width: 35,
-				height: 35,
-				borderRadius: 10,
-			}}
-			source={{
-				uri: user.image_url,
-				width: 35,
-				height: 35,
-			}}
-		/>
-	) : (
-		<Icon
-			name='user-account'
-			color={theme.colors.primary}
-			size={30}
-			style={{ padding: 2.5 }}
-		/>
-	);
 
 	return (
 		<Menu
@@ -62,12 +83,24 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 					borderless
 					onPress={() => setVisible(true)}
 				>
-					{avatar}
+					<Avatar
+						size={35}
+						url={user.image_url}
+					/>
 				</TouchableRipple>
 			}
 			onDismiss={() => setVisible(false)}
 		>
-			<View style={{ gap: 5, minWidth: 150 }}>
+			<View style={{ gap: 0, minWidth: 150 }}>
+				<Avatar
+					size={70}
+					url={user.image_url}
+					style={{
+						borderWidth: user.image_url ? 3 : undefined,
+						borderColor: theme.colors.primaryContainer,
+						marginBottom: 5,
+					}}
+				/>
 				<Text
 					variant='titleMedium'
 					style={{ color: theme.colors.primary, textAlign: 'center' }}
@@ -88,7 +121,7 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 				/>
 				<Button
 					icon='logout'
-					label='logout'
+					label={content.action.logout}
 					color='error'
 					mode='outlined'
 					onPress={() => false}
