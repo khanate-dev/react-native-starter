@@ -7,7 +7,7 @@ import { useTheme } from 'hooks/theme';
 import type { IconName } from 'components/app/icon';
 import type { ButtonProps as Props } from 'react-native-paper';
 import type { ReactNode } from 'react';
-import type { ThemeColor } from 'styles/theme';
+import type { ThemeColor } from 'theme';
 
 export type ButtonProps = Omit<Props, 'icon' | 'children'> & {
 	/** the label to show on the button */
@@ -26,34 +26,37 @@ export const Button = ({
 	label,
 	mode = 'contained',
 	disabled,
-	icon,
+	icon: iconName,
 	...restProps
 }: ButtonProps) => {
-	const theme = useTheme();
+	const { getColor, rtl } = useTheme();
 
-	const name = icon && appIconMap[icon];
+	const icon: Props['icon'] | undefined = iconName
+		? appIconMap[iconName]
+		: undefined;
 
 	return (
 		<Component
 			{...restProps}
-			icon={name}
 			mode={mode}
 			disabled={disabled || restProps.loading}
 			labelStyle={{ textTransform: 'capitalize' }}
+			icon={icon}
+			contentStyle={{ flexDirection: rtl ? 'row-reverse' : 'row' }}
 			style={[
-				{ borderRadius: 10, borderColor: theme.getColor(color, 'normal') },
+				{ borderRadius: 10, borderColor: getColor(color, 'normal') },
 				style,
 			]}
 			theme={{
 				colors: {
-					primary: theme.getColor(color, 'normal'),
-					onPrimary: theme.getColor(color, 'on-normal'),
-					primaryContainer: theme.getColor(color, 'container'),
-					onPrimaryContainer: theme.getColor(color, 'on-container'),
-					secondary: theme.getColor(color, 'normal'),
-					onSecondary: theme.getColor(color, 'on-normal'),
-					secondaryContainer: theme.getColor(color, 'container'),
-					onSecondaryContainer: theme.getColor(color, 'on-container'),
+					primary: getColor(color, 'normal'),
+					onPrimary: getColor(color, 'on-normal'),
+					primaryContainer: getColor(color, 'container'),
+					onPrimaryContainer: getColor(color, 'on-container'),
+					secondary: getColor(color, 'normal'),
+					onSecondary: getColor(color, 'on-normal'),
+					secondaryContainer: getColor(color, 'container'),
+					onSecondaryContainer: getColor(color, 'on-container'),
 				},
 			}}
 		>
