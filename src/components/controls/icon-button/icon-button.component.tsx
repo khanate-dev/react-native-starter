@@ -11,14 +11,13 @@ export type IconButtonProps = Omit<Props, 'icon'> & {
 };
 
 export const IconButton = ({
-	icon,
+	icon: iconName,
 	mode = 'contained',
 	...props
 }: IconButtonProps) => {
-	const name = appIconMap[icon];
 	return (
 		<Component
-			icon={name}
+			icon={appIconMap[iconName]}
 			mode={mode}
 			{...props}
 			style={[{ borderRadius: 10 }, props.style]}

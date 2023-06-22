@@ -9,6 +9,7 @@ import { appIconMap } from 'components/app/icon';
 import { Button } from 'components/controls/button';
 import { dayjsUtc } from 'helpers/date';
 import { FormControlWrapper } from 'components/controls/form-control-wrapper';
+import { useTheme } from 'hooks/theme';
 
 import type { ForwardedRef, RefObject } from 'react';
 import type { TextInputProps } from 'react-native-paper';
@@ -99,7 +100,7 @@ export type FormControlProps = Pick<TextInputProps, 'disabled'> & {
 	/** the button to show on the right side of the input */
 	button?: Pick<
 		ButtonProps,
-		'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
+		'color' | 'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
 	>;
 
 	/** the text input to select after this */
@@ -169,16 +170,10 @@ const FormControlComponent = (
 	}: FormControlProps,
 	ref: ForwardedRef<RefType>
 ) => {
+	const theme = useTheme();
+
 	const [isSecret, setIsSecret] = useState<boolean>(true);
 	const [showingPicker, setShowingPicker] = useState<boolean>(false);
-
-	const lineFlex = {
-		flexDirection: 'row',
-		alignItems: 'center',
-		flexWrap: 'nowrap',
-		alignContent: 'center',
-		gap: isSmallerScreen ? 5 : 10,
-	} satisfies StyleProp<ViewStyle>;
 
 	const inputJsx = (
 		<TextInput
@@ -248,7 +243,7 @@ const FormControlComponent = (
 			disabled={disabled}
 		>
 			{button ? (
-				<View style={lineFlex}>
+				<View style={[theme.styles.view.row, { gap: 5 }]}>
 					{inputJsx}
 					<Button
 						{...button}
