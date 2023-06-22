@@ -11,7 +11,12 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		const listener = events.listen('setIsLoading', setIsLoading);
+		const listener = events.listen('setIsLoading', (value) => {
+			if (typeof value === 'function' || typeof value === 'boolean')
+				return setIsLoading(value);
+			setIsLoading(true);
+			value.finally(() => setIsLoading(false));
+		});
 
 		return () => {
 			listener.remove();
@@ -35,5 +40,5 @@ export const useLoading = () => {
 	return isLoading;
 };
 
-export const setIsLoading = (value: SetStateAction<boolean>) =>
+export const setIsLoading = (value: SetStateAction<boolean> | Promise<any>) =>
 	events.emit('setIsLoading', value);

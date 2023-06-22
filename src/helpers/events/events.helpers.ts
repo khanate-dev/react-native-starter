@@ -12,7 +12,7 @@ export type EventMap = {
 	updateDarkMode: [SetStateAction<boolean>];
 	addAlert: [string | Error | AlertModalProps];
 	removeAlert: [];
-	setIsLoading: [SetStateAction<boolean>];
+	setIsLoading: [SetStateAction<boolean> | Promise<any>];
 	updateLanguage: [SetStateAction<Language>];
 };
 
