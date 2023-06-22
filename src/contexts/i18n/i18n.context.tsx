@@ -42,7 +42,12 @@ export const useI18n = () => {
 	if (language === undefined)
 		throw new Error('useDarkMode must be used within an DarkModeProvider');
 
-	return { language, content: content[language] };
+	return {
+		language,
+		direction: language === 'urdu' ? 'rtl' : 'ltr',
+		rtl: language === 'urdu',
+		content: content[language],
+	} as const;
 };
 
 export const updateLanguage = (language: SetStateAction<Language>) => {
