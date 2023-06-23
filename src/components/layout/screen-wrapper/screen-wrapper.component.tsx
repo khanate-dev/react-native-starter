@@ -58,10 +58,11 @@ export const ScreenWrapper = ({
 						justifyContent: 'flex-end',
 					}}
 				>
-					<View style={[theme.styles.view.row, { flexShrink: 1 }]}>
+					<View style={[theme.styles.view.row, { flexShrink: 1, padding: 7 }]}>
 						{onBack && (
 							<IconButton
 								icon={theme.rtl ? 'arrow-next' : 'arrow-back'}
+								style={iconMargin}
 								onPress={onBack}
 							/>
 						)}
@@ -74,7 +75,6 @@ export const ScreenWrapper = ({
 									textTransform: 'capitalize',
 									textAlign: theme.rtl ? 'right' : 'left',
 									flexGrow: 1,
-									marginLeft: 5,
 								}}
 							>
 								{title}
