@@ -4,7 +4,7 @@ import { Image, View } from 'react-native';
 
 import { useTheme } from '~/hooks/theme';
 import { Icon } from '~/components/app/icon';
-import { useUserOrNull } from '~/contexts/auth';
+import { logout, useUserOrNull } from '~/contexts/auth';
 import { Button } from '~/components/controls/button';
 import { useI18n } from '~/contexts/i18n';
 
@@ -124,7 +124,7 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 					label={content.action.logout}
 					color='error'
 					mode='outlined'
-					onPress={() => false}
+					onPress={logout}
 				/>
 			</View>
 		</Menu>
