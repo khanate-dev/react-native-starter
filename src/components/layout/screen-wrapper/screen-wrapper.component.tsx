@@ -96,7 +96,7 @@ export const ScreenWrapper = ({
 				<Animated.View
 					entering={SlideInLeft.springify()}
 					exiting={SlideOutRight.springify()}
-					style={[{ flex: 1, padding: 10 }, style]}
+					style={[{ flex: 1, padding: 5 }, style]}
 				>
 					{children}
 				</Animated.View>
