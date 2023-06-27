@@ -7,7 +7,7 @@
 		"android": "cross-env ENV=development expo start --android",
 		"ios": "cross-env ENV=development expo start --ios",
 		"web": "cross-env ENV=development expo start --web",
-		"update-deps": "npm-check -u && expo install --fix && npx expo-doctor",
+		"update-deps": "npm-check -u && expo install --fix && npx expo-doctor && prettier --write ./package.json",
 		"test": "jest --watch --coverage=false --changedSince=origin/main",
 		"test:all": "jest",
 		"lint": "eslint . --fix --report-unused-disable-directives",
