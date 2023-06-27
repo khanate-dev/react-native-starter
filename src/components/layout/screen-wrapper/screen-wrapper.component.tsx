@@ -14,7 +14,7 @@ import type { PropsWithChildren } from 'react';
 import type { App } from '~/types/app';
 
 export type ScreenWrapperProps = PropsWithChildren<
-	App.PropsWithStyle<{
+	App.propsWithStyle<{
 		/** the title to show on the page header */
 		title?: string;
 

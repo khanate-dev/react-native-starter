@@ -5,7 +5,7 @@ import { useTheme } from '~/hooks/theme';
 
 import type { App } from '~/types/app';
 
-export type StepperProps<T extends readonly string[]> = App.PropsWithStyle<{
+export type StepperProps<T extends readonly string[]> = App.propsWithStyle<{
 	/** the list of step names */
 	steps: T;
 
