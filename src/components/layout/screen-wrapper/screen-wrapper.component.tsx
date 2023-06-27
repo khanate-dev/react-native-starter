@@ -11,8 +11,10 @@ import { useTheme } from '~/hooks/theme';
 import { LanguageControl } from '~/components/app/language-control';
 import { UserControl } from '~/components/app/user-control';
 
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { App } from '~/types/app';
 import type { ReactNode } from 'react';
+import type { Utils } from '~/types/utils';
 
 export type ScreenWrapperProps = App.propsWithStyle<{
 	/** the title to show on the page header */
@@ -25,12 +27,21 @@ export type ScreenWrapperProps = App.propsWithStyle<{
 	hasPlainBackground?: boolean;
 
 	children: ReactNode;
-}>;
+}> &
+	Utils.allOrNone<{
+		/** should the content be wrapped in a `ScrollView` */
+		scroll?: boolean;
+
+		/** the styles to apply to the wrapping `ScrollView` */
+		scrollStyle?: StyleProp<ViewStyle>;
+	}>;
 
 export const ScreenWrapper = ({
 	children,
 	style,
 	title,
+	scroll,
+	scrollStyle,
 	back,
 	hasPlainBackground,
 }: ScreenWrapperProps) => {
@@ -92,13 +103,23 @@ export const ScreenWrapper = ({
 					/>
 				</View>
 
-				<Animated.View
-					entering={SlideInLeft.springify()}
-					exiting={SlideOutRight.springify()}
-					style={[{ flex: 1, padding: 5 }, style]}
-				>
-					{children}
-				</Animated.View>
+				{scroll ? (
+					<Animated.ScrollView
+						entering={SlideInLeft.springify()}
+						exiting={SlideOutRight.springify()}
+						contentContainerStyle={scrollStyle}
+					>
+						<View style={[{ padding: 5 }, style]}>{children}</View>
+					</Animated.ScrollView>
+				) : (
+					<Animated.View
+						entering={SlideInLeft.springify()}
+						exiting={SlideOutRight.springify()}
+						style={[{ flex: 1, padding: 5 }, style]}
+					>
+						{children}
+					</Animated.View>
+				)}
 			</Surface>
 		</SafeAreaView>
 	);
