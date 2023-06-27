@@ -40,7 +40,7 @@ const Register = () => {
 		<ScreenWrapper
 			title={content.pages.register}
 			style={{ padding: 15, gap: 5 }}
-			onBack={() => router.back()}
+			back
 		>
 			<Text
 				variant='headlineMedium'

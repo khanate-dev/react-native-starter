@@ -35,7 +35,7 @@ const Login = () => {
 		<ScreenWrapper
 			title={content.pages.login}
 			style={{ padding: 15, gap: 5 }}
-			onBack={() => router.back()}
+			back
 		>
 			<Text
 				variant='headlineMedium'
