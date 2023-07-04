@@ -82,7 +82,7 @@ const config = {
 					},
 					{
 						group: ['src/*'],
-						message: "Use '~/' path aliases",
+						message: 'Use path aliases',
 					},
 				],
 			},

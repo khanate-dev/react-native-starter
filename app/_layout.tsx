@@ -14,7 +14,6 @@ import { I18nProvider } from '~/contexts/i18n';
 
 const Providers = () => {
 	const isDarkMode = useDarkMode();
-
 	return (
 		<I18nProvider>
 			<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
