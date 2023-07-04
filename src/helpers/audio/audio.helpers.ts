@@ -2,26 +2,41 @@ import { Audio } from 'expo-av';
 
 import notification from '~/assets/audios/notification.mp3';
 
-const audioMap = {
+import type { AVPlaybackStatusSuccess } from 'expo-av';
+
+export const audios = {
 	notification,
 };
 
-export const getAudio = async (name: keyof typeof audioMap) => {
-	const audio = await Audio.Sound.createAsync(audioMap[name], {
-		rate: 0.25,
-	});
+export type GetAudioResponse = Promise<null | {
+	play: () => ReturnType<Audio.Sound['playAsync']>;
+	unload: () => ReturnType<Audio.Sound['unloadAsync']>;
+	duration: number;
+}>;
+
+export const getAudio = async (
+	uri: string,
+	onFinish?: (status: AVPlaybackStatusSuccess) => void
+): GetAudioResponse => {
+	const audio = await Audio.Sound.createAsync({ uri });
 	audio.sound.setOnPlaybackStatusUpdate((status) => {
 		if (!status.isLoaded || !status.didJustFinish) return;
 		audio.sound.unloadAsync();
+		onFinish?.(status);
 	});
+	const duration = await audio.sound
+		.getStatusAsync()
+		.then((res) =>
+			res.isLoaded && res.durationMillis ? res.durationMillis / res.rate : null
+		);
+	if (!duration) return null;
 	return {
-		duration: await audio.sound
-			.getStatusAsync()
-			.then((res) =>
-				res.isLoaded && res.durationMillis
-					? res.durationMillis / res.rate
-					: null
-			),
-		play: async () => audio.sound.playAsync(),
+		play: async () => {
+			if (!audio.status.isLoaded)
+				return audio.sound.loadAsync({ uri }, { shouldPlay: true });
+			return audio.sound.playAsync();
+		},
+		unload: async () => audio.sound.unloadAsync(),
+		duration,
 	};
 };
