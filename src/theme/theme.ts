@@ -1,4 +1,8 @@
-import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
+import {
+	MD3DarkTheme,
+	MD3LightTheme,
+	configureFonts,
+} from 'react-native-paper';
 
 import type { MD3Theme } from 'react-native-paper';
 import type { Utils } from '~/types/utils';
@@ -18,6 +22,26 @@ export type AppTheme = Utils.prettify<
 		>;
 	}
 >;
+
+const fonts = configureFonts({
+	config: {
+		displaySmall: { fontFamily: 'InterRegular' },
+		displayMedium: { fontFamily: 'InterRegular' },
+		displayLarge: { fontFamily: 'InterRegular' },
+		headlineSmall: { fontFamily: 'InterBold' },
+		headlineMedium: { fontFamily: 'InterBold' },
+		headlineLarge: { fontFamily: 'InterBold' },
+		titleSmall: { fontFamily: 'InterBold' },
+		titleMedium: { fontFamily: 'InterBold' },
+		titleLarge: { fontFamily: 'InterBold' },
+		labelSmall: { fontFamily: 'InterRegular' },
+		labelMedium: { fontFamily: 'InterRegular' },
+		labelLarge: { fontFamily: 'InterRegular' },
+		bodySmall: { fontFamily: 'InterRegular' },
+		bodyMedium: { fontFamily: 'InterRegular' },
+		bodyLarge: { fontFamily: 'InterRegular' },
+	},
+});
 
 export const lightTheme: AppTheme = {
 	...MD3LightTheme,
@@ -75,6 +99,7 @@ export const lightTheme: AppTheme = {
 		warningContainer: 'rgb(255, 220, 198)',
 		onWarningContainer: 'rgb(49, 19, 0)',
 	},
+	fonts,
 };
 
 export const darkTheme: AppTheme = {
@@ -133,6 +158,7 @@ export const darkTheme: AppTheme = {
 		warningContainer: 'rgb(114, 54, 0)',
 		onWarningContainer: 'rgb(255, 220, 198)',
 	},
+	fonts,
 };
 
 export type ThemeColor =
