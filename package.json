@@ -50,7 +50,8 @@
 		"react-native-screens": "^3.22.0",
 		"react-native-svg": "^13.9.0",
 		"sentry-expo": "^7.0.0",
-		"zod": "^3.21.4"
+		"zod": "^3.21.4",
+		"expo-font": "~11.4.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.22.7",
