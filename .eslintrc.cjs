@@ -317,7 +317,7 @@ const config = {
 			},
 		},
 		{
-			files: ['app/**/*'],
+			files: ['src/app/**/*'],
 			rules: {
 				'import/no-default-export': 'off',
 				'import/prefer-default-export': ['error', { target: 'any' }],
