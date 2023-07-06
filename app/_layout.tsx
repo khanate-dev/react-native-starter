@@ -5,7 +5,7 @@ import { PaperProvider } from 'react-native-paper';
 import { Slot } from 'expo-router';
 
 import { darkTheme, lightTheme } from '~/theme';
-import { environment } from '~/config';
+import { env } from '~/config';
 import { addAlert, AlertProvider } from '~/contexts/alert';
 import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode';
 import { AuthProvider } from '~/contexts/auth';
@@ -36,7 +36,7 @@ const Providers = () => {
 const Root = () => {
 	useEffect(() => {
 		if (
-			environment !== 'production' ||
+			env !== 'production' ||
 			typeof Updates.addListener !== 'function'
 		)
 			return;

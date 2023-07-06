@@ -1,54 +1,40 @@
-import dotenv from 'dotenv';
-import dotenvExpand from 'dotenv-expand';
 import { z } from 'zod';
 
 import type { ExpoConfig, ConfigContext } from '@expo/config';
 
-const environment =
-	process.env.ENV === 'development' ? 'development' : 'production';
-
-const dotenvConfig = dotenv.config({
-	path: `./.env.${environment}`,
-});
-dotenvExpand.expand(dotenvConfig);
-
-export const parseEnvironment = (input: unknown) => {
+const parseEnvironment = () => {
 	const environmentSchema = z.object({
-		ENV: z.preprocess(
-			(value) => (value === 'development' ? 'development' : 'production'),
-			z.enum(['development', 'production'])
-		),
+		NODE_ENV: z.enum(['development', 'production', 'test']),
 		BACKEND_API_PATH: z.string().url(),
 		SENTRY_ORG: z.string(),
 		SENTRY_PROJECT: z.string(),
 		SENTRY_AUTH_TOKEN: z.string(),
 		SENTRY_DSN: z.string(),
 	});
-	const parsed = environmentSchema.safeParse(input);
+	const parsed = environmentSchema.safeParse(process.env);
 	if (!parsed.success) {
+		const env = process.env.NODE_ENV;
 		console.error(
 			'🔥 Invalid environment variables:',
 			parsed.error.flatten().fieldErrors,
-			`\n🔥 Fix the issues in .env.${environment} file.`,
-			`\n💡 Tip: If you recently updated the .env.${environment} file and the error still persists, try restarting the server with the -cc flag to clear the cache.`
+			`\n🔥 Fix the issues in .env.${env} file.`,
+			`\n💡 Tip: If you recently updated the .env.${env} file and the error still persists, try restarting the server with the -cc flag to clear the cache.`,
 		);
 		throw new Error('Invalid environment, Check terminal for more details ');
 	}
 
 	return {
-		environment: parsed.data.ENV,
+		env: parsed.data.NODE_ENV,
 		sentry: {
-			organization: parsed.data.SENTRY_ORG,
-			authToken: parsed.data.SENTRY_AUTH_TOKEN,
 			dsn: parsed.data.SENTRY_DSN,
+			organization: parsed.data.SENTRY_ORG,
 			project: parsed.data.SENTRY_PROJECT,
 		},
 		backendApiEndpoint: parsed.data.BACKEND_API_PATH,
 	};
 };
 
-const extra = parseEnvironment(process.env);
-
+const extra = parseEnvironment();
 export type Environment = typeof extra;
 
 const details = {
