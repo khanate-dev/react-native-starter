@@ -64,6 +64,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'automatic',
+	experiments: {
+		typedRoutes: true,
+		tsconfigPaths: true,
+	},
 	extra: {
 		...extra,
 		eas: {
@@ -98,15 +102,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	// // web: {
 	// // 	bundler: 'metro',
 	// // },
-	plugins: ['sentry-expo'],
+	plugins: ['sentry-expo', 'expo-router'],
 	hooks: {
 		postPublish: [
 			{
 				file: 'sentry-expo/upload-sourcemaps',
 				config: {
+					setCommits: true,
 					organization: extra.sentry.organization,
 					project: extra.sentry.project,
-					setCommits: true,
 				},
 			},
 		],
