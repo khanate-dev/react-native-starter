@@ -3,9 +3,9 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { Environment as Env } from '../../app.config';
 
 export declare namespace App {
-	type PropsWithStyle<T extends Record<string, unknown> = {}> = T & {
+	type propsWithStyle<T extends Record<string, unknown> = {}> = T & {
 		/** the styles to apply to the component */
 		style?: StyleProp<ViewStyle>;
 	};
-	type Environment = Env;
+	type env = Env;
 }
