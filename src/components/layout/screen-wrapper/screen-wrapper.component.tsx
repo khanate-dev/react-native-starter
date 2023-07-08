@@ -2,6 +2,7 @@ import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 
 import { Background } from '~/components/app/background';
 import { IconButton } from '~/components/controls/icon-button';
@@ -10,32 +11,41 @@ import { useTheme } from '~/hooks/theme';
 import { LanguageControl } from '~/components/app/language-control';
 import { UserControl } from '~/components/app/user-control';
 
-import type { PropsWithChildren } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { App } from '~/types/app';
+import type { ReactNode } from 'react';
+import type { Utils } from '~/types/utils';
 
-export type ScreenWrapperProps = PropsWithChildren<
-	App.PropsWithStyle<{
-		/** the title to show on the page header */
-		title?: string;
+export type ScreenWrapperProps = App.propsWithStyle<{
+	/** the title to show on the page header */
+	title?: string;
 
-		/**
-		 * the function to call when the header back button is pressed
-		 * back button is not rendered if excluded
-		 */
-		onBack?: () => void;
+	/** should a back button be shown on the page header */
+	back?: boolean;
 
-		/** should the screen render a plain white background instead of the gradient? */
-		hasPlainBackground?: boolean;
-	}>
->;
+	/** should the screen render a plain white background instead of the gradient? */
+	hasPlainBackground?: boolean;
+
+	children: ReactNode;
+}> &
+	Utils.allOrNone<{
+		/** should the content be wrapped in a `ScrollView` */
+		scroll?: boolean;
+
+		/** the styles to apply to the wrapping `ScrollView` */
+		scrollStyle?: StyleProp<ViewStyle>;
+	}>;
 
 export const ScreenWrapper = ({
 	children,
 	style,
 	title,
-	onBack,
+	scroll,
+	scrollStyle,
+	back,
 	hasPlainBackground,
 }: ScreenWrapperProps) => {
+	const router = useRouter();
 	const theme = useTheme();
 	const isDarkMode = useDarkMode();
 
@@ -59,11 +69,11 @@ export const ScreenWrapper = ({
 					}}
 				>
 					<View style={[theme.styles.view.row, { flexShrink: 1, padding: 7 }]}>
-						{onBack && (
+						{back && (
 							<IconButton
 								icon={theme.rtl ? 'arrow-next' : 'arrow-back'}
 								style={iconMargin}
-								onPress={onBack}
+								onPress={() => router.back()}
 							/>
 						)}
 
@@ -93,13 +103,23 @@ export const ScreenWrapper = ({
 					/>
 				</View>
 
-				<Animated.View
-					entering={SlideInLeft.springify()}
-					exiting={SlideOutRight.springify()}
-					style={[{ flex: 1, padding: 5 }, style]}
-				>
-					{children}
-				</Animated.View>
+				{scroll ? (
+					<Animated.ScrollView
+						entering={SlideInLeft.springify()}
+						exiting={SlideOutRight.springify()}
+						contentContainerStyle={scrollStyle}
+					>
+						<View style={[{ padding: 5 }, style]}>{children}</View>
+					</Animated.ScrollView>
+				) : (
+					<Animated.View
+						entering={SlideInLeft.springify()}
+						exiting={SlideOutRight.springify()}
+						style={[{ flex: 1, padding: 5 }, style]}
+					>
+						{children}
+					</Animated.View>
+				)}
 			</Surface>
 		</SafeAreaView>
 	);

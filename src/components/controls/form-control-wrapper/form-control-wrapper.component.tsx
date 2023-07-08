@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react';
 import type { App } from '~/types/app';
 
 export type FormControlWrapperProps = PropsWithChildren<
-	App.PropsWithStyle<{
+	App.propsWithStyle<{
 		/** the error message to show beneath the input */
 		error?: string;
 

@@ -24,12 +24,13 @@ const Register = () => {
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
-			const { email } = await endpoints.user.add({
+			const { email: _ } = await endpoints.user.add({
 				...values,
 				image_url: null,
 			});
 			setTimeout(
-				() => router.push({ pathname: '/auth/login', params: { email } }),
+				// // () => router.push({ pathname: '/auth/login', params: { email } }),
+				() => router.push('/auth/login'),
 				1000
 			);
 			return 'user added! please wait...';
@@ -40,7 +41,7 @@ const Register = () => {
 		<ScreenWrapper
 			title={content.pages.register}
 			style={{ padding: 15, gap: 5 }}
-			onBack={() => router.back()}
+			back
 		>
 			<Text
 				variant='headlineMedium'

@@ -117,7 +117,7 @@ export const ForgotPassword = () => {
 	return (
 		<ScreenWrapper
 			title={content.pages.resetPassword}
-			onBack={() => router.back()}
+			back
 		>
 			<View
 				style={[

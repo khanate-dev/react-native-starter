@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, useSegments } from 'expo-router';
 
-import { getSetting, removeSetting, setSetting } from '~/helpers/settings';
+import { removeSetting, setSetting } from '~/helpers/settings';
 import { events } from '~/helpers/events';
 
 import type { LoggedInUser } from '~/schemas/user';
@@ -9,18 +9,17 @@ import type { PropsWithChildren } from 'react';
 
 const UserContext = createContext<null | LoggedInUser>(null);
 
-export const AuthProvider = ({ children }: PropsWithChildren) => {
-	const router = useRouter();
-	const segments = useSegments();
+type AuthProviderProps = PropsWithChildren<{
+	defaultUser: null | LoggedInUser;
+}>;
 
-	const [user, setUser] = useState<null | LoggedInUser>(null);
+export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
+	const rootSegment = useSegments()[0];
+	const router = useRouter();
+
+	const [user, setUser] = useState(defaultUser);
 
 	useEffect(() => {
-		(async () => {
-			const storedUser = await getSetting('user');
-			setUser(storedUser);
-		})();
-
 		const loginListener = events.listen('login', async (newUser) => {
 			const added = await setSetting('user', newUser);
 			if (!added) return;
@@ -40,11 +39,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 	}, []);
 
 	useEffect(() => {
-		if (segments[0] === '[...404]') return;
-		const inAuthGroup = segments[0] === 'auth';
-		if (!user && !inAuthGroup) router.replace('/auth');
-		else if (user && inAuthGroup) router.replace('/');
-	}, [router, segments, user]);
+		if (rootSegment === '[...404]') return;
+		if (!user && rootSegment !== 'auth') router.replace('/auth/');
+		else if (user && rootSegment === 'auth') router.replace('/');
+	}, [router, user, rootSegment]);
 
 	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };

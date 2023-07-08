@@ -9,7 +9,7 @@ import { useTheme } from '~/hooks/theme';
 import type { ThemeColor } from '~/theme';
 import type { App } from '~/types/app';
 
-export type AlertProps = App.PropsWithStyle<{
+export type AlertProps = App.propsWithStyle<{
 	/** the title of the alert. Omitting this prop will not render a title */
 	title?: string;
 

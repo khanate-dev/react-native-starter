@@ -4,16 +4,12 @@ import * as Sentry from 'sentry-expo';
 
 import type { App } from '~/types/app';
 
-const { environment, backendApiEndpoint, sentry } = Constants.manifest
-	?.extra as App.Environment;
+const { env, backendApiEndpoint, sentry } = Constants.expoConfig?.extra as App.Environment;
 
-export {
-	environment,
-	/** the base url path for the backend api's */
-	backendApiEndpoint,
-};
+export { env, backendApiEndpoint };
 
-if (environment === 'production') {
+
+if (env === 'production') {
 	Sentry.init({
 		dsn: sentry.dsn,
 		enableInExpoDevelopment: true,
@@ -22,28 +18,31 @@ if (environment === 'production') {
 	});
 }
 
-const isFetchMockedConfig: Record<typeof environment, boolean> = {
+const isFetchMockedConfig: Record<typeof env, boolean> = {
 	development: true,
 	production: true,
+	test: true,
 };
 
 /** should the app use mocked fetch? used for demos and testing */
-export const isFetchMocked: boolean = isFetchMockedConfig[environment];
+export const isFetchMocked: boolean = isFetchMockedConfig[env];
 
 export const isSmallerScreen = Dimensions.get('screen').width <= 400;
 
-const disableAuthConfig: Record<typeof environment, boolean> = {
+const disableAuthConfig: Record<typeof env, boolean> = {
 	development: true,
 	production: true,
+	test: true,
 };
 
 /** should fetch authentication be disabled? */
-export const disableAuth: boolean = disableAuthConfig[environment];
+export const disableAuth: boolean = disableAuthConfig[env];
 
-const shouldAutoFillConfig: Record<typeof environment, boolean> = {
+const shouldAutoFillConfig: Record<typeof env, boolean> = {
 	development: true,
 	production: false,
+	test: true,
 };
 
 /** should the app auto fill inputs with default values? */
-export const shouldAutoFill: boolean = shouldAutoFillConfig[environment];
+export const shouldAutoFill: boolean = shouldAutoFillConfig[env];

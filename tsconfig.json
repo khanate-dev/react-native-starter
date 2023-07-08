@@ -41,8 +41,7 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
-		// "verbatimModuleSyntax": true,
-		"importsNotUsedAsValues": "error",
+		"verbatimModuleSyntax": true,
 
 		// language and environment
 		"jsx": "react-native",
@@ -55,5 +54,13 @@
 		// completeness
 		"skipLibCheck": true
 	},
-	"exclude": ["node_modules", "cache", "coverage"]
+	"exclude": ["node_modules", "cache", "coverage"],
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.cjs",
+		"./.*.cjs",
+		".expo/types/**/*.ts",
+		"expo-env.d.ts"
+	]
 }
