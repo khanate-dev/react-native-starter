@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-import type { ExpoConfig, ConfigContext } from '@expo/config';
+import type { ConfigContext, ExpoConfig } from '@expo/config';
 
 const parseEnvironment = () => {
-	const environmentSchema = z.object({
+	const envSchema = z.object({
 		NODE_ENV: z.enum(['development', 'production', 'test']),
 		BACKEND_API_PATH: z.string().url(),
 		SENTRY_ORG: z.string(),
@@ -11,8 +11,9 @@ const parseEnvironment = () => {
 		SENTRY_AUTH_TOKEN: z.string(),
 		SENTRY_DSN: z.string(),
 	});
-	const parsed = environmentSchema.safeParse(process.env);
-	if (!parsed.success) {
+	const parsed = envSchema.safeParse(process.env);
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (!parsed.success && process.env.NODE_ENV) {
 		const env = process.env.NODE_ENV;
 		console.error(
 			'🔥 Invalid environment variables:',
@@ -22,15 +23,15 @@ const parseEnvironment = () => {
 		);
 		throw new Error('Invalid environment, Check terminal for more details ');
 	}
-
+	const data = parsed.success ? parsed.data : ({} as z.infer<typeof envSchema>);
 	return {
-		env: parsed.data.NODE_ENV,
+		env: data.NODE_ENV,
 		sentry: {
-			dsn: parsed.data.SENTRY_DSN,
-			organization: parsed.data.SENTRY_ORG,
-			project: parsed.data.SENTRY_PROJECT,
+			dsn: data.SENTRY_DSN,
+			organization: data.SENTRY_ORG,
+			project: data.SENTRY_PROJECT,
 		},
-		backendApiEndpoint: parsed.data.BACKEND_API_PATH,
+		backendApiEndpoint: data.BACKEND_API_PATH,
 	};
 };
 
