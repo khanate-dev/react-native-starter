@@ -1,6 +1,6 @@
+import { spawnSync } from 'child_process';
 import { mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
 import path from 'path';
-import { spawnSync } from 'child_process';
 
 import { transform } from '@svgr/core';
 
@@ -87,33 +87,33 @@ const generateIcons = async (folder?: string) => {
 			const sourcePath = path.join(sourceFolder, folder ?? '', file.name);
 			const componentPath = path.join(
 				currentTargetFolder,
-				file.name.replace('.svg', '.icon.tsx')
+				file.name.replace('.svg', '.icon.tsx'),
 			);
 			await readFile(sourcePath, 'utf-8')
 				.then(async (value) => {
 					const componentName = `${formatToken(
 						file.name.replace('.svg', ''),
-						'pascal'
+						'pascal',
 					)}Icon`;
 					return transform(value, config, { componentName });
 				})
 				.then(async (data) => {
 					console.info(
-						`${colors.dim}${sourcePath} -> ${componentPath}${colors.reset}`
+						`${colors.dim}${sourcePath} -> ${componentPath}${colors.reset}`,
 					);
 					return writeFile(componentPath, data);
 				});
-		})
+		}),
 	).then(() => {
 		if (folder) return;
 		console.info(
-			`${colors.blue}Linting generated components...${colors.reset}`
+			`${colors.blue}Linting generated components...${colors.reset}`,
 		);
-		spawnSync('npm', ['run', 'eslint', '--', '--fix', targetFolder]);
+		spawnSync('yarn', ['eslint', '--fix', targetFolder]);
 		console.info(
-			`${colors.blue}Prettifying generated components...${colors.reset}`
+			`${colors.blue}Prettifying generated components...${colors.reset}`,
 		);
-		spawnSync('npm', ['run', 'prettier', '--', '--write', targetFolder]);
+		spawnSync('yarn', ['prettier', '--write', targetFolder]);
 	});
 };
 
