@@ -7,7 +7,7 @@ import type { App } from '~/types/app';
 const { env, backendApiEndpoint, sentry } = Constants.expoConfig
 	?.extra as App.env;
 
-export { env, backendApiEndpoint };
+export { backendApiEndpoint, env };
 
 if (env === 'production') {
 	Sentry.init({

@@ -1,11 +1,11 @@
-import { DeviceEventEmitter, Dimensions, View, ScrollView } from 'react-native';
+import { DeviceEventEmitter, Dimensions, ScrollView, View } from 'react-native';
 import { Dialog, Portal, Text } from 'react-native-paper';
 
-import { Button } from '~/components/controls/button';
 import { Icon } from '~/components/app/icon';
-import { useTheme } from '~/hooks/theme';
+import { Button } from '~/components/controls/button';
 import { isSmallerScreen } from '~/config';
 import { useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
 
 import type { DialogProps } from 'react-native-paper';
 import type { ButtonProps } from '~/components/controls/button';

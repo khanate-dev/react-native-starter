@@ -1,4 +1,4 @@
-import { Modal, ActivityIndicator, Portal } from 'react-native-paper';
+import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
 
 import { useTheme } from '~/hooks/theme';
 

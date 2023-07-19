@@ -63,7 +63,9 @@ test('should test assertObject helper', () => {
 		assertObject(a);
 		z.util.assertIs<Obj>(a);
 	}).not.toThrow();
-	expect(() => assertObject({ fist: 'of fury' })).not.toThrow();
+	expect(() => {
+		assertObject({ fist: 'of fury' });
+	}).not.toThrow();
 });
 
 test('should test assertArray helper', () => {

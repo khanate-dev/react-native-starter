@@ -20,14 +20,14 @@ export const assertObject: Utils.assertFunction<Obj> = (value) => {
 
 export const isArray = <Type = unknown>(
 	value: unknown,
-	checker?: (value: unknown) => value is Type
+	checker?: (value: unknown) => value is Type,
 ): value is Type[] => {
 	return Array.isArray(value) && (!checker || value.every(checker));
 };
 
 type AssertArray = <Type = unknown>(
 	value: unknown,
-	checker?: Utils.assertFunction<Type>
+	checker?: Utils.assertFunction<Type>,
 ) => asserts value is Type[];
 
 export const assertArray: AssertArray = (value, checker) => {

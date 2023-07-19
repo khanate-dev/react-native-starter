@@ -1,11 +1,11 @@
-import { Menu } from 'react-native-paper';
 import { useState } from 'react';
+import { Menu } from 'react-native-paper';
 
-import { languages } from '~/i18n';
-import { updateLanguage, useI18n } from '~/contexts/i18n';
-import { IconButton } from '~/components/controls/icon-button';
-import { useTheme } from '~/hooks/theme';
 import { appIconMap } from '~/components/app/icon';
+import { IconButton } from '~/components/controls/icon-button';
+import { updateLanguage, useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
+import { languages } from '~/i18n';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
@@ -29,10 +29,14 @@ export const LanguageControl = ({ buttonStyle }: LanguageControlProps) => {
 				<IconButton
 					style={buttonStyle}
 					icon={'language'}
-					onPress={() => setVisible(true)}
+					onPress={() => {
+						setVisible(true);
+					}}
 				/>
 			}
-			onDismiss={() => setVisible(false)}
+			onDismiss={() => {
+				setVisible(false);
+			}}
 		>
 			{languages.map((lang) => (
 				<Menu.Item

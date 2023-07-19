@@ -3,9 +3,9 @@ import { createContext, useEffect, useState } from 'react';
 import { AlertModal } from '~/components/feedback/alert-modal';
 import { events } from '~/helpers/events';
 
-import type { EventMap } from '~/helpers/events';
 import type { PropsWithChildren } from 'react';
 import type { AlertModalProps } from '~/components/feedback/alert-modal';
+import type { EventMap } from '~/helpers/events';
 
 const AlertContext = createContext(null);
 
@@ -19,11 +19,13 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 					? { text: data }
 					: data instanceof Error
 					? { text: data.message }
-					: data
+					: data,
 			);
 		});
 
-		const removeListener = events.listen('removeAlert', () => setAlert(null));
+		const removeListener = events.listen('removeAlert', () => {
+			setAlert(null);
+		});
 
 		return () => {
 			addListener.remove();
@@ -36,7 +38,9 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 			{alert && (
 				<AlertModal
 					{...alert}
-					onClose={() => setAlert(null)}
+					onClose={() => {
+						setAlert(null);
+					}}
 				/>
 			)}
 			{children}
@@ -45,8 +49,11 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 };
 
 /** fires the add-alert event to show the given alert */
-export const addAlert = (...args: EventMap['addAlert']) =>
+export const addAlert = (...args: EventMap['addAlert']) => {
 	events.emit('addAlert', ...args);
+};
 
 /** fires the remove-alert event to remove showing alerts */
-export const removeAlert = () => events.emit('removeAlert');
+export const removeAlert = () => {
+	events.emit('removeAlert');
+};

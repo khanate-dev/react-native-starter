@@ -4,9 +4,9 @@ import { Button as Component } from 'react-native-paper';
 import { appIconMap } from '~/components/app/icon';
 import { useTheme } from '~/hooks/theme';
 
-import type { IconName } from '~/components/app/icon';
-import type { ButtonProps as Props } from 'react-native-paper';
 import type { ReactNode } from 'react';
+import type { ButtonProps as Props } from 'react-native-paper';
+import type { IconName } from '~/components/app/icon';
 import type { ThemeColor } from '~/theme';
 
 export type ButtonProps = Omit<Props, 'icon' | 'children'> & {

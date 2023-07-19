@@ -1,15 +1,15 @@
-import { dayjsUtc } from '~/helpers/date';
 import { wait } from '~/helpers/async';
+import { dayjsUtc } from '~/helpers/date';
 
-import type { User } from '~/schemas/user';
 import type { DbId, DbMeta, Jwt } from '~/helpers/schema';
+import type { User } from '~/schemas/user';
 
 export const mockToken =
 	/** cSpell: disable-next-line */
 	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c' as Jwt;
 
 export const createMockedData = <T extends DbMeta>(
-	data: Omit<T, keyof DbMeta>[]
+	data: Omit<T, keyof DbMeta>[],
 ) => {
 	return data.map((row, index) => ({
 		id: (index + 1) as DbId,
@@ -34,9 +34,10 @@ type MockData = typeof mockData;
 
 type MockedGet = {
 	<Key extends keyof MockData>(key: Key): Promise<MockData[Key]>;
-	<Key extends keyof MockData>(key: Key, id: DbId): Promise<
-		MockData[Key][number]
-	>;
+	<Key extends keyof MockData>(
+		key: Key,
+		id: DbId,
+	): Promise<MockData[Key][number]>;
 };
 
 export const mockedGet: MockedGet = async (key: keyof MockData, id?: DbId) => {
@@ -52,10 +53,10 @@ export const mockedGet: MockedGet = async (key: keyof MockData, id?: DbId) => {
 
 export const mockedAdd = async <
 	Key extends keyof MockData,
-	Type extends MockData[Key][number]
+	Type extends MockData[Key][number],
 >(
 	key: Key,
-	body: Omit<Type, keyof DbMeta>
+	body: Omit<Type, keyof DbMeta>,
 ): Promise<Type> => {
 	const list = mockData[key];
 	const newId = Math.max(...list.map((curr) => curr.id), 0) + 1;
@@ -73,11 +74,11 @@ export const mockedAdd = async <
 
 export const mockedUpdate = async <
 	Key extends keyof MockData,
-	Type extends MockData[Key][number]
+	Type extends MockData[Key][number],
 >(
 	key: Key,
 	id: DbId,
-	body: Omit<Type, keyof DbMeta>
+	body: Omit<Type, keyof DbMeta>,
 ): Promise<Type> => {
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);
@@ -90,10 +91,10 @@ export const mockedUpdate = async <
 
 export const mockedDelete = async <
 	Key extends keyof MockData,
-	Type extends MockData[Key][number]
+	Type extends MockData[Key][number],
 >(
 	key: Key,
-	id: DbId
+	id: DbId,
 ): Promise<Type> => {
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);

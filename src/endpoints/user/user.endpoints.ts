@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-import { loggedInUserSchema, userSchema } from '~/schemas/user';
 import {
-	postRequest,
-	getRequest,
-	putRequest,
 	deleteRequest,
+	getRequest,
+	postRequest,
+	putRequest,
 } from '~/helpers/api';
+import { omit } from '~/helpers/object';
 import {
 	mockToken,
 	mockedAdd,
@@ -14,10 +14,10 @@ import {
 	mockedGet,
 	mockedUpdate,
 } from '~/mocks';
-import { omit } from '~/helpers/object';
+import { loggedInUserSchema, userSchema } from '~/schemas/user';
 
-import type { User, UserSansMeta, LoggedInUser } from '~/schemas/user';
 import type { DbId } from '~/helpers/schema';
+import type { LoggedInUser, User, UserSansMeta } from '~/schemas/user';
 
 export const userEndpoints = {
 	login: async (body: {
@@ -39,7 +39,7 @@ export const userEndpoints = {
 	},
 	update: async (
 		id: DbId,
-		body: UserSansMeta
+		body: UserSansMeta,
 	): Promise<Omit<User, 'password'>> => {
 		const response = await putRequest(`user/${id}`, body);
 		return userSchema.parse(response);
@@ -53,7 +53,7 @@ export const userEndpoints = {
 export const userMocks: typeof userEndpoints = {
 	login: async ({ email, password }) => {
 		const user = await mockedGet('user').then((users) =>
-			users.find((curr) => curr.email === email)
+			users.find((curr) => curr.email === email),
 		);
 		if (!user) throw new Error('user not found');
 		if (user.password !== password) throw new Error('incorrect password');

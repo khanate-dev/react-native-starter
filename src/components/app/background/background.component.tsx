@@ -1,4 +1,4 @@
-import Svg, { Path } from 'react-native-svg';
+import { Path, default as Svg } from 'react-native-svg';
 
 import type { SvgProps } from 'react-native-svg';
 

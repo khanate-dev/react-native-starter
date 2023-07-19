@@ -1,19 +1,19 @@
-import { z } from 'zod';
 import { useReducer, useRef } from 'react';
 import { Keyboard } from 'react-native';
+import { z } from 'zod';
 
-import { dayjsUtc } from '~/helpers/date';
-import { humanizeToken } from '~/helpers/string';
 import { shouldAutoFill } from '~/config';
 import { getCatchMessage } from '~/errors';
+import { dayjsUtc } from '~/helpers/date';
 import { objectEntries } from '~/helpers/object';
+import { humanizeToken } from '~/helpers/string';
 
-import type { TextInput } from 'react-native';
 import type { RefObject } from 'react';
-import type { ZodDate, ZodTime } from '~/helpers/schema';
-import type { Utils } from '~/types/utils';
+import type { TextInput } from 'react-native';
 import type { ButtonProps } from '~/components/controls/button';
 import type { AlertProps } from '~/components/feedback/alert';
+import type { ZodDate, ZodTime } from '~/helpers/schema';
+import type { Utils } from '~/types/utils';
 
 type fieldMap = {
 	string: z.ZodString;
@@ -127,7 +127,7 @@ type State<T extends details<any>> = {
 
 export const useForm = <
 	Zod extends validSchema,
-	Details extends details<Zod>
+	Details extends details<Zod>,
 >(input: {
 	/** the zod schema for the form */
 	schema: Zod;
@@ -139,14 +139,14 @@ export const useForm = <
 	onSubmit: (state: Zod['_output']) => Promise<string | undefined>;
 }) => {
 	const textRefs = useRef<Record<textFields<Zod>, TextInput | null>>(
-		{} as never
+		{} as never,
 	);
 
 	const { schema, details, onSubmit } = input;
 
 	const fieldsArray = Object.entries(details) as [
 		keyof typeof details,
-		(typeof details)[keyof typeof details]
+		(typeof details)[keyof typeof details],
 	][];
 
 	const [state, dispatch] = useReducer(
@@ -157,7 +157,7 @@ export const useForm = <
 						type: 'updateState';
 						value: Partial<State<Details>>;
 				  }
-				| { type: 'updateStatus'; value: State<Details>['status'] }
+				| { type: 'updateStatus'; value: State<Details>['status'] },
 		): State<Details> => {
 			switch (action.type) {
 				case 'updateState':
@@ -185,10 +185,10 @@ export const useForm = <
 							? null
 							: ''),
 				}),
-				{}
+				{},
 			) as never,
 			status: { type: 'idle' },
-		}
+		},
 	);
 
 	const { values, status } = state;
@@ -206,18 +206,17 @@ export const useForm = <
 							[key]:
 								zod instanceof z.ZodNumber ? z.preprocess(Number, zod) : zod,
 						}),
-						{}
-					)
+						{},
+					),
 				)
 				.parse(state.values);
 			const result = await onSubmit(parsed);
 			const message = result ?? 'Submission Successful!';
 
 			dispatch({ type: 'updateStatus', value: { type: 'success', message } });
-			setTimeout(
-				() => dispatch({ type: 'updateStatus', value: { type: 'idle' } }),
-				2500
-			);
+			setTimeout(() => {
+				dispatch({ type: 'updateStatus', value: { type: 'idle' } });
+			}, 2500);
 		} catch (error: any) {
 			if (error instanceof z.ZodError) {
 				const fieldErrors = error.issues.reduce(
@@ -225,7 +224,7 @@ export const useForm = <
 						...object,
 						[String(err.path[0])]: err.message,
 					}),
-					{}
+					{},
 				);
 				const otherIssue = error.issues.find(({ code, path }) => {
 					const name = path[0];
@@ -262,8 +261,9 @@ export const useForm = <
 				label: humanizeToken(String(key)),
 				notRequired: field.notRequired ?? false,
 				value: values[key],
-				onChange: (value: unknown) =>
-					dispatch({ type: 'updateState', value: { [key]: value } }),
+				onChange: (value: unknown) => {
+					dispatch({ type: 'updateState', value: { [key]: value } });
+				},
 				error: status.type === 'error' ? status.fieldErrors[key] : undefined,
 				ref: !['boolean', 'date', 'time'].includes(field.type)
 					? (element: TextInput | null) => {
@@ -277,7 +277,7 @@ export const useForm = <
 					: undefined,
 			},
 		}),
-		{}
+		{},
 	) as Utils.prettify<{
 		[k in keyof Details]: Utils.prettify<
 			{
@@ -299,8 +299,9 @@ export const useForm = <
 			? ({
 					type: status.type,
 					text: status.message,
-					onClose: () =>
-						dispatch({ type: 'updateStatus', value: { type: 'idle' } }),
+					onClose: () => {
+						dispatch({ type: 'updateStatus', value: { type: 'idle' } });
+					},
 			  } satisfies AlertProps)
 			: null;
 

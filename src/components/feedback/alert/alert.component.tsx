@@ -1,6 +1,6 @@
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
-import { View } from 'react-native';
 
 import { Icon } from '~/components/app/icon';
 import { IconButton } from '~/components/controls/icon-button';

@@ -1,19 +1,19 @@
+import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
-import Constants from 'expo-constants';
-import { useRouter } from 'expo-router';
 
 import { Background } from '~/components/app/background';
+import { LanguageControl } from '~/components/app/language-control';
+import { UserControl } from '~/components/app/user-control';
 import { IconButton } from '~/components/controls/icon-button';
 import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode';
 import { useTheme } from '~/hooks/theme';
-import { LanguageControl } from '~/components/app/language-control';
-import { UserControl } from '~/components/app/user-control';
 
+import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { App } from '~/types/app';
-import type { ReactNode } from 'react';
 import type { Utils } from '~/types/utils';
 
 export type ScreenWrapperProps = App.propsWithStyle<{
@@ -73,7 +73,9 @@ export const ScreenWrapper = ({
 							<IconButton
 								icon={theme.rtl ? 'arrow-next' : 'arrow-back'}
 								style={iconMargin}
-								onPress={() => router.back()}
+								onPress={() => {
+									router.back();
+								}}
 							/>
 						)}
 

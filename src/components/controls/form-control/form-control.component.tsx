@@ -1,30 +1,30 @@
+import { isDayjs } from 'dayjs';
 import { forwardRef, useState } from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
-import { isDayjs } from 'dayjs';
 
-import { isSmallerScreen } from '~/config';
 import { appIconMap } from '~/components/app/icon';
 import { Button } from '~/components/controls/button';
-import { dayjsUtc } from '~/helpers/date';
 import { FormControlWrapper } from '~/components/controls/form-control-wrapper';
+import { isSmallerScreen } from '~/config';
+import { dayjsUtc } from '~/helpers/date';
 import { useTheme } from '~/hooks/theme';
 
-import type { ForwardedRef, RefObject } from 'react';
-import type { TextInputProps } from 'react-native-paper';
 import type { Dayjs } from 'dayjs';
-import type { ButtonProps } from '~/components/controls/button';
+import type { ForwardedRef, RefObject } from 'react';
 import type {
 	KeyboardTypeOptions,
+	TextInput as RefType,
 	StyleProp,
 	ViewStyle,
-	TextInput as RefType,
 } from 'react-native';
-import type { IconName } from '~/components/app/icon';
-import type { ZodTime } from '~/helpers/schema';
-import type { z } from 'zod';
+import type { TextInputProps } from 'react-native-paper';
 import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/src/components/TextInput/types';
+import type { z } from 'zod';
+import type { IconName } from '~/components/app/icon';
+import type { ButtonProps } from '~/components/controls/button';
+import type { ZodTime } from '~/helpers/schema';
 
 export const formControlType = [
 	'email',
@@ -168,7 +168,7 @@ const FormControlComponent = (
 		hasIcon,
 		disabled,
 	}: FormControlProps,
-	ref: ForwardedRef<RefType>
+	ref: ForwardedRef<RefType>,
 ) => {
 	const theme = useTheme();
 
@@ -217,13 +217,17 @@ const FormControlComponent = (
 					<TextInput.Icon
 						icon={appIconMap[isSecret ? 'hidden' : 'visible']}
 						disabled={disabled}
-						onPress={() => setIsSecret((prev) => !prev)}
+						onPress={() => {
+							setIsSecret((prev) => !prev);
+						}}
 					/>
 				) : type === 'date' || type === 'time' ? (
 					<TextInput.Icon
 						icon={appIconMap[type]}
 						disabled={disabled}
-						onPress={() => setShowingPicker(true)}
+						onPress={() => {
+							setShowingPicker(true);
+						}}
 					/>
 				) : undefined
 			}
@@ -268,7 +272,9 @@ const FormControlComponent = (
 					date={value?.toDate()}
 					inputEnabled={false}
 					disableStatusBar
-					onDismiss={() => setShowingPicker(false)}
+					onDismiss={() => {
+						setShowingPicker(false);
+					}}
 					onConfirm={({ date }) => {
 						onChange(date ? dayjsUtc.utc(date) : null);
 						setShowingPicker(false);
@@ -281,7 +287,9 @@ const FormControlComponent = (
 					visible={showingPicker}
 					hours={value?.hours}
 					minutes={value?.minutes}
-					onDismiss={() => setShowingPicker(false)}
+					onDismiss={() => {
+						setShowingPicker(false);
+					}}
 					onConfirm={(val) => {
 						onChange(val);
 						setShowingPicker(false);

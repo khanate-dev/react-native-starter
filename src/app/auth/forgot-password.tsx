@@ -1,17 +1,17 @@
+import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import { useRouter } from 'expo-router';
 
-import { useTheme } from '~/hooks/theme';
-import { useI18n } from '~/contexts/i18n';
-import { wait } from '~/helpers/async';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
-import { isSmallerScreen } from '~/config';
 import { Icon } from '~/components/app/icon';
 import { Button } from '~/components/controls/button';
 import { FormControl } from '~/components/controls/form-control';
 import { Alert } from '~/components/feedback/alert';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { isSmallerScreen } from '~/config';
+import { useI18n } from '~/contexts/i18n';
+import { wait } from '~/helpers/async';
+import { useTheme } from '~/hooks/theme';
 
 import type { TextInput } from 'react-native';
 import type { Utils } from '~/types/utils';
@@ -188,7 +188,7 @@ export const ForgotPassword = () => {
 										...state,
 										status: 'sending-code-failed',
 										error: 'Failed To Send Email!',
-								  }
+								  },
 						);
 					},
 				}}
@@ -238,7 +238,7 @@ export const ForgotPassword = () => {
 										...state,
 										status: 'verifying-code-failed',
 										error: 'Invalid Code!',
-								  }
+								  },
 						);
 					},
 					disabled: !codeEnabled || !code?.trim(),
@@ -319,9 +319,13 @@ export const ForgotPassword = () => {
 									...state,
 									status: 'resetting-failed',
 									error: 'Failed To Reset Password!',
-							  }
+							  },
 					);
-					if (success) setTimeout(() => router.back(), 500);
+					if (success) {
+						setTimeout(() => {
+							router.back();
+						}, 500);
+					}
 				}}
 			/>
 		</ScreenWrapper>

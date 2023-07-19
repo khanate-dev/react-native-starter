@@ -1,14 +1,14 @@
-import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 import { useState } from 'react';
 import { Image, View } from 'react-native';
+import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
-import { useTheme } from '~/hooks/theme';
 import { Icon } from '~/components/app/icon';
-import { logout, useUserOrNull } from '~/contexts/auth';
 import { Button } from '~/components/controls/button';
+import { logout, useUserOrNull } from '~/contexts/auth';
 import { useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
 
-import type { StyleProp, ViewStyle, ImageStyle } from 'react-native';
+import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 
 const Avatar = (props: {
 	size: number;
@@ -81,7 +81,9 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 						buttonStyle,
 					]}
 					borderless
-					onPress={() => setVisible(true)}
+					onPress={() => {
+						setVisible(true);
+					}}
 				>
 					<Avatar
 						size={35}
@@ -89,7 +91,9 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 					/>
 				</TouchableRipple>
 			}
-			onDismiss={() => setVisible(false)}
+			onDismiss={() => {
+				setVisible(false);
+			}}
 		>
 			<View style={{ gap: 0, minWidth: 150 }}>
 				<Avatar

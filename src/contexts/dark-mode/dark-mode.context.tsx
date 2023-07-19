@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Appearance } from 'react-native';
 
-import { getSetting, setSetting } from '~/helpers/settings';
 import { events } from '~/helpers/events';
+import { getSetting, setSetting } from '~/helpers/settings';
 
 import type { PropsWithChildren, SetStateAction } from 'react';
 
@@ -60,7 +60,9 @@ export const useDarkMode = () => {
 	return isDarkMode;
 };
 
-export const toggleDarkMode = () => events.emit('toggleDarkMode');
+export const toggleDarkMode = () => {
+	events.emit('toggleDarkMode');
+};
 
 export const updateDarkMode = (isDarkMode: SetStateAction<boolean>) => {
 	events.emit('updateDarkMode', isDarkMode);

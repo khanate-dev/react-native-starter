@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { TextInput, View } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
 import Animated, {
 	useAnimatedProps,
 	useDerivedValue,
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
+import { Circle, default as Svg } from 'react-native-svg';
 
 import { useTheme } from '~/hooks/theme';
 

@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { isDayjs } from 'dayjs';
+import { z } from 'zod';
 
 import { JWT_REGEX, PHONE_REGEX } from '~/config';
 import { dayjsUtc } from '~/helpers/date';
@@ -21,7 +21,7 @@ export const emailSchema = z.string().email();
 export const phoneSchema = z.string().regex(PHONE_REGEX);
 
 export const dayjsSchema = z.instanceof(
-	dayjsUtc as unknown as typeof dayjsUtc.Dayjs
+	dayjsUtc as unknown as typeof dayjsUtc.Dayjs,
 );
 
 export type ZodDayjs = typeof dayjsSchema;
@@ -45,7 +45,7 @@ export const timeSchema = z.preprocess(
 	z.object({
 		hours: z.number().min(0).max(23),
 		minutes: z.number().min(0).max(59),
-	})
+	}),
 );
 
 export type ZodTime = typeof timeSchema;
@@ -71,11 +71,11 @@ type _LocalId = z.infer<typeof _localIdSchema>;
  * @param list the existing list of data
  */
 export const createLocalId = <T extends { _localId: _LocalId }>(
-	list: T[]
+	list: T[],
 ): _LocalId => {
 	const lastId = Math.max(
 		...list.map((row) => row._localId as unknown as number),
-		0
+		0,
 	);
 	return (lastId + 1) as _LocalId;
 };
@@ -85,9 +85,9 @@ type OptionalGroup<T extends Record<string, unknown>> =
 	| { [K in keyof T]?: never };
 
 export const createGroupedOptionalSchema = <
-	Schema extends z.ZodObject<any, any, any, any>
+	Schema extends z.ZodObject<any, any, any, any>,
 >(
-	schema: Schema
+	schema: Schema,
 ): z.Schema<OptionalGroup<z.infer<Schema>>> => {
 	return schema.or(
 		z.object(
@@ -96,9 +96,9 @@ export const createGroupedOptionalSchema = <
 					acc[key] = z.undefined();
 					return acc;
 				},
-				{} as Record<string, z.ZodUndefined>
-			)
-		)
+				{} as Record<string, z.ZodUndefined>,
+			),
+		),
 	);
 };
 
@@ -112,9 +112,9 @@ export type DbMeta = z.infer<typeof dbMetaSchema>;
 
 export const createSchema = <
 	Keys extends string,
-	Input extends Record<Keys, z.ZodTypeAny>
+	Input extends Record<Keys, z.ZodTypeAny>,
 >(
-	input: Input
+	input: Input,
 ) => {
 	const schema = z.strictObject(input);
 	const modelSchema = z.strictObject({

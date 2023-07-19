@@ -1,18 +1,18 @@
-import { useEffect, useReducer } from 'react';
+import { loadAsync } from 'expo-font';
+import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
+import { useEffect, useReducer } from 'react';
 import { PaperProvider } from 'react-native-paper';
-import { Slot, SplashScreen } from 'expo-router';
-import { loadAsync } from 'expo-font';
 
-import { darkTheme, lightTheme } from '~/theme';
-import { addAlert, AlertProvider } from '~/contexts/alert';
-import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode';
-import { LoadingProvider } from '~/contexts/loading';
-import { I18nProvider } from '~/contexts/i18n';
-import { AuthProvider } from '~/contexts/auth';
 import { env } from '~/config';
+import { AlertProvider, addAlert } from '~/contexts/alert';
+import { AuthProvider } from '~/contexts/auth';
+import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode';
+import { I18nProvider } from '~/contexts/i18n';
+import { LoadingProvider } from '~/contexts/loading';
 import { getSetting } from '~/helpers/settings';
+import { darkTheme, lightTheme } from '~/theme';
 
 import type { Reducer } from 'react';
 import type { LoggedInUser } from '~/schemas/user';
@@ -33,8 +33,10 @@ const Providers = () => {
 		Promise.all([
 			getSetting('user'),
 			loadAsync({
-				InterRegular: require('~/assets/fonts/inter-regular.otf'),
-				InterBold: require('~/assets/fonts/inter-bold.otf'),
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				InterRegular: require('~/assets/fonts/inter-regular.otf') as string,
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				InterBold: require('~/assets/fonts/inter-bold.otf') as string,
 			}),
 		]).then(([user]) => {
 			dispatch(user);

@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 // eslint-disable-next-line no-restricted-imports
 import type {
-	Icon as Type,
 	IconProps as Props,
+	Icon as Type,
 } from '@expo/vector-icons/build/createIconSet';
 
 type map = typeof Component extends Type<infer T, any> ? T : never;

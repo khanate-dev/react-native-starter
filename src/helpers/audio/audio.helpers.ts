@@ -16,7 +16,7 @@ export type GetAudioResponse = Promise<null | {
 
 export const getAudio = async (
 	uri: string,
-	onFinish?: (status: AVPlaybackStatusSuccess) => void
+	onFinish?: (status: AVPlaybackStatusSuccess) => void,
 ): GetAudioResponse => {
 	const audio = await Audio.Sound.createAsync({ uri });
 	audio.sound.setOnPlaybackStatusUpdate((status) => {
@@ -27,7 +27,7 @@ export const getAudio = async (
 	const duration = await audio.sound
 		.getStatusAsync()
 		.then((res) =>
-			res.isLoaded && res.durationMillis ? res.durationMillis / res.rate : null
+			res.isLoaded && res.durationMillis ? res.durationMillis / res.rate : null,
 		);
 	if (!duration) return null;
 	return {

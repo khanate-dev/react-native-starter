@@ -1,15 +1,15 @@
-import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { Text } from 'react-native-paper';
 
-import { userSchema } from '~/schemas/user';
-import { useForm } from '~/hooks/form';
-import { useI18n } from '~/contexts/i18n';
-import { useTheme } from '~/hooks/theme';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
-import { endpoints } from '~/endpoints';
-import { FormControl } from '~/components/controls/form-control';
 import { Button } from '~/components/controls/button';
+import { FormControl } from '~/components/controls/form-control';
 import { Alert } from '~/components/feedback/alert';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { useI18n } from '~/contexts/i18n';
+import { endpoints } from '~/endpoints';
+import { useForm } from '~/hooks/form';
+import { useTheme } from '~/hooks/theme';
+import { userSchema } from '~/schemas/user';
 
 const Register = () => {
 	const theme = useTheme();
@@ -30,8 +30,10 @@ const Register = () => {
 			});
 			setTimeout(
 				// // () => router.push({ pathname: '/auth/login', params: { email } }),
-				() => router.push('/auth/login'),
-				1000
+				() => {
+					router.push('/auth/login');
+				},
+				1000,
 			);
 			return 'user added! please wait...';
 		},

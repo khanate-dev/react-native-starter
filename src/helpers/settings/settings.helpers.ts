@@ -1,10 +1,10 @@
 import * as SecureStore from 'expo-secure-store';
 import { z } from 'zod';
 
-import { loggedInUserSchema } from '~/schemas/user';
-import { languages } from '~/i18n';
-import { events } from '~/helpers/events';
 import { getCatchMessage } from '~/errors';
+import { events } from '~/helpers/events';
+import { languages } from '~/i18n';
+import { loggedInUserSchema } from '~/schemas/user';
 
 const schemas = {
 	user: loggedInUserSchema,
@@ -19,7 +19,7 @@ type Settings = {
 };
 
 export const removeSetting = async <Key extends keyof Settings>(
-	key: Key
+	key: Key,
 ): Promise<boolean> => {
 	try {
 		await SecureStore.deleteItemAsync(key);
@@ -34,7 +34,7 @@ export const removeSetting = async <Key extends keyof Settings>(
 };
 
 export const getSetting = async <Key extends keyof Settings>(
-	key: Key
+	key: Key,
 ): Promise<null | Settings[Key]> => {
 	try {
 		const result = await SecureStore.getItemAsync(key);
@@ -54,7 +54,7 @@ export const getSetting = async <Key extends keyof Settings>(
 
 export const setSetting = async <Key extends keyof Settings>(
 	key: Key,
-	value: Settings[Key]
+	value: Settings[Key],
 ): Promise<boolean> => {
 	try {
 		await SecureStore.setItemAsync(key, JSON.stringify(value));

@@ -1,12 +1,12 @@
-import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { Text } from 'react-native-paper';
 
-import { Button } from '~/components/controls/button';
-import { isSmallerScreen } from '~/config';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
 import { Icon } from '~/components/app/icon';
-import { useTheme } from '~/hooks/theme';
+import { Button } from '~/components/controls/button';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { isSmallerScreen } from '~/config';
 import { useI18n } from '~/contexts/i18n';
+import { useTheme } from '~/hooks/theme';
 
 export type ErrorPageProps = {
 	/** the title of the error page */
@@ -76,7 +76,9 @@ export const ErrorPage = ({
 				label={buttonLabel ?? content.action.back}
 				icon='arrow-back'
 				style={{ width: 150 }}
-				onPress={() => router.back()}
+				onPress={() => {
+					router.back();
+				}}
 			/>
 		</ScreenWrapper>
 	);

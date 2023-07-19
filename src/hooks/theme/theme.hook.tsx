@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-restricted-imports
 import { useTheme as usePaperTheme } from 'react-native-paper';
 
-import { formatToken } from '~/helpers/string';
 import { useI18n } from '~/contexts/i18n';
+import { formatToken } from '~/helpers/string';
 
-import type { AppTheme, ThemeColor } from '~/theme';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type { AppTheme, ThemeColor } from '~/theme';
 
 export const useTheme = () => {
 	const theme = usePaperTheme<AppTheme>();
@@ -15,7 +15,7 @@ export const useTheme = () => {
 		...theme,
 		getColor: (
 			color: ThemeColor,
-			variant: 'normal' | 'on-normal' | 'container' | 'on-container' = 'normal'
+			variant: 'normal' | 'on-normal' | 'container' | 'on-container' = 'normal',
 		): string => {
 			switch (variant) {
 				case 'normal':

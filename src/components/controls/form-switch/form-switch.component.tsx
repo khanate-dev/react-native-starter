@@ -1,12 +1,12 @@
-import { Switch, Text, TouchableRipple } from 'react-native-paper';
-import { View } from 'react-native';
 import { useRef } from 'react';
+import { View } from 'react-native';
+import { Switch, Text, TouchableRipple } from 'react-native-paper';
 
 import { Icon } from '~/components/app/icon';
 import { FormControlWrapper } from '~/components/controls/form-control-wrapper';
 import { useTheme } from '~/hooks/theme';
 
-import type { StyleProp, ViewStyle, Switch as RefType } from 'react-native';
+import type { Switch as RefType, StyleProp, ViewStyle } from 'react-native';
 import type { SwitchProps } from 'react-native-paper';
 
 type styles = {
@@ -61,7 +61,11 @@ export const FormSwitch = ({
 			error={error}
 			disabled={disabled}
 		>
-			<TouchableRipple onPress={() => onChange(!value)}>
+			<TouchableRipple
+				onPress={() => {
+					onChange(!value);
+				}}
+			>
 				<View
 					style={{
 						flexDirection: 'row',

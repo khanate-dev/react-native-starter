@@ -3,29 +3,29 @@ import { isObject } from '~/helpers/type';
 import type { Utils } from '~/types/utils';
 
 export const objectEntries = <T extends Record<string, unknown>>(
-	object: T
+	object: T,
 ): [keyof T, T[keyof T]][] => {
 	return Object.entries(object) as never;
 };
 
 export const objectKeys = <T extends Record<string, unknown>>(
-	object: T
+	object: T,
 ): (keyof T)[] => {
 	return Object.keys(object);
 };
 
 export const objectValues = <T extends Record<string, unknown>>(
-	object: T
+	object: T,
 ): T[keyof T][] => {
 	return Object.values(object) as never;
 };
 
 export const omit = <
 	Type extends Record<string, unknown>,
-	ToOmit extends keyof Type
+	ToOmit extends keyof Type,
 >(
 	object: Type,
-	keys: ToOmit | ToOmit[]
+	keys: ToOmit | ToOmit[],
 ): Utils.prettify<Omit<Type, ToOmit>> => {
 	const keyArray = Array.isArray(keys) ? keys : [keys];
 	return objectEntries(object).reduce((obj, [key, value]) => {
@@ -36,10 +36,10 @@ export const omit = <
 
 export const pick = <
 	Type extends Record<string, unknown>,
-	ToPick extends keyof Type
+	ToPick extends keyof Type,
 >(
 	object: Type,
-	keys: ToPick | ToPick[]
+	keys: ToPick | ToPick[],
 ): Utils.prettify<Pick<Type, ToPick>> => {
 	const keyArray = Array.isArray(keys) ? keys : [keys];
 	return objectEntries(object).reduce((obj, [key, value]) => {
@@ -50,10 +50,10 @@ export const pick = <
 
 export const deepMerge = <
 	T extends Record<string, unknown>,
-	U extends Record<string, unknown>
+	U extends Record<string, unknown>,
 >(
 	first: T,
-	second: U
+	second: U,
 ): Utils.deepMerge<T, U> => {
 	const commonKeys = { ...first, ...second };
 	const merged: Record<string, unknown> = {};

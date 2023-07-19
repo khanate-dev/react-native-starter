@@ -44,7 +44,7 @@ export const Stepper = <T extends readonly string[]>({
 						? 'primary'
 						: steps.indexOf(currentStep) > index
 						? 'success'
-						: 'error'
+						: 'error',
 				);
 				return (
 					<View

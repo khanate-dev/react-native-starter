@@ -1,9 +1,9 @@
 import { DeviceEventEmitter } from 'react-native';
 
 import type { SetStateAction } from 'react';
-import type { LoggedInUser } from '~/schemas/user';
 import type { AlertModalProps } from '~/components/feedback/alert-modal';
 import type { Language } from '~/i18n';
+import type { LoggedInUser } from '~/schemas/user';
 
 export type EventMap = {
 	login: [LoggedInUser];
@@ -22,12 +22,16 @@ export const events = {
 	},
 	listen: <T extends keyof EventMap>(
 		event: T,
-		listener: (...args: EventMap[T]) => void
+		listener: (...args: EventMap[T]) => void,
 	) => {
 		const subscription = DeviceEventEmitter.addListener(
 			event,
-			listener as never
+			listener as never,
 		);
-		return { remove: () => subscription.remove() };
+		return {
+			remove: () => {
+				subscription.remove();
+			},
+		};
 	},
 };

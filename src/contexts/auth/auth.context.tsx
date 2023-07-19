@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter, useSegments } from 'expo-router';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import { removeSetting, setSetting } from '~/helpers/settings';
 import { events } from '~/helpers/events';
+import { removeSetting, setSetting } from '~/helpers/settings';
 
-import type { LoggedInUser } from '~/schemas/user';
 import type { PropsWithChildren } from 'react';
+import type { LoggedInUser } from '~/schemas/user';
 
 const UserContext = createContext<null | LoggedInUser>(null);
 
@@ -48,10 +48,14 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 };
 
 /** fires the logout event to force logout on authentication errors */
-export const logout = () => events.emit('logout');
+export const logout = () => {
+	events.emit('logout');
+};
 
 /** fires the login event to set the new user on login */
-export const login = (user: LoggedInUser) => events.emit('login', user);
+export const login = (user: LoggedInUser) => {
+	events.emit('login', user);
+};
 
 export const useUserOrNull = (): LoggedInUser | null => {
 	const user = useContext(UserContext);

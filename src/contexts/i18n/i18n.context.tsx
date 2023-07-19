@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { content, defaultLanguage } from '~/i18n';
-import { getSetting, setSetting } from '~/helpers/settings';
 import { events } from '~/helpers/events';
+import { getSetting, setSetting } from '~/helpers/settings';
+import { content, defaultLanguage } from '~/i18n';
 
-import type { Language } from '~/i18n';
 import type { PropsWithChildren, SetStateAction } from 'react';
+import type { Language } from '~/i18n';
 
 const I18nContext = createContext<Language>(defaultLanguage);
 

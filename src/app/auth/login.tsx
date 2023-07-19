@@ -1,16 +1,16 @@
-import { Text } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { Text } from 'react-native-paper';
 
-import { userSchema } from '~/schemas/user';
-import { endpoints } from '~/endpoints';
-import { login } from '~/contexts/auth';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
 import { Button } from '~/components/controls/button';
-import { useForm } from '~/hooks/form';
 import { FormControl } from '~/components/controls/form-control';
 import { Alert } from '~/components/feedback/alert';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { login } from '~/contexts/auth';
 import { useI18n } from '~/contexts/i18n';
+import { endpoints } from '~/endpoints';
+import { useForm } from '~/hooks/form';
 import { useTheme } from '~/hooks/theme';
+import { userSchema } from '~/schemas/user';
 
 const Login = () => {
 	const theme = useTheme();
@@ -26,7 +26,9 @@ const Login = () => {
 		},
 		onSubmit: async (values) => {
 			const user = await endpoints.user.login(values);
-			setTimeout(() => login(user), 1000);
+			setTimeout(() => {
+				login(user);
+			}, 1000);
 			return 'Logged In! Redirecting...';
 		},
 	});
@@ -77,7 +79,9 @@ const Login = () => {
 					marginRight: 'auto',
 					marginTop: 10,
 				}}
-				onPress={() => router.push('/auth/forgot-password')}
+				onPress={() => {
+					router.push('/auth/forgot-password');
+				}}
 			/>
 		</ScreenWrapper>
 	);

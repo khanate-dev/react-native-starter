@@ -33,7 +33,7 @@ export const getDateOrNull = (value: unknown): null | Date => {
 
 export const compareDate = (
 	first: string | Date,
-	second: string | Date
+	second: string | Date,
 ): number => new Date(first).getTime() - new Date(second).getTime();
 
 export const dayjsFormatPatterns = {
