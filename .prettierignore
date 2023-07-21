@@ -6,4 +6,4 @@ dist
 build
 pnpm-lock.yaml
 yarn.lock
-package-lock.json
+package-lock.yaml
