@@ -49,8 +49,8 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 };
 
 /** fires the add-alert event to show the given alert */
-export const addAlert = (...args: EventMap['addAlert']) => {
-	events.emit('addAlert', ...args);
+export const addAlert = (data: EventMap['addAlert']) => {
+	events.emit('addAlert', data);
 };
 
 /** fires the remove-alert event to remove showing alerts */
