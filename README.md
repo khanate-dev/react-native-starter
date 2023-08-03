@@ -8,7 +8,7 @@ React Native Starter using Typescript and Expo
 - `React Native`
 - `Expo` (Managed Workflow)
 - `Typescript`
-- `React Native Paper`en for theming and components
+- `React Native Paper` for theming and components
 - `Sentry` for logging and error reporting
 - `yarn` for package management
 - `dotenv-vault` to share environment variables
@@ -44,6 +44,8 @@ Lint the code: `yarn lint`
 Environment variables are securely shared with `dotenv-vault`.
 
 Create new vault: `yarn env:new`
+
+Login to the vault: `yarn env:login`
 
 Open vault: `yarn env:open`
 
