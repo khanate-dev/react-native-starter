@@ -317,6 +317,7 @@ const config = {
 			excludedFiles: ['src/**/*'],
 			rules: {
 				'import/no-nodejs-modules': 'off',
+				'import/no-default-export': 'off',
 			},
 		},
 	],

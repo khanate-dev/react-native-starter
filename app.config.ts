@@ -54,7 +54,6 @@ const semverToInt = (version: `${number}.${number}.${number}`): number => {
 	return (major ?? 0) * 10000000 + (minor ?? 0) * 100000 + (patch ?? 0);
 };
 
-// eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	owner: details.org,
