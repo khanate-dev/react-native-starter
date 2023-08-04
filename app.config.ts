@@ -12,7 +12,7 @@ const parseEnvironment = () => {
 		SENTRY_DSN: z.string(),
 	});
 	const parsed = envSchema.safeParse(process.env);
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
 	if (!parsed.success && process.env.NODE_ENV) {
 		const env = process.env.NODE_ENV;
 		console.error(
@@ -40,7 +40,7 @@ export type Environment = typeof extra;
 
 const details = {
 	id: 'native-starter',
-	org: 'khanate',
+	org: 'khanate-dev',
 	name: 'React Native Starter',
 	description: 'React Native Starter',
 	github: 'https://github.com/kahante-dev/react-native-starter',
@@ -57,6 +57,7 @@ const semverToInt = (version: `${number}.${number}.${number}`): number => {
 // eslint-disable-next-line import/no-default-export
 export default ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
+	owner: details.org,
 	scheme: details.id,
 	name: details.name,
 	slug: details.id,
