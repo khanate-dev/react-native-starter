@@ -20,7 +20,7 @@ import type {
 	ViewStyle,
 } from 'react-native';
 import type { TextInputProps } from 'react-native-paper';
-import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/src/components/TextInput/types';
+import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/components/TextInput/types';
 import type { z } from 'zod';
 import type { IconName } from '~/components/app/icon';
 import type { ButtonProps } from '~/components/controls/button';
@@ -89,6 +89,7 @@ export type FormControlProps = Pick<TextInputProps, 'disabled'> & {
 	/** the styles to apply the control */
 	styles?: styles;
 
+	/** the label to show above the input */
 	label: TextInputLabelProp;
 
 	/** the error message to show beneath the input */
