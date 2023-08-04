@@ -21,7 +21,7 @@
 		}
 	},
 	"cli": {
-		"version": ">= 0.52.0",
+		"version": ">= 3.18.1",
 		"requireCommit": true
 	},
 	"submit": {
