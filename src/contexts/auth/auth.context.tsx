@@ -1,4 +1,4 @@
-import { useRouter, useSegments } from 'expo-router';
+import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { events } from '~/helpers/events';
@@ -16,6 +16,7 @@ type AuthProviderProps = PropsWithChildren<{
 export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 	const rootSegment = useSegments()[0];
 	const router = useRouter();
+	const rootNavigationState = useRootNavigation();
 
 	const [user, setUser] = useState(defaultUser);
 
@@ -39,10 +40,14 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 	}, []);
 
 	useEffect(() => {
-		if (rootSegment === '[...404]') return;
+		// TODO Remove this after expo router fixes #740
+		// https://github.com/expo/router/issues/740
+		if (!rootNavigationState) return;
+
+		if (rootSegment === undefined || rootSegment === '[...404]') return;
 		if (!user && rootSegment !== 'auth') router.replace('/auth/');
 		else if (user && rootSegment === 'auth') router.replace('/');
-	}, [router, user, rootSegment]);
+	}, [rootNavigationState, router, user, rootSegment]);
 
 	return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
