@@ -1,16 +1,13 @@
 /** @type {import('eslint').Linter.Config} */
 const config = {
-	env: {
-		es2021: true,
-		node: true,
-	},
+	env: { es2021: true, node: true },
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/strict-type-checked',
 		'plugin:@typescript-eslint/stylistic-type-checked',
-		'prettier',
 		'plugin:import/recommended',
 		'plugin:import/typescript',
+		'prettier',
 	],
 	plugins: ['import', 'unused-imports', '@typescript-eslint'],
 	parser: '@typescript-eslint/parser',
@@ -64,39 +61,11 @@ const config = {
 		'no-restricted-imports': [
 			'error',
 			{
-				patterns: [
-					{
-						group: ['../*'],
-						message: 'Do not use parent imports',
-					},
-					{
-						group: ['@expo/vector-icons*'],
-						message: "Use 'components/app/app-icon' instead",
-					},
-					{
-						group: ['react-native-paper*'],
-						importNames: ['IconButton'],
-						message: "Use 'components/forms/icon-button' instead",
-					},
-					{
-						group: ['react-native-paper*', 'react-native*'],
-						importNames: ['Button'],
-						message: "Use 'components/forms/button' instead",
-					},
-					{
-						group: ['react-native-paper*'],
-						importNames: ['useTheme'],
-						message: "Use 'hooks/theme' instead",
-					},
-					{
-						group: ['src/*'],
-						message: 'Use path aliases',
-					},
-				],
+				patterns: [{ group: ['../*'], message: 'Do not use parent imports' }],
 			},
 		],
 		'no-restricted-syntax': [
-			'warn',
+			'error',
 			{
 				message: "Don't declare enums. Use POJO with as const instead",
 				selector: 'TSEnumDeclaration',
@@ -178,15 +147,13 @@ const config = {
 		'@typescript-eslint/default-param-last': 'warn',
 		'no-dupe-class-members': 'off',
 		'@typescript-eslint/no-dupe-class-members': 'warn',
-		'@typescript-eslint/no-explicit-any': 'off',
+		'@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: true }],
 		'@typescript-eslint/no-floating-promises': 'off',
 		'@typescript-eslint/no-inferrable-types': 'off',
 		'@typescript-eslint/no-loop-func': 'warn',
 		'@typescript-eslint/no-misused-promises': [
 			'warn',
-			{
-				checksVoidReturn: false,
-			},
+			{ checksVoidReturn: false },
 		],
 		'@typescript-eslint/no-redundant-type-constituents': 'warn',
 		'@typescript-eslint/no-shadow': 'warn',
@@ -217,10 +184,6 @@ const config = {
 		],
 		'@typescript-eslint/return-await': 'warn',
 		'@typescript-eslint/switch-exhaustiveness-check': 'warn',
-		'@typescript-eslint/restrict-template-expressions': [
-			'warn',
-			{ allowAny: true },
-		],
 		'@typescript-eslint/ban-types': [
 			'warn',
 			{
@@ -243,9 +206,7 @@ const config = {
 			],
 			plugins: ['jsx-expressions'],
 			settings: {
-				react: {
-					version: 'detect',
-				},
+				react: { version: 'detect' },
 			},
 			rules: {
 				'@typescript-eslint/no-unnecessary-type-constraint': 'off',
@@ -289,14 +250,11 @@ const config = {
 				'vitest/prefer-expect-assertions': 'off',
 				'vitest/require-top-level-describe': 'off',
 				'vitest/max-expects': ['error', { max: 10 }],
-				'testing-library/no-manual-cleanup': 'warn',
-				'testing-library/no-global-regexp-flag-in-query': 'warn',
 				'testing-library/prefer-explicit-assert': [
 					'error',
 					{ assertion: 'toBeInTheDocument' },
 				],
 				'testing-library/prefer-user-event': 'warn',
-				'testing-library/prefer-wait-for': 'warn',
 			},
 		},
 		{
@@ -318,6 +276,12 @@ const config = {
 			rules: {
 				'import/no-nodejs-modules': 'off',
 				'import/no-default-export': 'off',
+			},
+		},
+		{
+			files: ['**/*.d.ts'],
+			rules: {
+				'@typescript-eslint/consistent-type-definitions': 'off',
 			},
 		},
 	],

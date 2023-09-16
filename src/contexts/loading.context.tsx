@@ -44,6 +44,8 @@ export const useLoading = () => {
 	return isLoading;
 };
 
-export const setIsLoading = (value: SetStateAction<boolean> | Promise<any>) => {
+export const setIsLoading = (
+	value: SetStateAction<boolean> | Promise<unknown>,
+) => {
 	events.emit('setIsLoading', value);
 };
