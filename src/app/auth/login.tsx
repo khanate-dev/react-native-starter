@@ -7,7 +7,7 @@ import { Alert } from '~/components/feedback/alert.component';
 import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { login } from '~/contexts/auth';
 import { useI18n } from '~/contexts/i18n';
-import { endpoints } from '~/endpoints';
+import { endpoints } from '~/endpoints/endpoints';
 import { useForm } from '~/hooks/form';
 import { useTheme } from '~/hooks/theme';
 import { userSchema } from '~/schemas/user.schemas';
