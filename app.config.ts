@@ -94,7 +94,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 		supportsTablet: true,
 	},
 	android: {
-		package: `com.${details.org}.${details.id.replace(/-/gu, '.')}`,
+		package: `com.${details.org.replace(/-/gu, '.')}.${details.id.replace(/-/gu, '.')}`,
 		versionCode: semverToInt(details.version),
 		adaptiveIcon: {
 			foregroundImage: './assets/adaptive-icon.png',
