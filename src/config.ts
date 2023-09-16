@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { Dimensions } from 'react-native';
 import * as Sentry from 'sentry-expo';
 
-import type { App } from '~/types/app';
+import type { App } from '~/types/app.types';
 
 const { env, backendApiEndpoint, sentry } = Constants.expoConfig
 	?.extra as App.env;

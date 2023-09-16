@@ -5,7 +5,7 @@ import { events } from '~/helpers/events';
 import { removeSetting, setSetting } from '~/helpers/settings';
 
 import type { PropsWithChildren } from 'react';
-import type { LoggedInUser } from '~/schemas/user';
+import type { LoggedInUser } from '~/schemas/user.schemas';
 
 const UserContext = createContext<null | LoggedInUser>(null);
 

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getCatchMessage } from '~/errors';
 import { events } from '~/helpers/events';
 import { languages } from '~/i18n';
-import { loggedInUserSchema } from '~/schemas/user';
+import { loggedInUserSchema } from '~/schemas/user.schemas';
 
 const schemas = {
 	user: loggedInUserSchema,

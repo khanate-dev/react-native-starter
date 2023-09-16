@@ -11,7 +11,7 @@ import {
 } from '~/errors';
 import { getSetting } from '~/helpers/settings';
 
-import type { Utils } from '~/types/utils';
+import type { Utils } from '~/types/utils.types';
 
 const responseSchema = z.strictObject({
 	errorCode: z.string(),

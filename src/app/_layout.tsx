@@ -15,7 +15,7 @@ import { getSetting } from '~/helpers/settings';
 import { darkTheme, lightTheme } from '~/theme';
 
 import type { Reducer } from 'react';
-import type { LoggedInUser } from '~/schemas/user';
+import type { LoggedInUser } from '~/schemas/user.schemas';
 
 SplashScreen.preventAutoHideAsync();
 

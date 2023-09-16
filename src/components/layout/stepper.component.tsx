@@ -3,7 +3,7 @@ import { Text } from 'react-native-paper';
 
 import { useTheme } from '~/hooks/theme';
 
-import type { App } from '~/types/app';
+import type { App } from '~/types/app.types';
 
 export type StepperProps<T extends readonly string[]> = App.propsWithStyle<{
 	/** the list of step names */

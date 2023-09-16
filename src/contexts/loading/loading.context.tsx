@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { LoadingModal } from '~/components/feedback/loading-modal';
+import { LoadingModal } from '~/components/feedback/loading-modal.component';
 import { events } from '~/helpers/events/events.helpers';
 
 import type { PropsWithChildren, SetStateAction } from 'react';

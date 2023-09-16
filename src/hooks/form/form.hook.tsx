@@ -10,10 +10,10 @@ import { humanizeToken } from '~/helpers/string';
 
 import type { RefObject } from 'react';
 import type { TextInput } from 'react-native';
-import type { ButtonProps } from '~/components/controls/button';
-import type { AlertProps } from '~/components/feedback/alert';
+import type { ButtonProps } from '~/components/controls/button.component';
+import type { AlertProps } from '~/components/feedback/alert.component';
 import type { ZodDate, ZodTime } from '~/helpers/schema';
-import type { Utils } from '~/types/utils';
+import type { Utils } from '~/types/utils.types';
 
 type fieldMap = {
 	string: z.ZodString;

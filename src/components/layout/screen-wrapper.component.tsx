@@ -4,17 +4,17 @@ import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
-import { Background } from '~/components/app/background';
-import { LanguageControl } from '~/components/app/language-control';
-import { UserControl } from '~/components/app/user-control';
-import { IconButton } from '~/components/controls/icon-button';
+import { Background } from '~/components/app/background.component';
+import { LanguageControl } from '~/components/app/language-control.component';
+import { UserControl } from '~/components/app/user-control.component';
+import { IconButton } from '~/components/controls/icon-button.component';
 import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode';
 import { useTheme } from '~/hooks/theme';
 
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { App } from '~/types/app';
-import type { Utils } from '~/types/utils';
+import type { App } from '~/types/app.types';
+import type { Utils } from '~/types/utils.types';
 
 export type ScreenWrapperProps = App.propsWithStyle<{
 	/** the title to show on the page header */

@@ -2,7 +2,7 @@ import { wait } from '~/helpers/async';
 import { dayjsUtc } from '~/helpers/date';
 
 import type { DbId, DbMeta, Jwt } from '~/helpers/schema';
-import type { User } from '~/schemas/user';
+import type { User } from '~/schemas/user.schemas';
 
 export const mockToken =
 	/** cSpell: disable-next-line */

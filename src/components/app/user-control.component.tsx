@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Image, View } from 'react-native';
 import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
-import { Icon } from '~/components/app/icon';
-import { Button } from '~/components/controls/button';
+import { Icon } from '~/components/app/icon.component';
+import { Button } from '~/components/controls/button.component';
 import { logout, useUserOrNull } from '~/contexts/auth';
 import { useI18n } from '~/contexts/i18n';
 import { useTheme } from '~/hooks/theme';

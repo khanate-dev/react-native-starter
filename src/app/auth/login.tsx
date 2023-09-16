@@ -1,16 +1,16 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { Button } from '~/components/controls/button';
-import { FormControl } from '~/components/controls/form-control';
-import { Alert } from '~/components/feedback/alert';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { Button } from '~/components/controls/button.component';
+import { FormControl } from '~/components/controls/form-control.component';
+import { Alert } from '~/components/feedback/alert.component';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { login } from '~/contexts/auth';
 import { useI18n } from '~/contexts/i18n';
 import { endpoints } from '~/endpoints';
 import { useForm } from '~/hooks/form';
 import { useTheme } from '~/hooks/theme';
-import { userSchema } from '~/schemas/user';
+import { userSchema } from '~/schemas/user.schemas';
 
 const Login = () => {
 	const theme = useTheme();

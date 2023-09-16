@@ -14,10 +14,10 @@ import {
 	mockedGet,
 	mockedUpdate,
 } from '~/mocks';
-import { loggedInUserSchema, userSchema } from '~/schemas/user';
+import { loggedInUserSchema, userSchema } from '~/schemas/user.schemas';
 
 import type { DbId } from '~/helpers/schema';
-import type { LoggedInUser, User, UserSansMeta } from '~/schemas/user';
+import type { LoggedInUser, User, UserSansMeta } from '~/schemas/user.schemas';
 
 export const userEndpoints = {
 	login: async (body: {

@@ -12,7 +12,7 @@ import { useTheme } from '~/hooks/theme';
 
 import type { TextInputProps } from 'react-native';
 import type { CircleProps } from 'react-native-svg';
-import type { App } from '~/types/app';
+import type { App } from '~/types/app.types';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedText = Animated.createAnimatedComponent(TextInput);

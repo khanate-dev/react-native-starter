@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { Button } from '~/components/controls/button';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper';
+import { Button } from '~/components/controls/button.component';
+import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { useI18n } from '~/contexts/i18n';
 import { useTheme } from '~/hooks/theme';
 
