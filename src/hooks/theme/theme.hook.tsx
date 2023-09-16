@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { useTheme as usePaperTheme } from 'react-native-paper';
 
-import { useI18n } from '~/contexts/i18n';
+import { useI18n } from '~/contexts/i18n.context';
 import { formatToken } from '~/helpers/string';
 
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';

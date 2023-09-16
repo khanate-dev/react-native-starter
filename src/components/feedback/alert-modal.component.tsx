@@ -4,7 +4,7 @@ import { Dialog, Portal, Text } from 'react-native-paper';
 import { Icon } from '~/components/app/icon.component';
 import { Button } from '~/components/controls/button.component';
 import { isSmallerScreen } from '~/config';
-import { useI18n } from '~/contexts/i18n';
+import { useI18n } from '~/contexts/i18n.context';
 import { useTheme } from '~/hooks/theme';
 
 import type { DialogProps } from 'react-native-paper';

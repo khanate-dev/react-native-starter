@@ -5,7 +5,7 @@ import { Button } from '~/components/controls/button.component';
 import { FormControl } from '~/components/controls/form-control.component';
 import { Alert } from '~/components/feedback/alert.component';
 import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
-import { useI18n } from '~/contexts/i18n';
+import { useI18n } from '~/contexts/i18n.context';
 import { endpoints } from '~/endpoints/endpoints';
 import { useForm } from '~/hooks/form';
 import { useTheme } from '~/hooks/theme';

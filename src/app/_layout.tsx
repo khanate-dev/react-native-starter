@@ -6,11 +6,11 @@ import { useEffect, useReducer } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
 import { env } from '~/config';
-import { AlertProvider, addAlert } from '~/contexts/alert';
-import { AuthProvider } from '~/contexts/auth';
-import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode';
-import { I18nProvider } from '~/contexts/i18n';
-import { LoadingProvider } from '~/contexts/loading';
+import { AlertProvider, addAlert } from '~/contexts/alert.context';
+import { AuthProvider } from '~/contexts/auth.context';
+import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode.context';
+import { I18nProvider } from '~/contexts/i18n.context';
+import { LoadingProvider } from '~/contexts/loading.context';
 import { getSetting } from '~/helpers/settings';
 import { darkTheme, lightTheme } from '~/theme';
 

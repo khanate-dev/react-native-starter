@@ -2,7 +2,7 @@ import { getNetworkStateAsync } from 'expo-network';
 import { z } from 'zod';
 
 import { disableAuth, isFetchMocked } from '~/config';
-import { logout } from '~/contexts/auth';
+import { logout } from '~/contexts/auth.context';
 import {
 	ApiError,
 	AuthError,

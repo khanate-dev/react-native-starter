@@ -8,7 +8,7 @@ import { Background } from '~/components/app/background.component';
 import { LanguageControl } from '~/components/app/language-control.component';
 import { UserControl } from '~/components/app/user-control.component';
 import { IconButton } from '~/components/controls/icon-button.component';
-import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode';
+import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode.context';
 import { useTheme } from '~/hooks/theme';
 
 import type { ReactNode } from 'react';

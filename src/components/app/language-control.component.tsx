@@ -3,7 +3,7 @@ import { Menu } from 'react-native-paper';
 
 import { appIconMap } from '~/components/app/icon.component';
 import { IconButton } from '~/components/controls/icon-button.component';
-import { updateLanguage, useI18n } from '~/contexts/i18n';
+import { updateLanguage, useI18n } from '~/contexts/i18n.context';
 import { useTheme } from '~/hooks/theme';
 import { languages } from '~/i18n';
 
