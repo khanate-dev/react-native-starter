@@ -9,7 +9,7 @@ type _tuple<N extends number, T, R extends readonly T[]> = R['length'] extends N
 
 export declare namespace Utils {
 	type dropFirst<T extends readonly unknown[]> = T extends readonly [
-		any?,
+		unknown?,
 		...infer U,
 	]
 		? U
@@ -29,7 +29,7 @@ export declare namespace Utils {
 	>;
 
 	type filteredKeys<T, U> = {
-		[P in keyof T]: T[P] extends U ? P : never;
+		[k in keyof T]: T[k] extends U ? k : never;
 	}[keyof T];
 
 	/** global type helper to create a union array type from a union type */
@@ -57,8 +57,8 @@ export declare namespace Utils {
 
 	/** takes a union of types and converts it into intersection of the types */
 	type unionToIntersection<T> = (
-		T extends any ? (x: T) => any : never
-	) extends (x: infer U) => any
+		T extends unknown ? (x: T) => unknown : never
+	) extends (x: infer U) => unknown
 		? U
 		: never;
 
@@ -120,7 +120,26 @@ export declare namespace Utils {
 		: never;
 
 	/** matches a type to another exactly. Used with generic functions to make sure the object type matches exactly */
-	type Strictly<T, Shape> = Shape & {
+	type strictly<T, Shape> = Shape & {
 		[k in keyof T]: k extends keyof Shape ? Shape[k] : never;
+	};
+
+	/** remove index signatures from an object type */
+	type removeIndexSignature<T extends Obj> = {
+		[k in keyof T as string extends k
+			? never
+			: number extends k
+			? never
+			: symbol extends k
+			? never
+			: k]: T[k];
+	};
+
+	/** makes sure the wrapped type does not take part in inference in a generic function */
+	type noInfer<T> = [T][T extends T ? 0 : never];
+
+	/** return the keys of the object that match a certain type */
+	type keysOfType<T extends Obj, Match> = keyof {
+		[k in keyof T as T[k] extends Match ? k : never]: true;
 	};
 }

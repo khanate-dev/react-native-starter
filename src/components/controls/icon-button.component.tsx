@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports
 import { IconButton as Component } from 'react-native-paper';
 
 import { appIconMap } from '~/components/app/icon.component';
