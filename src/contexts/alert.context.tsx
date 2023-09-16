@@ -1,11 +1,11 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { AlertModal } from '~/components/feedback/alert-modal.component';
-import { events } from '~/helpers/events';
+import { events } from '~/helpers/events.helpers';
 
 import type { PropsWithChildren } from 'react';
 import type { AlertModalProps } from '~/components/feedback/alert-modal.component';
-import type { EventMap } from '~/helpers/events';
+import type { EventMap } from '~/helpers/events.helpers';
 
 const AlertContext = createContext(null);
 

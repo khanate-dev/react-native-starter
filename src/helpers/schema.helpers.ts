@@ -2,9 +2,12 @@ import { isDayjs } from 'dayjs';
 import { z } from 'zod';
 
 import { JWT_REGEX, PHONE_REGEX } from '~/constants';
-import { dayjsUtc } from '~/helpers/date';
+import { dayjsUtc } from '~/helpers/date.helpers';
 
-export const dbIdSchema = z.number().int().positive().finite().brand('DbKey');
+import type { BulkResponse } from '~/helpers/api.helpers';
+import type { Utils } from '~/types/utils.types';
+
+export const dbIdSchema = z.number().int().positive().finite().brand('DbId');
 
 export type ZodDbId = typeof dbIdSchema;
 
@@ -84,9 +87,7 @@ type OptionalGroup<T extends Record<string, unknown>> =
 	| T
 	| { [K in keyof T]?: never };
 
-export const createGroupedOptionalSchema = <
-	Schema extends z.ZodObject<any, any, any, any>,
->(
+export const createGroupedOptionalSchema = <Schema extends z.AnyZodObject>(
 	schema: Schema,
 ): z.Schema<OptionalGroup<z.infer<Schema>>> => {
 	return schema.or(
@@ -100,6 +101,47 @@ export const createGroupedOptionalSchema = <
 			),
 		),
 	);
+};
+
+export const zodAllOrNone = <T extends Record<string, z.Schema>>(
+	shape: T,
+): z.Schema<
+	Utils.allOrNone<
+		Utils.makeUndefinedOptional<{ [k in keyof T]: T[k]['_output'] }>
+	>
+> => {
+	return z.strictObject(shape).or(
+		z.object(
+			Object.keys(shape).reduce(
+				(acc, key) => {
+					acc[key] = z.undefined();
+					return acc;
+				},
+				{} as Record<string, z.ZodUndefined>,
+			),
+		),
+	);
+};
+
+export type DefaultBulkResponseObj = z.ZodObject<
+	{},
+	'strip',
+	z.ZodUnknown,
+	z.objectOutputType<{}, z.ZodUnknown, 'strip'>
+>;
+
+export const createBulkResponseSchema = <
+	Schema extends z.ZodObject<z.ZodRawShape> = DefaultBulkResponseObj,
+>(
+	input?: Schema,
+): z.Schema<BulkResponse<Schema['_output']>> => {
+	const schema = input ?? z.object({}).catchall(z.unknown());
+	const errorSchema = schema.extend({ error: z.string() });
+	const bulkSchema = z.strictObject({
+		successful: z.array(schema),
+		failed: z.array(errorSchema),
+	});
+	return bulkSchema as z.Schema<BulkResponse<Schema['_output']>>;
 };
 
 export const dbMetaSchema = z.strictObject({

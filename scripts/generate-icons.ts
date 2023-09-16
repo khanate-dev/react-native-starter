@@ -4,7 +4,7 @@ import path from 'path';
 
 import { transform } from '@svgr/core';
 
-import { formatToken } from '~/helpers/string';
+import { formatToken } from '~/helpers/format-token.helpers';
 
 import type { Config } from '@svgr/core';
 

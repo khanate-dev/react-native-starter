@@ -1,8 +1,8 @@
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { events } from '~/helpers/events';
-import { removeSetting, setSetting } from '~/helpers/settings';
+import { events } from '~/helpers/events.helpers';
+import { removeSetting, setSetting } from '~/helpers/settings.helpers';
 
 import type { PropsWithChildren } from 'react';
 import type { LoggedInUser } from '~/schemas/user.schemas';

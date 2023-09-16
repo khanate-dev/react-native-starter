@@ -5,8 +5,8 @@ import {
 	getRequest,
 	postRequest,
 	putRequest,
-} from '~/helpers/api';
-import { omit } from '~/helpers/object';
+} from '~/helpers/api.helpers';
+import { omit } from '~/helpers/object.helpers';
 import {
 	mockToken,
 	mockedAdd,
@@ -16,7 +16,7 @@ import {
 } from '~/mocks';
 import { loggedInUserSchema, userSchema } from '~/schemas/user.schemas';
 
-import type { DbId } from '~/helpers/schema';
+import type { DbId } from '~/helpers/schema.helpers';
 import type { LoggedInUser, User, UserSansMeta } from '~/schemas/user.schemas';
 
 export const userEndpoints = {

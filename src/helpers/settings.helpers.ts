@@ -2,7 +2,7 @@ import * as SecureStore from 'expo-secure-store';
 import { z } from 'zod';
 
 import { stringifyError } from '~/errors';
-import { events } from '~/helpers/events';
+import { events } from '~/helpers/events.helpers';
 import { languages } from '~/i18n';
 import { loggedInUserSchema } from '~/schemas/user.schemas';
 

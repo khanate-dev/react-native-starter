@@ -8,7 +8,7 @@ import { appIconMap } from '~/components/app/icon.component';
 import { Button } from '~/components/controls/button.component';
 import { FormControlWrapper } from '~/components/controls/form-control-wrapper.component';
 import { isSmallerScreen } from '~/config';
-import { dayjsUtc } from '~/helpers/date';
+import { dayjsUtc } from '~/helpers/date.helpers';
 import { useTheme } from '~/hooks/theme.hook';
 
 import type { Dayjs } from 'dayjs';
@@ -24,7 +24,7 @@ import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/compo
 import type { z } from 'zod';
 import type { IconName } from '~/components/app/icon.component';
 import type { ButtonProps } from '~/components/controls/button.component';
-import type { ZodTime } from '~/helpers/schema';
+import type { ZodTime } from '~/helpers/schema.helpers';
 
 export const formControlType = [
 	'email',

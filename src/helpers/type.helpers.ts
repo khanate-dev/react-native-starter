@@ -1,5 +1,9 @@
 import { stringifyError } from '~/errors';
+import { createBulkResponseSchema } from '~/helpers/schema.helpers';
 
+import type { z } from 'zod';
+import type { BulkResponse } from '~/helpers/api.helpers';
+import type { DefaultBulkResponseObj } from '~/helpers/schema.helpers';
 import type { Utils } from '~/types/utils.types';
 
 export const readableTypeOf = (value: unknown) => {
@@ -39,4 +43,29 @@ export const assertArray: AssertArray = (value, checker) => {
 	} catch (error) {
 		throw new TypeError(`Invalid array member. ${stringifyError(error)}`);
 	}
+};
+
+export const excludeString = <
+	const T extends string | undefined,
+	const U extends string,
+>(
+	input: T,
+	excludeList: U | Readonly<U[]>,
+) => {
+	return (
+		(Array.isArray(excludeList) &&
+			excludeList.includes(input as unknown as U)) ||
+		(excludeList as string) === input
+			? undefined
+			: input
+	) as T extends U ? Exclude<T, U> | undefined : T;
+};
+
+export const isBulkResponse = <
+	Schema extends z.ZodObject<z.ZodRawShape> = DefaultBulkResponseObj,
+>(
+	value: unknown,
+	schema?: Schema,
+): value is BulkResponse<Schema['_output']> => {
+	return createBulkResponseSchema(schema).safeParse(value).success;
 };

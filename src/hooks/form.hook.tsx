@@ -4,15 +4,15 @@ import { z } from 'zod';
 
 import { shouldAutoFill } from '~/config';
 import { stringifyError } from '~/errors';
-import { dayjsUtc } from '~/helpers/date';
-import { objectEntries } from '~/helpers/object';
-import { humanizeToken } from '~/helpers/string';
+import { dayjsUtc } from '~/helpers/date.helpers';
+import { humanizeToken } from '~/helpers/humanize-token.helpers';
+import { objectEntries } from '~/helpers/object.helpers';
 
 import type { RefObject } from 'react';
 import type { TextInput } from 'react-native';
 import type { ButtonProps } from '~/components/controls/button.component';
 import type { AlertProps } from '~/components/feedback/alert.component';
-import type { ZodDate, ZodTime } from '~/helpers/schema';
+import type { ZodDate, ZodTime } from '~/helpers/schema.helpers';
 import type { Utils } from '~/types/utils.types';
 
 type fieldMap = {
@@ -75,7 +75,7 @@ const formDefaults: {
 	boolean: false,
 };
 
-type notRequired<T extends fieldZod> = T extends z.ZodNullable<any>
+type notRequired<T extends fieldZod> = T extends z.ZodNullable<z.ZodTypeAny>
 	? true
 	: T extends z.ZodBoolean
 	? true
@@ -113,6 +113,7 @@ type details<Zod extends validSchema> = {
 			: { next?: never });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type State<T extends details<any>> = {
 	values: { [k in keyof T]: workingTypeMap[T[k]['type']] };
 	status:
@@ -217,7 +218,7 @@ export const useForm = <
 			setTimeout(() => {
 				dispatch({ type: 'updateStatus', value: { type: 'idle' } });
 			}, 2500);
-		} catch (error: any) {
+		} catch (error) {
 			if (error instanceof z.ZodError) {
 				const fieldErrors = error.issues.reduce(
 					(object, err) => ({

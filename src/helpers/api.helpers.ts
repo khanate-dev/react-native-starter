@@ -1,10 +1,10 @@
 import { getNetworkStateAsync } from 'expo-network';
 import { z } from 'zod';
 
-import { disableAuth, isFetchMocked } from '~/config';
+import { backendPath, disableAuth, isFetchMocked } from '~/config';
 import { logout } from '~/contexts/auth.context';
 import { ApiError, AuthError, ConnectionError, stringifyError } from '~/errors';
-import { getSetting } from '~/helpers/settings';
+import { getSetting } from '~/helpers/settings.helpers';
 
 import type { Utils } from '~/types/utils.types';
 
@@ -34,9 +34,10 @@ const apiRequest = async <Response = unknown>(
 				throw new ConnectionError('not connected to the internet!');
 		}
 
-		const options: Omit<RequestInit, 'headers'> & {
-			headers: Headers;
-		} = { method, headers: new Headers() };
+		const options: Omit<RequestInit, 'headers'> & { headers: Headers } = {
+			method,
+			headers: new Headers(),
+		};
 
 		if (!isPublic && !disableAuth) {
 			const user = await getSetting('user');
@@ -51,7 +52,7 @@ const apiRequest = async <Response = unknown>(
 			options.body = body;
 		}
 
-		const response = await fetch(apiPath, options);
+		const response = await fetch(`${backendPath}/${apiPath}`, options);
 		if (response.status === 401) throw new AuthError('login expired!');
 
 		const result = responseSchema.safeParse(await response.json());
@@ -61,10 +62,7 @@ const apiRequest = async <Response = unknown>(
 		return data as Response;
 	} catch (error) {
 		if (error instanceof AuthError) logout();
-		if (error instanceof ApiError) throw error;
-		throw new ApiError(`fetch error: ${stringifyError(error)}`, {
-			cause: error,
-		});
+		throw error;
 	}
 };
 

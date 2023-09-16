@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { events } from '~/helpers/events';
-import { getSetting, setSetting } from '~/helpers/settings';
+import { events } from '~/helpers/events.helpers';
+import { getSetting, setSetting } from '~/helpers/settings.helpers';
 import { content, defaultLanguage } from '~/i18n';
 
 import type { PropsWithChildren, SetStateAction } from 'react';

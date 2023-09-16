@@ -4,10 +4,9 @@ import * as Sentry from 'sentry-expo';
 
 import type { App } from '~/types/app.types';
 
-const { env, backendApiEndpoint, sentry } = Constants.expoConfig
-	?.extra as App.env;
+const { env, backendPath, sentry } = Constants.expoConfig?.extra as App.env;
 
-export { backendApiEndpoint, env };
+export { backendPath, env };
 
 if (env === 'production') {
 	Sentry.init({

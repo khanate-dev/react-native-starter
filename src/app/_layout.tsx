@@ -11,7 +11,7 @@ import { AuthProvider } from '~/contexts/auth.context';
 import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode.context';
 import { I18nProvider } from '~/contexts/i18n.context';
 import { LoadingProvider } from '~/contexts/loading.context';
-import { getSetting } from '~/helpers/settings';
+import { getSetting } from '~/helpers/settings.helpers';
 import { darkTheme, lightTheme } from '~/theme';
 
 import type { Reducer } from 'react';
