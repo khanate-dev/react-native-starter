@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { z } from 'zod';
 
-import { getCatchMessage } from '~/errors';
+import { stringifyError } from '~/errors';
 import { events } from '~/helpers/events';
 import { languages } from '~/i18n';
 import { loggedInUserSchema } from '~/schemas/user.schemas';
@@ -27,7 +27,7 @@ export const removeSetting = async <Key extends keyof Settings>(
 	} catch (error) {
 		events.emit('addAlert', {
 			title: 'error removing from secure store',
-			text: getCatchMessage(error),
+			text: stringifyError(error),
 		});
 		return false;
 	}
@@ -45,7 +45,7 @@ export const getSetting = async <Key extends keyof Settings>(
 	} catch (error) {
 		events.emit('addAlert', {
 			title: 'error reading from secure store',
-			text: getCatchMessage(error),
+			text: stringifyError(error),
 		});
 		await removeSetting(key);
 		return null;
@@ -62,7 +62,7 @@ export const setSetting = async <Key extends keyof Settings>(
 	} catch (error) {
 		events.emit('addAlert', {
 			title: 'error writing to secure store',
-			text: getCatchMessage(error),
+			text: stringifyError(error),
 		});
 		return false;
 	}

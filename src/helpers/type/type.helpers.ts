@@ -1,4 +1,4 @@
-import { getCatchMessage } from '~/errors';
+import { stringifyError } from '~/errors';
 
 import type { Utils } from '~/types/utils.types';
 
@@ -37,6 +37,6 @@ export const assertArray: AssertArray = (value, checker) => {
 		if (!value.length || !checker) return;
 		value.forEach(checker);
 	} catch (error) {
-		throw new TypeError(`Invalid array member. ${getCatchMessage(error)}`);
+		throw new TypeError(`Invalid array member. ${stringifyError(error)}`);
 	}
 };

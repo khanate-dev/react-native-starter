@@ -3,12 +3,7 @@ import { z } from 'zod';
 
 import { disableAuth, isFetchMocked } from '~/config';
 import { logout } from '~/contexts/auth.context';
-import {
-	ApiError,
-	AuthError,
-	ConnectionError,
-	getCatchMessage,
-} from '~/errors';
+import { ApiError, AuthError, ConnectionError, stringifyError } from '~/errors';
 import { getSetting } from '~/helpers/settings';
 
 import type { Utils } from '~/types/utils.types';
@@ -67,7 +62,7 @@ const apiRequest = async <Response = unknown>(
 	} catch (error) {
 		if (error instanceof AuthError) logout();
 		if (error instanceof ApiError) throw error;
-		throw new ApiError(`fetch error: ${getCatchMessage(error)}`, {
+		throw new ApiError(`fetch error: ${stringifyError(error)}`, {
 			cause: error,
 		});
 	}
@@ -160,7 +155,7 @@ export const bulkPostRequest = async <Type extends Obj>(
 				.catch((error) =>
 					response.failed.push({
 						...row,
-						error: getCatchMessage(error),
+						error: stringifyError(error),
 					}),
 				);
 		}),

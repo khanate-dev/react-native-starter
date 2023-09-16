@@ -3,7 +3,7 @@ import { Keyboard } from 'react-native';
 import { z } from 'zod';
 
 import { shouldAutoFill } from '~/config';
-import { getCatchMessage } from '~/errors';
+import { stringifyError } from '~/errors';
 import { dayjsUtc } from '~/helpers/date';
 import { objectEntries } from '~/helpers/object';
 import { humanizeToken } from '~/helpers/string';
@@ -245,7 +245,7 @@ export const useForm = <
 					type: 'updateStatus',
 					value: {
 						type: 'error',
-						message: getCatchMessage(error),
+						message: stringifyError(error),
 						fieldErrors: {},
 					},
 				});
