@@ -9,7 +9,7 @@ import { Button } from '~/components/controls/button.component';
 import { FormControlWrapper } from '~/components/controls/form-control-wrapper.component';
 import { isSmallerScreen } from '~/config';
 import { dayjsUtc } from '~/helpers/date';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { Dayjs } from 'dayjs';
 import type { ForwardedRef, RefObject } from 'react';

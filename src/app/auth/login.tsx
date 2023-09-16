@@ -8,8 +8,8 @@ import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { login } from '~/contexts/auth.context';
 import { useI18n } from '~/contexts/i18n.context';
 import { endpoints } from '~/endpoints/endpoints';
-import { useForm } from '~/hooks/form';
-import { useTheme } from '~/hooks/theme';
+import { useForm } from '~/hooks/form.hook';
+import { useTheme } from '~/hooks/theme.hook';
 import { userSchema } from '~/schemas/user.schemas';
 
 const Login = () => {

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { App } from '~/types/app.types';
 

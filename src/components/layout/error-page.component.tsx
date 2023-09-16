@@ -6,7 +6,7 @@ import { Button } from '~/components/controls/button.component';
 import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { isSmallerScreen } from '~/config';
 import { useI18n } from '~/contexts/i18n.context';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 export type ErrorPageProps = {
 	/** the title of the error page */

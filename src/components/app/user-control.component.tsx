@@ -6,7 +6,7 @@ import { Icon } from '~/components/app/icon.component';
 import { Button } from '~/components/controls/button.component';
 import { logout, useUserOrNull } from '~/contexts/auth.context';
 import { useI18n } from '~/contexts/i18n.context';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 

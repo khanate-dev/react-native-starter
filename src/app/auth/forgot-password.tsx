@@ -11,7 +11,7 @@ import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
 import { isSmallerScreen } from '~/config';
 import { useI18n } from '~/contexts/i18n.context';
 import { wait } from '~/helpers/async';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { TextInput } from 'react-native';
 import type { Utils } from '~/types/utils.types';

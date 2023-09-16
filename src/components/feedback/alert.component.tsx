@@ -4,7 +4,7 @@ import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
 import { Icon } from '~/components/app/icon.component';
 import { IconButton } from '~/components/controls/icon-button.component';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { ThemeColor } from '~/theme';
 import type { App } from '~/types/app.types';

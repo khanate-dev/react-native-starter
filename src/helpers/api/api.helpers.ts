@@ -40,18 +40,18 @@ const apiRequest = async <Response = unknown>(
 		}
 
 		const options: Omit<RequestInit, 'headers'> & {
-			headers: Record<string, any>;
-		} = { method, headers: {} };
+			headers: Headers;
+		} = { method, headers: new Headers() };
 
 		if (!isPublic && !disableAuth) {
 			const user = await getSetting('user');
 			if (!user) throw new AuthError('user auth token not found!');
-			options.headers.Authorization = `Bearer ${user.token}`;
+			options.headers.set('Authorization', `Bearer ${user.token}`);
 		}
 
 		if (body && !(body instanceof FormData)) {
 			options.body = JSON.stringify(body);
-			options.headers['Content-Type'] = 'application/json';
+			options.headers.set('Content-Type', 'application/json');
 		} else {
 			options.body = body;
 		}

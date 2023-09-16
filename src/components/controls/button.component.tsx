@@ -2,7 +2,7 @@
 import { Button as Component } from 'react-native-paper';
 
 import { appIconMap } from '~/components/app/icon.component';
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 import type { ReactNode } from 'react';
 import type { ButtonProps as Props } from 'react-native-paper';

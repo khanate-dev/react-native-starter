@@ -1,6 +1,6 @@
 import { ActivityIndicator, Modal, Portal } from 'react-native-paper';
 
-import { useTheme } from '~/hooks/theme';
+import { useTheme } from '~/hooks/theme.hook';
 
 export const LoadingModal = () => {
 	const theme = useTheme();
