@@ -20,12 +20,11 @@
 		"noUnusedParameters": false,
 
 		// modules
-		"baseUrl": ".",
-		"module": "esnext",
-		"moduleResolution": "node",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
 		"paths": {
-			"~/*": ["src/*"]
+			"~/*": ["./src/*"]
 		},
 
 		// emit
@@ -47,6 +46,7 @@
 		"jsx": "react-native",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"target": "esnext",
+		"moduleDetection": "force",
 
 		// output formatting
 		"noErrorTruncation": true,
