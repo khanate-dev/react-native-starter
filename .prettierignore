@@ -7,3 +7,4 @@ build
 pnpm-lock.yaml
 yarn.lock
 package-lock.yaml
+trace

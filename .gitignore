@@ -40,3 +40,6 @@ coverage/
 
 expo-env.d.ts
 # @end expo-cli
+
+# typescript trace
+trace
