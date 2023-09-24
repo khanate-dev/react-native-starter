@@ -33,7 +33,7 @@ Build An Independent APK: `yarn expo build:android -t apk`
 
 Publish: `yarn expo publish`
 
-Convert svg icons to components: `yarn svgr`
+Convert svg icons to components: `yarn generate-icons`
 
 Lint the code: `yarn lint`
 

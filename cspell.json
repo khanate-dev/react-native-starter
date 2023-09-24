@@ -4,7 +4,8 @@
 		"dismissable",
 		"Millis",
 		"springify",
-		"typecheck"
+		"typecheck",
+		"xlink"
 	],
 	"ignorePaths": [
 		"package-lock.json",
@@ -19,6 +20,6 @@
 		"dist",
 		"public",
 		"trace",
-		"**/*.{mp3,otf}",
+		"**/*.{mp3,otf}"
 	]
 }
