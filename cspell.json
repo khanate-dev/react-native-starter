@@ -1,6 +1,9 @@
 {
 	"words": [
 		"datetime",
+		"dismissable",
+		"Millis",
+		"springify",
 		"typecheck"
 	],
 	"ignorePaths": [
@@ -16,6 +19,6 @@
 		"dist",
 		"public",
 		"trace",
-		"**/*.mp3"
+		"**/*.{mp3,otf}",
 	]
 }
