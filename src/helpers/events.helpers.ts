@@ -9,7 +9,6 @@ export type EventMap = {
 	login: LoggedInUser;
 	logout: undefined;
 	toggleDarkMode: undefined;
-	updateDarkMode: SetStateAction<boolean>;
 	addAlert: string | Error | AlertModalProps;
 	removeAlert: undefined;
 	setIsLoading: SetStateAction<boolean> | Promise<unknown>;
