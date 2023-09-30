@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { backendPath, disableAuth, isFetchMocked } from '~/config';
 import { logout } from '~/contexts/auth.context';
 import { ApiError, AuthError, ConnectionError, stringifyError } from '~/errors';
-import { getSetting } from '~/helpers/settings.helpers';
+import { getStorage } from '~/helpers/storage.helpers';
 
 import type { Utils } from '~/types/utils.types';
 
@@ -40,7 +40,7 @@ const apiRequest = async <Response = unknown>(
 		};
 
 		if (!isPublic && !disableAuth) {
-			const user = await getSetting('user');
+			const user = await getStorage('user');
 			if (!user) throw new AuthError('user auth token not found!');
 			options.headers.set('Authorization', `Bearer ${user.token}`);
 		}

@@ -14,11 +14,13 @@ const schemas = {
 
 type Schemas = typeof schemas;
 
-type Settings = {
-	[k in keyof Schemas]: z.infer<Schemas[k]>;
+export type StorageKey = keyof Schemas;
+
+export type StorageMap = {
+	[k in StorageKey]: z.infer<Schemas[k]>;
 };
 
-export const removeSetting = async <Key extends keyof Settings>(
+export const removeStorage = async <Key extends StorageKey>(
 	key: Key,
 ): Promise<boolean> => {
 	try {
@@ -33,9 +35,9 @@ export const removeSetting = async <Key extends keyof Settings>(
 	}
 };
 
-export const getSetting = async <Key extends keyof Settings>(
+export const getStorage = async <Key extends StorageKey>(
 	key: Key,
-): Promise<null | Settings[Key]> => {
+): Promise<null | StorageMap[Key]> => {
 	try {
 		const result = await SecureStore.getItemAsync(key);
 		if (!result) return null;
@@ -47,14 +49,14 @@ export const getSetting = async <Key extends keyof Settings>(
 			title: 'error reading from secure store',
 			text: stringifyError(error),
 		});
-		await removeSetting(key);
+		await removeStorage(key);
 		return null;
 	}
 };
 
-export const setSetting = async <Key extends keyof Settings>(
+export const setStorage = async <Key extends StorageKey>(
 	key: Key,
-	value: Settings[Key],
+	value: StorageMap[Key],
 ): Promise<boolean> => {
 	try {
 		await SecureStore.setItemAsync(key, JSON.stringify(value));
