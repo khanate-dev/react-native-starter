@@ -140,6 +140,7 @@ const config = {
 				destructuredArrayIgnorePattern: '^_',
 			},
 		],
+		'no-restricted-globals': ['warn', 'window'],
 
 		'@typescript-eslint/consistent-type-exports': 'warn',
 		'@typescript-eslint/consistent-type-imports': 'warn',
