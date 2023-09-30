@@ -8,7 +8,7 @@ import { Background } from '~/components/app/background.component';
 import { LanguageControl } from '~/components/app/language-control.component';
 import { UserControl } from '~/components/app/user-control.component';
 import { IconButton } from '~/components/controls/icon-button.component';
-import { toggleDarkMode, useDarkMode } from '~/contexts/dark-mode.context';
+import { toggleMode, useMode } from '~/contexts/mode.context';
 import { useTheme } from '~/hooks/theme.hook';
 
 import type { ReactNode } from 'react';
@@ -47,7 +47,7 @@ export const ScreenWrapper = ({
 }: ScreenWrapperProps) => {
 	const router = useRouter();
 	const theme = useTheme();
-	const isDarkMode = useDarkMode();
+	const mode = useMode();
 
 	const iconMargin = theme.rtl ? { marginRight: 0 } : { marginLeft: 0 };
 
@@ -99,9 +99,9 @@ export const ScreenWrapper = ({
 					<LanguageControl buttonStyle={iconMargin} />
 
 					<IconButton
-						icon={isDarkMode ? 'dark-mode' : 'light-mode'}
+						icon={`${mode.setting}-mode`}
 						style={iconMargin}
-						onPress={toggleDarkMode}
+						onPress={toggleMode}
 					/>
 				</View>
 

@@ -8,7 +8,7 @@ import type { LoggedInUser } from '~/schemas/user.schemas';
 export type EventMap = {
 	login: LoggedInUser;
 	logout: undefined;
-	toggleDarkMode: undefined;
+	toggleMode: undefined;
 	addAlert: string | Error | AlertModalProps;
 	removeAlert: undefined;
 	setIsLoading: SetStateAction<boolean> | Promise<unknown>;

@@ -7,15 +7,15 @@ import { PaperProvider } from 'react-native-paper';
 
 import { env } from '~/config';
 import { AlertProvider, addAlert } from '~/contexts/alert.context';
-import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode.context';
 import { I18nProvider } from '~/contexts/i18n.context';
 import { LoadingProvider } from '~/contexts/loading.context';
+import { ModeProvider, useMode } from '~/contexts/mode.context';
 import { darkTheme, lightTheme } from '~/theme';
 
 SplashScreen.preventAutoHideAsync();
 
 const Providers = () => {
-	const isDarkMode = useDarkMode();
+	const mode = useMode();
 
 	const [loaded, setLoaded] = useState(false);
 
@@ -35,7 +35,7 @@ const Providers = () => {
 
 	return (
 		<I18nProvider>
-			<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
+			<PaperProvider theme={mode.scheme === 'dark' ? darkTheme : lightTheme}>
 				<AlertProvider>
 					<LoadingProvider>
 						<StatusBar
@@ -76,9 +76,9 @@ const RootLayout = () => {
 	}, []);
 
 	return (
-		<DarkModeProvider>
+		<ModeProvider>
 			<Providers />
-		</DarkModeProvider>
+		</ModeProvider>
 	);
 };
 
