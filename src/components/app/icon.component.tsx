@@ -13,6 +13,7 @@ export const appIconMap = {
 	'user-account': 'account-circle-outline',
 	'light-mode': 'white-balance-sunny',
 	'dark-mode': 'weather-night',
+	'system-mode': 'theme-light-dark',
 	'arrow-back': 'arrow-left-circle-outline',
 	'arrow-next': 'arrow-right-circle-outline',
 	'arrow-up': 'arrow-up-circle-outline',
