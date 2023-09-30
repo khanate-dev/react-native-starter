@@ -2,10 +2,17 @@ import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { events } from '~/helpers/events.helpers';
-import { removeStorage, setStorage } from '~/helpers/storage.helpers';
+import { createStore } from '~/helpers/store.helpers';
+import { loggedInUserSchema } from '~/schemas/user.schemas';
 
 import type { PropsWithChildren } from 'react';
 import type { LoggedInUser } from '~/schemas/user.schemas';
+
+export const authStore = createStore({
+	key: 'user',
+	schema: loggedInUserSchema,
+	secureStore: true,
+});
 
 const UserContext = createContext<null | LoggedInUser>(null);
 
@@ -22,13 +29,13 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 
 	useEffect(() => {
 		const loginListener = events.listen('login', async (newUser) => {
-			const added = await setStorage('user', newUser);
+			const added = await authStore.set(newUser);
 			if (!added) return;
 			setUser(newUser);
 		});
 
 		const logoutListener = events.listen('logout', async () => {
-			const removed = await removeStorage('user');
+			const removed = await authStore.remove();
 			if (!removed) return;
 			setUser(null);
 		});

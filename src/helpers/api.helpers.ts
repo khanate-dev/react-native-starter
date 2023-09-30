@@ -2,9 +2,8 @@ import { getNetworkStateAsync } from 'expo-network';
 import { z } from 'zod';
 
 import { backendPath, disableAuth, isFetchMocked } from '~/config';
-import { logout } from '~/contexts/auth.context';
+import { authStore, logout } from '~/contexts/auth.context';
 import { ApiError, AuthError, ConnectionError, stringifyError } from '~/errors';
-import { getStorage } from '~/helpers/storage.helpers';
 
 import type { Utils } from '~/types/utils.types';
 
@@ -40,7 +39,7 @@ const apiRequest = async <Response = unknown>(
 		};
 
 		if (!isPublic && !disableAuth) {
-			const user = await getStorage('user');
+			const user = await authStore.get();
 			if (!user) throw new AuthError('user auth token not found!');
 			options.headers.set('Authorization', `Bearer ${user.token}`);
 		}

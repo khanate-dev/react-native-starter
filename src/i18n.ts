@@ -1,6 +1,10 @@
 /* cSpell: disable */
 
+import { z } from 'zod';
+
 export const languages = ['english', 'urdu'] as const;
+
+export const languageSchema = z.enum(languages);
 
 export type Language = (typeof languages)[number];
 

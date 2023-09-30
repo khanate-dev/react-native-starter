@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
 
-import { getStorage } from '~/helpers/storage.helpers';
-
 import { useAsyncState } from './async-state.hook';
 
-import type { StorageKey, StorageMap } from '~/helpers/storage.helpers';
+import type { z } from 'zod';
+import type { Store } from '~/helpers/store.helpers';
 
-export const useStorage = <T extends StorageKey>(
-	key: T,
-	defaultValue?: StorageMap[T],
+export const useStorage = <
+	Schema extends z.ZodSchema,
+	Default extends Schema['_output'] = never,
+>(
+	store: Store<Schema, Default>,
 ) => {
-	const [state, setState] = useAsyncState<StorageMap[T]>(defaultValue);
+	const [state, setState] = useAsyncState<Awaited<Schema['_output']>>(
+		store.defaultVal,
+	);
 
 	useEffect(() => {
-		getStorage(key).then(setState);
-	}, [key, setState]);
+		store.get().then(setState);
+	}, [store, setState]);
 
 	return [state, setState] as const;
 };
