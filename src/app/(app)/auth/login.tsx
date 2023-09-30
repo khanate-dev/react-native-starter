@@ -21,7 +21,7 @@ const Login = () => {
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, password: true }),
 		details: {
-			email: { type: 'email', next: 'password', default: '' },
+			email: { type: 'email', next: 'password' },
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {

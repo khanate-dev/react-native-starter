@@ -22,7 +22,7 @@ export const createMockedData = <T extends DbMeta>(
 export const mockData = {
 	user: createMockedData<User>([
 		{
-			email: 'testing@test.com' as User['email'],
+			email: 'testing@test.com',
 			name: 'test',
 			password: '12345',
 			image_url: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12',

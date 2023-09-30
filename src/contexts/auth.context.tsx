@@ -21,7 +21,7 @@ type AuthProviderProps = PropsWithChildren<{
 }>;
 
 export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
-	const rootSegment = useSegments()[0];
+	const rootSegment = useSegments()[1];
 	const router = useRouter();
 	const rootNavigationState = useRootNavigation();
 
@@ -47,7 +47,7 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 	}, []);
 
 	useEffect(() => {
-		if (rootSegment === undefined || rootSegment === '[...404]') return;
+		if (rootSegment === '[...404]') return;
 		if (!user && rootSegment !== 'auth') router.replace('/auth/');
 		else if (user && rootSegment === 'auth') router.replace('/');
 	}, [rootNavigationState, router, user, rootSegment]);
