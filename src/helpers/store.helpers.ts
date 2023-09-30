@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
-import { z } from 'zod';
 
-import { stringifyError } from '~/errors';
+import type { z } from 'zod';
 
-import { events } from './events.helpers';
+
 
 const storeMethodsMap = {
 	secure: {
@@ -64,13 +63,7 @@ export const createStore = <
 				const string = await store.get(key);
 				if (!string) throw new Error('not found');
 				return schema.parse(JSON.parse(string)) as never;
-			} catch (error) {
-				if (!(error instanceof z.ZodError)) {
-					events.emit('addAlert', {
-						title: 'error reading from secure store',
-						text: stringifyError(error),
-					});
-				}
+			} catch {
 				if (defaultVal !== undefined) {
 					await store.set(key, JSON.stringify(defaultVal));
 					return defaultVal as never;
@@ -83,11 +76,7 @@ export const createStore = <
 			try {
 				await store.set(key, JSON.stringify(value));
 				return true;
-			} catch (error) {
-				events.emit('addAlert', {
-					title: 'error writing to secure store',
-					text: stringifyError(error),
-				});
+			} catch {
 				return false;
 			}
 		},
@@ -97,11 +86,7 @@ export const createStore = <
 					? store.set(key, JSON.stringify(defaultVal))
 					: store.remove(key));
 				return true;
-			} catch (error) {
-				events.emit('addAlert', {
-					title: 'error removing from secure store',
-					text: stringifyError(error),
-				});
+			} catch {
 				return false;
 			}
 		},
