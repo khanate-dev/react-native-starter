@@ -2,7 +2,7 @@ import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { events } from '~/helpers/events.helpers';
-import { removeSetting, setSetting } from '~/helpers/settings.helpers';
+import { removeStorage, setStorage } from '~/helpers/storage.helpers';
 
 import type { PropsWithChildren } from 'react';
 import type { LoggedInUser } from '~/schemas/user.schemas';
@@ -22,13 +22,13 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 
 	useEffect(() => {
 		const loginListener = events.listen('login', async (newUser) => {
-			const added = await setSetting('user', newUser);
+			const added = await setStorage('user', newUser);
 			if (!added) return;
 			setUser(newUser);
 		});
 
 		const logoutListener = events.listen('logout', async () => {
-			const removed = await removeSetting('user');
+			const removed = await removeStorage('user');
 			if (!removed) return;
 			setUser(null);
 		});
@@ -40,10 +40,6 @@ export const AuthProvider = ({ defaultUser, children }: AuthProviderProps) => {
 	}, []);
 
 	useEffect(() => {
-		// TODO Remove this after expo router fixes #740
-		// https://github.com/expo/router/issues/740
-		if (!rootNavigationState) return;
-
 		if (rootSegment === undefined || rootSegment === '[...404]') return;
 		if (!user && rootSegment !== 'auth') router.replace('/auth/');
 		else if (user && rootSegment === 'auth') router.replace('/');

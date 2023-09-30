@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Appearance } from 'react-native';
 
 import { events } from '~/helpers/events.helpers';
-import { getSetting, setSetting } from '~/helpers/settings.helpers';
+import { getStorage, setStorage } from '~/helpers/storage.helpers';
 
 import type { PropsWithChildren, SetStateAction } from 'react';
 
@@ -17,7 +17,7 @@ export const DarkModeProvider = ({ children }: PropsWithChildren) => {
 		const toggleListener = events.listen('toggleDarkMode', () => {
 			setIsDarkMode((prev) => {
 				const newIsDarkMode = !prev;
-				setSetting('isDarkMode', newIsDarkMode);
+				setStorage('isDarkMode', newIsDarkMode);
 				return newIsDarkMode;
 			});
 		});
@@ -25,13 +25,13 @@ export const DarkModeProvider = ({ children }: PropsWithChildren) => {
 		const updateListener = events.listen('updateDarkMode', (value) => {
 			setIsDarkMode((prev) => {
 				const newIsDarkMode = typeof value === 'boolean' ? value : value(prev);
-				setSetting('isDarkMode', newIsDarkMode);
+				setStorage('isDarkMode', newIsDarkMode);
 				return newIsDarkMode;
 			});
 		});
 
 		(async () => {
-			setIsDarkMode((await getSetting('isDarkMode')) ?? prefersDarkMode);
+			setIsDarkMode((await getStorage('isDarkMode')) ?? prefersDarkMode);
 		})();
 
 		Appearance.addChangeListener(({ colorScheme }) => {

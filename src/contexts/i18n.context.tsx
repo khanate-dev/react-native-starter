@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { events } from '~/helpers/events.helpers';
-import { getSetting, setSetting } from '~/helpers/settings.helpers';
+import { getStorage, setStorage } from '~/helpers/storage.helpers';
 import { content, defaultLanguage } from '~/i18n';
 
 import type { PropsWithChildren, SetStateAction } from 'react';
@@ -16,13 +16,13 @@ export const I18nProvider = ({ children }: PropsWithChildren) => {
 		const updateListener = events.listen('updateLanguage', (value) => {
 			setLanguage((prev) => {
 				const newLanguage = typeof value === 'function' ? value(prev) : value;
-				setSetting('language', newLanguage);
+				setStorage('language', newLanguage);
 				return newLanguage;
 			});
 		});
 
 		(async () => {
-			setLanguage((await getSetting('language')) ?? defaultLanguage);
+			setLanguage((await getStorage('language')) ?? defaultLanguage);
 		})();
 
 		return () => {

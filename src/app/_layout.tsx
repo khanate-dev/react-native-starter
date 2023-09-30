@@ -2,62 +2,47 @@ import { loadAsync } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
 import { env } from '~/config';
 import { AlertProvider, addAlert } from '~/contexts/alert.context';
-import { AuthProvider } from '~/contexts/auth.context';
 import { DarkModeProvider, useDarkMode } from '~/contexts/dark-mode.context';
 import { I18nProvider } from '~/contexts/i18n.context';
 import { LoadingProvider } from '~/contexts/loading.context';
-import { getSetting } from '~/helpers/settings.helpers';
 import { darkTheme, lightTheme } from '~/theme';
 
-import type { Reducer } from 'react';
-import type { LoggedInUser } from '~/schemas/user.schemas';
-
 SplashScreen.preventAutoHideAsync();
-
-type State = { loaded: false } | { loaded: true; user: null | LoggedInUser };
 
 const Providers = () => {
 	const isDarkMode = useDarkMode();
 
-	const [state, dispatch] = useReducer<Reducer<State, null | LoggedInUser>>(
-		(_, user) => ({ loaded: true, user }),
-		{ loaded: false },
-	);
+	const [loaded, setLoaded] = useState(false);
 
 	useEffect(() => {
-		Promise.all([
-			getSetting('user'),
-			loadAsync({
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				InterRegular: require('~/assets/fonts/inter-regular.otf') as string,
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				InterBold: require('~/assets/fonts/inter-bold.otf') as string,
-			}),
-		]).then(([user]) => {
-			dispatch(user);
+		loadAsync({
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			InterRegular: require('~/assets/fonts/inter-regular.otf') as string,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			InterBold: require('~/assets/fonts/inter-bold.otf') as string,
+		}).then(() => {
+			setLoaded(true);
 			SplashScreen.hideAsync();
 		});
 	}, []);
 
-	if (!state.loaded) return null;
+	if (!loaded) return null;
 
 	return (
 		<I18nProvider>
 			<PaperProvider theme={isDarkMode ? darkTheme : lightTheme}>
 				<AlertProvider>
 					<LoadingProvider>
-						<AuthProvider defaultUser={state.user}>
-							<StatusBar
-								style='light'
-								backgroundColor='#000000'
-							/>
-							<Slot />
-						</AuthProvider>
+						<StatusBar
+							style='light'
+							backgroundColor='#000000'
+						/>
+						<Slot />
 					</LoadingProvider>
 				</AlertProvider>
 			</PaperProvider>
