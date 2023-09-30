@@ -4,7 +4,7 @@ import type { Reducer } from 'react';
 
 export type AsyncState<T> =
 	| [isLoading: true, value: null]
-	| [isLoading: false, value: T];
+	| [isLoading: false, value: T | null];
 
 export type AsyncSetter<T> = T | null | ((prev: T | null) => T | null);
 
@@ -17,7 +17,7 @@ export const useAsyncState = <
 		(state, action) => {
 			const value =
 				typeof action === 'function' ? (action(state[1]) as T | null) : action;
-			return value ? [false, value] : [true, null];
+			return [false, value];
 		},
 		initialValue ? [false, initialValue] : [true, null],
 	);
