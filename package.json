@@ -1,6 +1,12 @@
 {
 	"name": "react-native-starter",
 	"version": "1.0.0",
+	"author": {
+		"name": "Khanate",
+		"email": "dev@khanate.pk",
+		"url": "https://khanate.pk"
+	},
+	"license": "MIT",
 	"main": "expo-router/entry",
 	"scripts": {
 		"start": "expo start",
@@ -92,6 +98,5 @@
 		"ts-jest": "^29.1.1",
 		"tsx": "^3.13.0",
 		"typescript": "^5.2.2"
-	},
-	"private": true
+	}
 }
