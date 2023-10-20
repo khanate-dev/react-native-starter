@@ -1,8 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import { Appearance } from 'react-native';
+import { z } from 'zod';
 
 import { events } from '~/helpers/events.helpers';
+import { createStore } from '~/helpers/store.helpers';
 
 import type { PropsWithChildren, Reducer } from 'react';
 
@@ -12,9 +13,12 @@ export type Mode = (typeof modes)[number];
 
 export type ModeState = { setting: Mode; scheme: Exclude<Mode, 'system'> };
 
-const isMode = (val: unknown): val is Mode => {
-	return modes.includes(String(val));
-};
+const modeStore = createStore({
+	key: 'mode',
+	secureStore: false,
+	schema: z.enum(modes),
+	defaultVal: 'system',
+});
 
 const defaultModeState: ModeState = {
 	setting: 'system',
@@ -40,26 +44,18 @@ export const ModeProvider = ({ children }: PropsWithChildren) => {
 			dispatch((prev) => {
 				const newMode =
 					prev === 'system' ? 'light' : prev === 'light' ? 'dark' : 'system';
-				AsyncStorage.setItem('mode', newMode);
+				modeStore.set(newMode);
 				return newMode;
 			});
 		});
 
 		(async () => {
-			const stored = await AsyncStorage.getItem('mode');
-			if (!isMode(stored)) {
-				await AsyncStorage.setItem('mode', 'system');
-				dispatch('system');
-				return;
-			}
-			dispatch(stored);
+			dispatch(await modeStore.get());
 		})();
 
-		const appearanceListener = Appearance.addChangeListener(
-			({ colorScheme }) => {
-				dispatch(colorScheme ?? 'light');
-			},
-		);
+		const appearanceListener = Appearance.addChangeListener(() => {
+			dispatch('system');
+		});
 
 		return () => {
 			toggleListener.remove();
