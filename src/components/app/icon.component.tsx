@@ -43,7 +43,7 @@ export const appIconMap = {
 	checked: 'check-circle',
 } as const;
 
-type _ =
+type invalidIcons =
 	//   ^?
 	keyof {
 		[k in keyof typeof appIconMap as (typeof appIconMap)[k] extends map
@@ -51,7 +51,7 @@ type _ =
 			: k]: true;
 	};
 
-z.util.assertEqual<_, never>(true);
+z.util.assertEqual<invalidIcons, never>(true);
 
 export type IconName = keyof typeof appIconMap;
 
