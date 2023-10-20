@@ -5,9 +5,9 @@ import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
 import { Background } from '~/components/app/background.component';
-import { LanguageControl } from '~/components/app/language-control.component';
 import { UserControl } from '~/components/app/user-control.component';
 import { IconButton } from '~/components/controls/icon-button.component';
+import { LanguageControl } from '~/components/controls/language-control.component';
 import { toggleMode, useMode } from '~/contexts/mode.context';
 import { useTheme } from '~/hooks/theme.hook';
 
