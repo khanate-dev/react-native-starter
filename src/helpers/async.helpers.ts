@@ -7,3 +7,13 @@ export const wait = async (ms: number) => {
 		setTimeout(resolve, ms);
 	});
 };
+
+/**
+ * Wrap a value in a promise.
+ * @param val the value to wrap in a promise
+ */
+export const promisify = async <const T>(val: T) => {
+	return new Promise<T>((resolve) => {
+		resolve(val);
+	});
+};
