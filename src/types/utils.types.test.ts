@@ -3,6 +3,8 @@ import type { Utils } from './utils.types.js';
 type trueTuple<T extends true[]> = T[number] extends true ? true : false;
 type falseTuple<T extends false[]> = T[number] extends false ? true : false;
 
+declare function assertType<T>(val: T): void;
+
 test('test prettify type util', () => {
 	type tests = trueTuple<
 		[
