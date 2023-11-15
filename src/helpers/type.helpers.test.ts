@@ -3,14 +3,14 @@
 import { z } from 'zod';
 
 import {
-	assertArray,
-	assertObject,
-	isArray,
-	isObject,
-	readableTypeOf,
+    assertArray,
+    assertObject,
+    isArray,
+    isObject,
+    readableTypeOf,
 } from './type.helpers';
 
-import type { Utils } from '~/types/utils.types';
+import type { Utils } from '../types/utils.types';
 
 const isNumber = (value: unknown): value is number => typeof value === 'number';
 

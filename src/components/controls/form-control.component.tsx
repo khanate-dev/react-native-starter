@@ -4,27 +4,27 @@ import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
-import { appIconMap } from '~/components/app/icon.component';
-import { Button } from '~/components/controls/button.component';
-import { FormControlWrapper } from '~/components/controls/form-control-wrapper.component';
-import { isSmallerScreen } from '~/config';
-import { dayjsUtc } from '~/helpers/date.helpers';
-import { useTheme } from '~/hooks/theme.hook';
+import { appIconMap } from '../../components/app/icon.component';
+import { Button } from '../../components/controls/button.component';
+import { FormControlWrapper } from '../../components/controls/form-control-wrapper.component';
+import { isSmallerScreen } from '../../config';
+import { dayjsUtc } from '../../helpers/date.helpers';
+import { useTheme } from '../../hooks/theme.hook';
 
 import type { Dayjs } from 'dayjs';
 import type { ForwardedRef, RefObject } from 'react';
 import type {
-	KeyboardTypeOptions,
-	TextInput as RefType,
-	StyleProp,
-	ViewStyle,
+    KeyboardTypeOptions,
+    TextInput as RefType,
+    StyleProp,
+    ViewStyle,
 } from 'react-native';
 import type { TextInputProps } from 'react-native-paper';
 import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/components/TextInput/types';
 import type { z } from 'zod';
-import type { IconName } from '~/components/app/icon.component';
-import type { ButtonProps } from '~/components/controls/button.component';
-import type { ZodTime } from '~/helpers/schema.helpers';
+import type { IconName } from '../../components/app/icon.component';
+import type { ButtonProps } from '../../components/controls/button.component';
+import type { ZodTime } from '../../helpers/schema.helpers';
 
 export const formControlType = [
 	'email',

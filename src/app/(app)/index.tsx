@@ -1,7 +1,7 @@
-import { Button } from '~/components/controls/button.component';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
-import { logout } from '~/contexts/auth.context';
-import { useI18n } from '~/contexts/i18n.context';
+import { Button } from '../../components/controls/button.component';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component';
+import { logout } from '../../contexts/auth.context';
+import { useI18n } from '../../contexts/i18n.context';
 
 const App = () => {
 	const { content } = useI18n();

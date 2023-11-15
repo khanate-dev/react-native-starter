@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAsyncState } from './async-state.hook';
 
 import type { z } from 'zod';
-import type { Store } from '~/helpers/store.helpers';
+import type { Store } from '../helpers/store.helpers';
 
 export const useStorage = <
 	Schema extends z.ZodSchema,

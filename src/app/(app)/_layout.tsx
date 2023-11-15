@@ -1,7 +1,7 @@
 import { Slot } from 'expo-router';
 
-import { AuthProvider, authStore } from '~/contexts/auth.context';
-import { useStorage } from '~/hooks/storage.hook';
+import { AuthProvider, authStore } from '../../contexts/auth.context';
+import { useStorage } from '../../hooks/storage.hook';
 
 const RootLayout = () => {
 	const [[isLoading, user]] = useStorage(authStore);

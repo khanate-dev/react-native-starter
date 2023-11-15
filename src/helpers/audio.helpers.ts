@@ -1,6 +1,6 @@
 import { Audio } from 'expo-av';
 
-import notification from '~/assets/audios/notification.mp3';
+import notification from '../assets/audios/notification.mp3';
 
 import type { AVPlaybackStatusSuccess } from 'expo-av';
 

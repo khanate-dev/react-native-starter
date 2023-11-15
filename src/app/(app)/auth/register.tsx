@@ -1,15 +1,15 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { Button } from '~/components/controls/button.component';
-import { FormControl } from '~/components/controls/form-control.component';
-import { Alert } from '~/components/feedback/alert.component';
-import { ScreenWrapper } from '~/components/layout/screen-wrapper.component';
-import { useI18n } from '~/contexts/i18n.context';
-import { endpoints } from '~/endpoints/endpoints';
-import { useForm } from '~/hooks/form.hook';
-import { useTheme } from '~/hooks/theme.hook';
-import { userSchema } from '~/schemas/user.schemas';
+import { Button } from '../../../components/controls/button.component';
+import { FormControl } from '../../../components/controls/form-control.component';
+import { Alert } from '../../../components/feedback/alert.component';
+import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component';
+import { useI18n } from '../../../contexts/i18n.context';
+import { endpoints } from '../../../endpoints/endpoints';
+import { useForm } from '../../../hooks/form.hook';
+import { useTheme } from '../../../hooks/theme.hook';
+import { userSchema } from '../../../schemas/user.schemas';
 
 const Register = () => {
 	const theme = useTheme();

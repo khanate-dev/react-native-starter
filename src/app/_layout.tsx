@@ -5,12 +5,12 @@ import * as Updates from 'expo-updates';
 import { useEffect, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
-import { env } from '~/config';
-import { AlertProvider, addAlert } from '~/contexts/alert.context';
-import { I18nProvider } from '~/contexts/i18n.context';
-import { LoadingProvider } from '~/contexts/loading.context';
-import { ModeProvider, useMode } from '~/contexts/mode.context';
-import { darkTheme, lightTheme } from '~/theme';
+import { env } from '../config';
+import { AlertProvider, addAlert } from '../contexts/alert.context';
+import { I18nProvider } from '../contexts/i18n.context';
+import { LoadingProvider } from '../contexts/loading.context';
+import { ModeProvider, useMode } from '../contexts/mode.context';
+import { darkTheme, lightTheme } from '../theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,9 +22,9 @@ const Providers = () => {
 	useEffect(() => {
 		loadAsync({
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			InterRegular: require('~/assets/fonts/inter-regular.otf') as string,
+			InterRegular: require('../assets/fonts/inter-regular.otf') as string,
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			InterBold: require('~/assets/fonts/inter-bold.otf') as string,
+			InterBold: require('../assets/fonts/inter-bold.otf') as string,
 		}).then(() => {
 			setLoaded(true);
 			SplashScreen.hideAsync();

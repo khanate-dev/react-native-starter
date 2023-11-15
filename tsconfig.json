@@ -23,9 +23,6 @@
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"resolveJsonModule": true,
-		"paths": {
-			"~/*": ["./src/*"]
-		},
 
 		// emit
 		"downlevelIteration": true,

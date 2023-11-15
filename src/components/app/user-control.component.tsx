@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Image, View } from 'react-native';
 import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
-import { Icon } from '~/components/app/icon.component';
-import { Button } from '~/components/controls/button.component';
-import { logout, useUserOrNull } from '~/contexts/auth.context';
-import { useI18n } from '~/contexts/i18n.context';
-import { useTheme } from '~/hooks/theme.hook';
+import { Icon } from "./icon.component";
+
+import { logout, useUserOrNull } from '../../contexts/auth.context';
+import { useI18n } from '../../contexts/i18n.context';
+import { useTheme } from '../../hooks/theme.hook';
+import { Button } from "../controls/button.component";
 
 import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 

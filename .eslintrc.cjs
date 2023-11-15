@@ -58,12 +58,6 @@ const config = {
 		'no-octal-escape': 'warn',
 		'no-param-reassign': 'warn',
 		'no-promise-executor-return': 'warn',
-		'no-restricted-imports': [
-			'error',
-			{
-				patterns: [{ group: ['../*'], message: 'Do not use parent imports' }],
-			},
-		],
 		'no-restricted-syntax': [
 			'error',
 			{

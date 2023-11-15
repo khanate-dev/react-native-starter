@@ -1,12 +1,12 @@
 import { Button as Component } from 'react-native-paper';
 
-import { appIconMap } from '~/components/app/icon.component';
-import { useTheme } from '~/hooks/theme.hook';
+import { appIconMap } from '../../components/app/icon.component';
+import { useTheme } from '../../hooks/theme.hook';
 
 import type { ReactNode } from 'react';
 import type { ButtonProps as Props } from 'react-native-paper';
-import type { IconName } from '~/components/app/icon.component';
-import type { ThemeColor } from '~/theme';
+import type { IconName } from '../../components/app/icon.component';
+import type { ThemeColor } from '../../theme';
 
 export type ButtonProps = Omit<Props, 'icon' | 'children'> & {
 	/** the label to show on the button */

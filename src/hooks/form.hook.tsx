@@ -2,18 +2,18 @@ import { useReducer, useRef } from 'react';
 import { Keyboard } from 'react-native';
 import { z } from 'zod';
 
-import { shouldAutoFill } from '~/config';
-import { stringifyError } from '~/errors';
-import { dayjsUtc } from '~/helpers/date.helpers';
-import { humanizeToken } from '~/helpers/humanize-token.helpers';
-import { objectEntries } from '~/helpers/object.helpers';
+import { shouldAutoFill } from '../config';
+import { stringifyError } from '../errors';
+import { dayjsUtc } from '../helpers/date.helpers';
+import { humanizeToken } from '../helpers/humanize-token.helpers';
+import { objectEntries } from '../helpers/object.helpers';
 
 import type { RefObject } from 'react';
 import type { TextInput } from 'react-native';
-import type { ButtonProps } from '~/components/controls/button.component';
-import type { AlertProps } from '~/components/feedback/alert.component';
-import type { ZodDate, ZodTime } from '~/helpers/schema.helpers';
-import type { Utils } from '~/types/utils.types';
+import type { ButtonProps } from '../components/controls/button.component';
+import type { AlertProps } from '../components/feedback/alert.component';
+import type { ZodDate, ZodTime } from '../helpers/schema.helpers';
+import type { Utils } from '../types/utils.types';
 
 type fieldMap = {
 	string: z.ZodString;

@@ -65,10 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	orientation: 'portrait',
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'automatic',
-	experiments: {
-		typedRoutes: true,
-		tsconfigPaths: true,
-	},
+	experiments: {typedRoutes: true,},
 	extra: {
 		...extra,
 		eas: {

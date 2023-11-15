@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { events } from '~/helpers/events.helpers';
-import { createStore } from '~/helpers/store.helpers';
-import { content, defaultLanguage, languageSchema } from '~/i18n';
+import { events } from '../helpers/events.helpers';
+import { createStore } from '../helpers/store.helpers';
+import { content, defaultLanguage, languageSchema } from '../i18n';
 
 import type { PropsWithChildren, SetStateAction } from 'react';
-import type { Language } from '~/i18n';
+import type { Language } from '../i18n';
 
 const languageStore = createStore({
 	key: 'language',
