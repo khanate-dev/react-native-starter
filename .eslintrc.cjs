@@ -92,11 +92,7 @@ const config = {
 		yoda: 'warn',
 
 		'import/consistent-type-specifier-style': ['warn', 'prefer-top-level'],
-		'import/extensions': [
-			'warn',
-			'never',
-			{ helpers: 'always', json: 'always', styles: 'always', test: 'always' },
-		],
+		'import/extensions': ['warn', 'ignorePackages'],
 		'import/first': 'warn',
 		'import/newline-after-import': 'warn',
 		'import/no-commonjs': 'warn',

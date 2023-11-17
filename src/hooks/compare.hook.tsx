@@ -1,5 +1,6 @@
-import { objectKeys } from '../helpers/object.helpers';
-import { usePrevious } from '../hooks/previous.hook';
+import { usePrevious } from './previous.hook.tsx';
+
+import { objectKeys } from '../helpers/object.helpers.ts';
 
 /** checks if the given value has changed */
 export const useCompare = <T extends unknown>(valueToCheck: T): boolean => {

@@ -1,15 +1,15 @@
 import { DeviceEventEmitter, Dimensions, ScrollView, View } from 'react-native';
 import { Dialog, Portal, Text } from 'react-native-paper';
 
-import { Icon } from '../../components/app/icon.component';
-import { Button } from '../../components/controls/button.component';
-import { isSmallerScreen } from '../../config';
-import { useI18n } from '../../contexts/i18n.context';
-import { useTheme } from '../../hooks/theme.hook';
+import { isSmallerScreen } from '../../config.ts';
+import { useI18n } from '../../contexts/i18n.context.tsx';
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { Icon } from '../app/icon.component.tsx';
+import { Button } from '../controls/button.component.tsx';
 
 import type { DialogProps } from 'react-native-paper';
-import type { ButtonProps } from '../../components/controls/button.component';
 import type { ThemeColor } from '../../theme';
+import type { ButtonProps } from '../controls/button.component.tsx';
 
 export type AlertModalProps = Pick<
 	DialogProps,

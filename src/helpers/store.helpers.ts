@@ -3,8 +3,6 @@ import * as SecureStore from 'expo-secure-store';
 
 import type { z } from 'zod';
 
-
-
 const storeMethodsMap = {
 	secure: {
 		get: SecureStore.getItemAsync,

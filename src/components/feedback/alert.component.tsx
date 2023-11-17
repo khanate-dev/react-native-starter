@@ -2,12 +2,12 @@ import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
-import { Icon } from '../../components/app/icon.component';
-import { IconButton } from '../../components/controls/icon-button.component';
-import { useTheme } from '../../hooks/theme.hook';
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { Icon } from '../app/icon.component.tsx';
+import { IconButton } from '../controls/icon-button.component.tsx';
 
 import type { ThemeColor } from '../../theme';
-import type { App } from '../../types/app.types';
+import type { App } from '../../types/app.types.ts';
 
 export type AlertProps = App.propsWithStyle<{
 	/** the title of the alert. Omitting this prop will not render a title */

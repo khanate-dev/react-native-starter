@@ -1,16 +1,16 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { Button } from '../../../components/controls/button.component';
-import { FormControl } from '../../../components/controls/form-control.component';
-import { Alert } from '../../../components/feedback/alert.component';
-import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component';
-import { login } from '../../../contexts/auth.context';
-import { useI18n } from '../../../contexts/i18n.context';
-import { endpoints } from '../../../endpoints/endpoints';
-import { useForm } from '../../../hooks/form.hook';
-import { useTheme } from '../../../hooks/theme.hook';
-import { userSchema } from '../../../schemas/user.schemas';
+import { Button } from '../../../components/controls/button.component.tsx';
+import { FormControl } from '../../../components/controls/form-control.component.tsx';
+import { Alert } from '../../../components/feedback/alert.component.tsx';
+import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component.tsx';
+import { login } from '../../../contexts/auth.context.tsx';
+import { useI18n } from '../../../contexts/i18n.context.tsx';
+import { endpoints } from '../../../endpoints/endpoints.ts';
+import { useForm } from '../../../hooks/form.hook.tsx';
+import { useTheme } from '../../../hooks/theme.hook.tsx';
+import { userSchema } from '../../../schemas/user.schemas.ts';
 
 const Login = () => {
 	const theme = useTheme();

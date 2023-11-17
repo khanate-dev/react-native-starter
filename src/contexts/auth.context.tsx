@@ -1,12 +1,12 @@
 import { useRootNavigation, useRouter, useSegments } from 'expo-router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { events } from '../helpers/events.helpers';
-import { createStore } from '../helpers/store.helpers';
-import { loggedInUserSchema } from '../schemas/user.schemas';
+import { events } from '../helpers/events.helpers.ts';
+import { createStore } from '../helpers/store.helpers.ts';
+import { loggedInUserSchema } from '../schemas/user.schemas.ts';
 
 import type { PropsWithChildren } from 'react';
-import type { LoggedInUser } from '../schemas/user.schemas';
+import type { LoggedInUser } from '../schemas/user.schemas.ts';
 
 export const authStore = createStore({
 	key: 'user',

@@ -3,18 +3,18 @@ import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { Icon } from '../../../components/app/icon.component';
-import { Button } from '../../../components/controls/button.component';
-import { FormControl } from '../../../components/controls/form-control.component';
-import { Alert } from '../../../components/feedback/alert.component';
-import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component';
-import { isSmallerScreen } from '../../../config';
-import { useI18n } from '../../../contexts/i18n.context';
-import { wait } from '../../../helpers/async.helpers';
-import { useTheme } from '../../../hooks/theme.hook';
+import { Icon } from '../../../components/app/icon.component.tsx';
+import { Button } from '../../../components/controls/button.component.tsx';
+import { FormControl } from '../../../components/controls/form-control.component.tsx';
+import { Alert } from '../../../components/feedback/alert.component.tsx';
+import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component.tsx';
+import { isSmallerScreen } from '../../../config.ts';
+import { useI18n } from '../../../contexts/i18n.context.tsx';
+import { wait } from '../../../helpers/async.helpers.ts';
+import { useTheme } from '../../../hooks/theme.hook.tsx';
 
 import type { TextInput } from 'react-native';
-import type { Utils } from '../../../types/utils.types';
+import type { Utils } from '../../../types/utils.types.ts';
 
 export type ResetCodeStatus =
 	| 'idle'

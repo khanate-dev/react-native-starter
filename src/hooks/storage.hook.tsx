@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { useAsyncState } from './async-state.hook';
+import { useAsyncState } from './async-state.hook.tsx';
 
 import type { z } from 'zod';
-import type { Store } from '../helpers/store.helpers';
+import type { Store } from '../helpers/store.helpers.ts';
 
 export const useStorage = <
 	Schema extends z.ZodSchema,

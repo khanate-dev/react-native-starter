@@ -1,5 +1,10 @@
 /* eslint-disable vitest/max-expects */
-import { ApiError, AuthError, ConnectionError, stringifyError } from './errors';
+import {
+	ApiError,
+	AuthError,
+	ConnectionError,
+	stringifyError,
+} from './errors.ts';
 
 test('testing getCatchMessage', () => {
 	expect(stringifyError(new Error('error message'))).toBe('error message');

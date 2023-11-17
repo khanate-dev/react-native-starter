@@ -1,7 +1,7 @@
 import { usePathname } from 'expo-router';
 
-import { ErrorPage } from '../../components/layout/error-page.component';
-import { useI18n } from '../../contexts/i18n.context';
+import { ErrorPage } from '../../components/layout/error-page.component.tsx';
+import { useI18n } from '../../contexts/i18n.context.tsx';
 
 const NotFound = () => {
 	const pathname = usePathname();

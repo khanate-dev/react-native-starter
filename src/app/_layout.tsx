@@ -5,12 +5,12 @@ import * as Updates from 'expo-updates';
 import { useEffect, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
-import { env } from '../config';
-import { AlertProvider, addAlert } from '../contexts/alert.context';
-import { I18nProvider } from '../contexts/i18n.context';
-import { LoadingProvider } from '../contexts/loading.context';
-import { ModeProvider, useMode } from '../contexts/mode.context';
-import { darkTheme, lightTheme } from '../theme';
+import { env } from '../config.ts';
+import { AlertProvider, addAlert } from '../contexts/alert.context.tsx';
+import { I18nProvider } from '../contexts/i18n.context.tsx';
+import { LoadingProvider } from '../contexts/loading.context.tsx';
+import { ModeProvider, useMode } from '../contexts/mode.context.tsx';
+import { darkTheme, lightTheme } from '../theme.ts';
 
 SplashScreen.preventAutoHideAsync();
 

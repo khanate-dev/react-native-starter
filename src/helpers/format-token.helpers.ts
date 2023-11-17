@@ -1,20 +1,20 @@
 import {
-    alphabet,
-    alphaNumeric,
-    lowerAlphabet,
-    numeric,
-    upperAlphabet,
-    wordSeparators,
-} from '../helpers/string-literals.helpers';
+	alphabet,
+	alphaNumeric,
+	lowerAlphabet,
+	numeric,
+	upperAlphabet,
+	wordSeparators,
+} from './string-literals.helpers.ts';
 
 import type {
-    Alphabet,
-    AlphaNumeric,
-    LowerAlphabet,
-    Numeric,
-    UpperAlphabet,
-    WordSeparators,
-} from '../helpers/string-literals.helpers';
+	Alphabet,
+	AlphaNumeric,
+	LowerAlphabet,
+	Numeric,
+	UpperAlphabet,
+	WordSeparators,
+} from './string-literals.helpers.ts';
 
 const formatStrategies = [
 	'camel',

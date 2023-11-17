@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { TextInput, View } from 'react-native';
 import Animated, {
-    useAnimatedProps,
-    useDerivedValue,
-    useSharedValue,
-    withTiming,
+	useAnimatedProps,
+	useDerivedValue,
+	useSharedValue,
+	withTiming,
 } from 'react-native-reanimated';
 import { Circle, default as Svg } from 'react-native-svg';
 
-import { useTheme } from '../../hooks/theme.hook';
+import { useTheme } from '../../hooks/theme.hook.tsx';
 
 import type { TextInputProps } from 'react-native';
 import type { CircleProps } from 'react-native-svg';
-import type { App } from '../../types/app.types';
+import type { App } from '../../types/app.types.ts';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedText = Animated.createAnimatedComponent(TextInput);

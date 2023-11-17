@@ -2,9 +2,10 @@ import { useRef } from 'react';
 import { View } from 'react-native';
 import { Switch, Text, TouchableRipple } from 'react-native-paper';
 
-import { Icon } from '../../components/app/icon.component';
-import { FormControlWrapper } from '../../components/controls/form-control-wrapper.component';
-import { useTheme } from '../../hooks/theme.hook';
+import { FormControlWrapper } from './form-control-wrapper.component.tsx';
+
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { Icon } from '../app/icon.component.tsx';
 
 import type { Switch as RefType, StyleProp, ViewStyle } from 'react-native';
 import type { SwitchProps } from 'react-native-paper';

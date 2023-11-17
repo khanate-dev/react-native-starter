@@ -1,12 +1,10 @@
 import { isDayjs } from 'dayjs';
 import { z } from 'zod';
 
-import { dayjsUtc } from "./date.helpers";
+import { dayjsUtc } from './date.helpers.ts';
 
-import { JWT_REGEX, PHONE_REGEX } from '../constants';
-
-import type { Utils } from '../types/utils.types';
-import type { BulkResponse } from "./api.helpers";
+import type { Utils } from '../types/utils.types.ts';
+import type { BulkResponse } from './api.helpers.ts';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbId');
 
@@ -14,7 +12,9 @@ export type ZodDbId = typeof dbIdSchema;
 
 export type DbId = z.infer<ZodDbId>;
 
-export const jwtSchema = z.string().regex(JWT_REGEX).brand('jwt');
+export const jwtRegex = /^[0-9a-zA-Z]*\.[0-9a-zA-Z]*\.[0-9a-zA-Z-_]*$/u;
+
+export const jwtSchema = z.string().regex(jwtRegex).brand('jwt');
 
 export type ZodJwt = typeof jwtSchema;
 
@@ -22,7 +22,10 @@ export type Jwt = z.infer<typeof jwtSchema>;
 
 export const emailSchema = z.string().email();
 
-export const phoneSchema = z.string().regex(PHONE_REGEX);
+export const phoneRegex =
+	/^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/u;
+
+export const phoneSchema = z.string().regex(phoneRegex);
 
 export const dayjsSchema = z.instanceof(
 	dayjsUtc as unknown as typeof dayjsUtc.Dayjs,

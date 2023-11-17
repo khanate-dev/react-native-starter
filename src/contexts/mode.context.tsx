@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useReducer } from 'react';
 import { Appearance } from 'react-native';
 import { z } from 'zod';
 
-import { events } from '../helpers/events.helpers';
-import { createStore } from '../helpers/store.helpers';
+import { events } from '../helpers/events.helpers.ts';
+import { createStore } from '../helpers/store.helpers.ts';
 
 import type { PropsWithChildren, Reducer } from 'react';
 
