@@ -85,30 +85,26 @@ type notRequired<T extends fieldZod> = T extends z.ZodNullable<z.ZodTypeAny>
 
 type validSchema = z.ZodObject<Record<string, fieldZod>, 'strict'>;
 
-type Raw<T extends validSchema> = T extends
-	| z.ZodObject<infer R>
-	| z.ZodEffects<z.ZodObject<infer R>>
-	? R
-	: never;
+type Raw<T extends validSchema> = T extends z.ZodObject<infer R> ? R : never;
 
 type textFields<Zod extends validSchema> = keyof {
 	[k in keyof Raw<Zod> as Raw<Zod>[k] extends textFieldZod ? k : never]: true;
 };
 
-type details<Zod extends validSchema> = {
-	[k in keyof Raw<Zod>]: {
+type details<Zod extends validSchema, raw extends Raw<Zod> = Raw<Zod>> = {
+	[k in keyof raw]: {
 		/** the type of the schema field */
-		type: reverseMap<Raw<Zod>[k]>;
+		type: reverseMap<raw[k]>;
 
 		/** the default value for the form state */
-		default?: Raw<Zod>[k]['_output'];
+		default?: raw[k]['_output'];
 
 		/** can the field's value be null?  */
 		notRequired?: boolean;
-	} & (notRequired<Raw<Zod>[k]> extends true
+	} & (notRequired<raw[k]> extends true
 		? { notRequired: true }
-		: { notRequired?: notRequired<Raw<Zod>[k]> }) &
-		(k extends textFields<Zod>
+		: { notRequired?: notRequired<raw[k]> }) &
+		(raw[k] extends textFieldZod
 			? { next?: Exclude<textFields<Zod>, k> }
 			: { next?: never });
 };
