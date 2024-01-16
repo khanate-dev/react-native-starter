@@ -19,7 +19,7 @@
 		"lint": "eslint . --fix --report-unused-disable-directives && pnpm format && pnpm spellcheck",
 		"format": "prettier --write --log-level silent .",
 		"spellcheck": "cspell . --quiet",
-		"generate-icons": "tsx ./scripts/generate-icons.ts",
+		"generate-icons": "node ./scripts/generate-icons.ts",
 		"env:new": "dotenv-vault new",
 		"env:login": "dotenv-vault login",
 		"env:push": "yarn env:push:development && yarn env:push:production",
