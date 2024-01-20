@@ -1,6 +1,9 @@
-/* cSpell: disable */
-
+import { useSyncExternalStore } from 'react';
 import { z } from 'zod';
+
+import { englishContent } from './content/english.content.ts';
+import { urduContent } from './content/urdu.content.ts';
+import { Store } from './helpers/store.helpers.ts';
 
 export const languages = ['english', 'urdu'] as const;
 
@@ -10,86 +13,52 @@ export type Language = (typeof languages)[number];
 
 export const defaultLanguage: Language = 'english';
 
-const english = {
-	title: 'react native starter',
-	headings: {
-		welcome: 'welcome to\nreact native\nstarter!',
-		login: 'hi,\nplease\nlogin!',
-		register: "welcome,\nlet's get started!",
-	},
-	action: {
-		login: 'login',
-		logout: 'logout',
-		register: 'register',
-		close: 'close',
-		back: 'back',
-		forgotPassword: 'forgot password?',
-		resetPassword: 'reset password',
-		code: {
-			normal: 'send code',
-			error: 'resend code',
-			success: 'code sent!',
-		},
-		verify: {
-			normal: 'verify',
-			error: 'retry',
-			success: 'verified!',
-		},
-	},
-	error: 'error',
-	oops: 'oops',
-	genericError: 'something went wrong',
-	resetDescription: 'enter the email to get the reset code',
-	resetSent: 'a reset code has been sent to your email',
-	pathNotFound: (pathname: string) => `path ${pathname} does not exist`,
-	pages: {
-		notFound: 'not found',
-		login: 'login',
-		register: 'register',
-		resetPassword: 'reset password',
-	},
+export const languageLabel: Record<Language, string> = {
+	english: 'English',
+	urdu: 'اردو', // cSpell: disable-line
 };
 
-export type Content = typeof english;
+export type Content = typeof englishContent;
 
-const urdu: Content = {
-	title: 'ری ایکٹ نیٹو ابتدائی',
-	headings: {
-		welcome: 'ابتدائی\nری اکٹ نیٹو\nمیں خوش آمدید',
-		login: 'براہ کرم لاگ ان کریں',
-		register: 'خوش آمدید،\nآئیے شروع کرتے ہیں۔',
-	},
-	action: {
-		login: 'داخل ہوں',
-		logout: 'خارج ہوں',
-		register: 'اندراج',
-		close: 'بند کریں',
-		back: 'واپس',
-		forgotPassword: 'پاسورڈ بھول گئے؟',
-		resetPassword: 'پاسورڈ بدلیں',
-		code: {
-			normal: 'کوڈ بھیجیں',
-			error: 'دوبارہ بھیجیں',
-			success: 'بھیج دیا',
-		},
-		verify: {
-			normal: 'تصدیق کریں',
-			error: 'دوبارہ کریں',
-			success: 'تصدیق شدہ!',
-		},
-	},
-	error: 'غلطی',
-	oops: 'اوہو',
-	genericError: 'نامعلوم مسئلہ درپیش آیا',
-	resetDescription: 'تبدیلی کے کوڈ کیلئے ای میل درج کریں',
-	resetSent: 'تبدیلی کا کوڈ آپ کو بھیج دیا گیا ہے',
-	pathNotFound: (pathname: string) => `نامعلوم صفحہ: ${pathname}`,
-	pages: {
-		notFound: 'نامعلوم صفحہ',
-		login: 'داخلہ',
-		register: 'اندراج',
-		resetPassword: 'پاسورڈ تبدیلی',
-	},
+const content: Record<Language, Content> = {
+	english: englishContent,
+	urdu: urduContent,
 };
 
-export const content: Record<Language, Content> = { english, urdu };
+const store = new Store({
+	key: 'language',
+	schema: languageSchema,
+	defaultVal: defaultLanguage,
+});
+
+const getLanguage = () => store.getSnapShot();
+
+const subscribe = (callback: () => void) => {
+	return store.subscribe(callback);
+};
+
+export const updateLanguage = (language: Language) => {
+	store.set(language);
+};
+
+export const useI18n = () => {
+	const language = useSyncExternalStore(subscribe, getLanguage);
+	return {
+		language,
+		updateLanguage,
+		direction: language === 'urdu' ? 'rtl' : 'ltr',
+		rtl: language === 'urdu',
+		content: content[language],
+	} as const;
+};
+
+export const getI18n = () => {
+	const language = store.getSnapShot();
+	return {
+		language,
+		updateLanguage,
+		direction: language === 'urdu' ? 'rtl' : 'ltr',
+		rtl: language === 'urdu',
+		content: content[language],
+	} as const;
+};
