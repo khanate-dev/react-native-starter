@@ -4,8 +4,8 @@ import { Text } from 'react-native-paper';
 import { ScreenWrapper } from './screen-wrapper.component.tsx';
 
 import { isSmallerScreen } from '../../config.ts';
-import { useI18n } from '../../contexts/i18n.context.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
+import { useI18n } from '../../i18n.ts';
 import { Icon } from '../app/icon.component.tsx';
 import { Button } from '../controls/button.component.tsx';
 

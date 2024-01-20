@@ -4,9 +4,9 @@ import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
 import { Icon } from './icon.component.tsx';
 
-import { logout, useUserOrNull } from '../../contexts/auth.context.tsx';
-import { useI18n } from '../../contexts/i18n.context.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
+import { logout, useUserOrNull } from '../../hooks/user.hook.tsx';
+import { useI18n } from '../../i18n.ts';
 import { Button } from '../controls/button.component.tsx';
 
 import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
@@ -57,7 +57,7 @@ export type UserControlProps = {
 };
 
 export const UserControl = ({ buttonStyle }: UserControlProps) => {
-	const user = useUserOrNull();
+	const { user } = useUserOrNull();
 	const theme = useTheme();
 	const { content } = useI18n();
 

@@ -4,12 +4,12 @@ import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
-import { toggleMode, useMode } from '../../contexts/mode.context.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { Background } from '../app/background.component.tsx';
 import { UserControl } from '../app/user-control.component.tsx';
 import { IconButton } from '../controls/icon-button.component.tsx';
 import { LanguageControl } from '../controls/language-control.component.tsx';
+import { ThemeControl } from '../controls/theme-control.component.tsx';
 
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -47,7 +47,6 @@ export const ScreenWrapper = ({
 }: ScreenWrapperProps) => {
 	const router = useRouter();
 	const theme = useTheme();
-	const mode = useMode();
 
 	const iconMargin = theme.rtl ? { marginRight: 0 } : { marginLeft: 0 };
 
@@ -95,14 +94,8 @@ export const ScreenWrapper = ({
 					</View>
 
 					<UserControl buttonStyle={iconMargin} />
-
 					<LanguageControl buttonStyle={iconMargin} />
-
-					<IconButton
-						icon={`${mode.setting}-mode`}
-						style={iconMargin}
-						onPress={toggleMode}
-					/>
+					<ThemeControl buttonStyle={iconMargin} />
 				</View>
 
 				{scroll ? (
