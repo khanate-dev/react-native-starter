@@ -31,7 +31,9 @@ const store = new Store({
 	defaultVal: defaultLanguage,
 });
 
-const getLanguage = () => store.getSnapShot();
+const getLanguage = () => {
+	return store.getSnapShot();
+};
 
 const subscribe = (callback: () => void) => {
 	return store.subscribe(callback);
