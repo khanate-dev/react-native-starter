@@ -105,17 +105,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	// // 	bundler: 'metro',
 	// //	favicon: './assets/favicon.png'
 	// // },
-	plugins: ['sentry-expo', 'expo-router'],
-	hooks: {
-		postPublish: [
+	plugins: [
+		[
+			'@sentry/react-native/expo',
 			{
-				file: 'sentry-expo/upload-sourcemaps',
-				config: {
-					setCommits: true,
-					organization: extra.sentry.organization,
-					project: extra.sentry.project,
-				},
+				setCommits: true,
+				organization: extra.sentry.organization,
+				project: extra.sentry.project,
 			},
 		],
-	},
+		'expo-router',
+	],
 });
