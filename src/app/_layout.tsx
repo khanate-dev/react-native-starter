@@ -1,8 +1,7 @@
-import { loadAsync } from 'expo-font';
-import { Slot, SplashScreen } from 'expo-router';
+import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { fetchUpdateAsync, reloadAsync, useUpdates } from 'expo-updates';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
 import { env } from '../config.ts';
@@ -11,14 +10,10 @@ import { LoadingProvider } from '../contexts/loading.context.tsx';
 import { useMode } from '../hooks/mode.hook.tsx';
 import { darkTheme, lightTheme } from '../theme.ts';
 
-SplashScreen.preventAutoHideAsync();
+import type { PropsWithChildren } from 'react';
 
-const RootLayout = () => {
-	const mode = useMode();
+const UpdateCheckerProvider = (props: PropsWithChildren) => {
 	const { isUpdateAvailable } = useUpdates();
-
-	const [loaded, setLoaded] = useState(false);
-
 	useEffect(() => {
 		if (env !== 'production' || !isUpdateAvailable) return;
 		addAlert({
@@ -35,29 +30,23 @@ const RootLayout = () => {
 		});
 	}, [isUpdateAvailable]);
 
-	useEffect(() => {
-		loadAsync({
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			InterRegular: require('../assets/fonts/inter-regular.otf') as string,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			InterBold: require('../assets/fonts/inter-bold.otf') as string,
-		}).then(() => {
-			setLoaded(true);
-			SplashScreen.hideAsync();
-		});
-	}, []);
+	return props.children;
+};
 
-	if (!loaded) return null;
+const RootLayout = () => {
+	const mode = useMode();
 
 	return (
 		<PaperProvider theme={mode.setting === 'dark' ? darkTheme : lightTheme}>
 			<AlertProvider>
 				<LoadingProvider>
-					<StatusBar
-						style='light'
-						backgroundColor='#000000'
-					/>
-					<Slot />
+					<UpdateCheckerProvider>
+						<StatusBar
+							style='light'
+							backgroundColor='#000000'
+						/>
+						<Slot />
+					</UpdateCheckerProvider>
 				</LoadingProvider>
 			</AlertProvider>
 		</PaperProvider>
