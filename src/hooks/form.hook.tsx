@@ -75,13 +75,14 @@ const formDefaults: {
 	boolean: false,
 };
 
-type notRequired<T extends fieldZod> = T extends z.ZodNullable<z.ZodTypeAny>
-	? true
-	: T extends z.ZodBoolean
-	? true
-	: T extends z.ZodString
-	? boolean
-	: false;
+type notRequired<T extends fieldZod> =
+	T extends z.ZodNullable<z.ZodTypeAny>
+		? true
+		: T extends z.ZodBoolean
+			? true
+			: T extends z.ZodString
+				? boolean
+				: false;
 
 type validSchema = z.ZodObject<Record<string, fieldZod>, 'strict'>;
 
@@ -177,10 +178,10 @@ export const useForm = <
 						(shouldAutoFill
 							? formDefaults[field.type]
 							: field.type === 'boolean'
-							? false
-							: ['date', 'time'].includes(field.type)
-							? null
-							: ''),
+								? false
+								: ['date', 'time'].includes(field.type)
+									? null
+									: ''),
 				}),
 				{},
 			) as never,
@@ -265,7 +266,7 @@ export const useForm = <
 				ref: !['boolean', 'date', 'time'].includes(field.type)
 					? (element: TextInput | null) => {
 							textRefs.current[key as keyof typeof textRefs.current] = element;
-					  }
+						}
 					: undefined,
 				next: field.next
 					? () =>
@@ -299,7 +300,7 @@ export const useForm = <
 					onClose: () => {
 						dispatch({ type: 'updateStatus', value: { type: 'idle' } });
 					},
-			  } satisfies AlertProps)
+				} satisfies AlertProps)
 			: null;
 
 	const buttonProps = {

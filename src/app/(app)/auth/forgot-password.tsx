@@ -188,7 +188,7 @@ export const ForgotPassword = () => {
 										...state,
 										status: 'sending-code-failed',
 										error: 'Failed To Send Email!',
-								  },
+									},
 						);
 					},
 				}}
@@ -215,8 +215,8 @@ export const ForgotPassword = () => {
 							!codeEnabled && !emailStage
 								? 'success'
 								: status !== 'verifying-code-failed'
-								? 'error'
-								: 'normal'
+									? 'error'
+									: 'normal'
 						],
 					color: status === 'verifying-code-failed' ? 'error' : 'primary',
 					loading: status === 'verifying-code',
@@ -233,12 +233,12 @@ export const ForgotPassword = () => {
 										password: '',
 										confirmPassword: '',
 										error: undefined,
-								  }
+									}
 								: {
 										...state,
 										status: 'verifying-code-failed',
 										error: 'Invalid Code!',
-								  },
+									},
 						);
 					},
 					disabled: !codeEnabled || !code?.trim(),
@@ -319,7 +319,7 @@ export const ForgotPassword = () => {
 									...state,
 									status: 'resetting-failed',
 									error: 'Failed To Reset Password!',
-							  },
+								},
 					);
 					if (success) {
 						setTimeout(() => {

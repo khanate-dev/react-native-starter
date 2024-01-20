@@ -43,8 +43,8 @@ export const Stepper = <T extends readonly string[]>({
 					step === currentStep
 						? 'primary'
 						: steps.indexOf(currentStep) > index
-						? 'success'
-						: 'error',
+							? 'success'
+							: 'error',
 				);
 				return (
 					<View

@@ -209,10 +209,10 @@ const FormControlComponent = (
 				isDayjs(value)
 					? value.format('YYYY-MM-DD')
 					: typeof value === 'string'
-					? value
-					: value
-					? `${value.hours}:${value.minutes}`
-					: ''
+						? value
+						: value
+							? `${value.hours}:${value.minutes}`
+							: ''
 			}
 			right={
 				type === 'password' ? (

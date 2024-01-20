@@ -50,7 +50,7 @@
 		"noErrorTruncation": true,
 
 		// completeness
-		"skipLibCheck": true
+		"skipLibCheck": true,
 	},
 	"exclude": ["node_modules", "cache", "coverage"],
 	"include": [
@@ -59,6 +59,6 @@
 		"**/*.cjs",
 		"./.*.cjs",
 		".expo/types/**/*.ts",
-		"expo-env.d.ts"
-	]
+		"expo-env.d.ts",
+	],
 }

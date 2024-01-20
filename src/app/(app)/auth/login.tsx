@@ -80,7 +80,7 @@ const Login = () => {
 					marginTop: 10,
 				}}
 				onPress={() => {
-					router.push('/auth/forgot-password');
+					router.navigate('/auth/forgot-password');
 				}}
 			/>
 		</ScreenWrapper>

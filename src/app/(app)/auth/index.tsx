@@ -29,14 +29,14 @@ const Auth = () => {
 			<Button
 				label={content.action.register}
 				onPress={() => {
-					router.push('/auth/register');
+					router.navigate('/auth/register');
 				}}
 			/>
 
 			<Button
 				label={content.action.login}
 				onPress={() => {
-					router.push('/auth/login');
+					router.navigate('/auth/login');
 				}}
 			/>
 		</ScreenWrapper>

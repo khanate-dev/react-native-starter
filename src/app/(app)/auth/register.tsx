@@ -29,9 +29,9 @@ const Register = () => {
 				image_url: null,
 			});
 			setTimeout(
-				// // () => router.push({ pathname: '/auth/login', params: { email } }),
+				// // () => router.navigate({ pathname: '/auth/login', params: { email } }),
 				() => {
-					router.push('/auth/login');
+					router.navigate('/auth/login');
 				},
 				1000,
 			);

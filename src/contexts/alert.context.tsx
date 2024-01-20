@@ -18,8 +18,8 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 				typeof data === 'string'
 					? { text: data }
 					: data instanceof Error
-					? { text: data.message }
-					: data,
+						? { text: data.message }
+						: data,
 			);
 		});
 
