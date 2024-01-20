@@ -19,7 +19,10 @@ export const ButtonLink = <T extends string>({
 	...linkProps
 }: ButtonLinkProps<T>) => {
 	return (
-		<Link {...linkProps}>
+		<Link
+			{...linkProps}
+			asChild
+		>
 			<Button
 				{...buttonProps}
 				color={color}
