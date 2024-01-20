@@ -3,9 +3,8 @@ import { Menu } from 'react-native-paper';
 
 import { IconButton } from './icon-button.component.tsx';
 
-import { updateLanguage, useI18n } from '../../contexts/i18n.context.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
-import { languages } from '../../i18n.ts';
+import { languageLabel, languages, useI18n } from '../../i18n.ts';
 import { appIconMap } from '../app/icon.component.tsx';
 
 import type { StyleProp, ViewStyle } from 'react-native';
@@ -15,7 +14,7 @@ export type LanguageControlProps = {
 };
 
 export const LanguageControl = ({ buttonStyle }: LanguageControlProps) => {
-	const { language } = useI18n();
+	const { language, updateLanguage } = useI18n();
 	const theme = useTheme();
 
 	const [visible, setVisible] = useState(false);
@@ -42,7 +41,7 @@ export const LanguageControl = ({ buttonStyle }: LanguageControlProps) => {
 			{languages.map((lang) => (
 				<Menu.Item
 					key={lang}
-					title={lang}
+					title={languageLabel[lang]}
 					leadingIcon={appIconMap[language === lang ? 'checked' : 'unchecked']}
 					titleStyle={{ textTransform: 'capitalize' }}
 					style={{
