@@ -17,11 +17,8 @@ const store = new Store({
 	defaultVal: 'system',
 });
 
-const getMode = () => {
-	const setting = store.getSnapShot();
-	const mode =
-		setting === 'system' ? Appearance.getColorScheme() ?? 'light' : setting;
-	return { setting, mode };
+const getModeSetting = () => {
+	return store.getSnapShot();
 };
 
 const subscribe = (callback: () => void) => {
@@ -33,6 +30,8 @@ export const updateMode = async (mode: Mode) => {
 };
 
 export const useMode = () => {
-	const mode = useSyncExternalStore(subscribe, getMode);
-	return { ...mode, updateMode };
+	const setting = useSyncExternalStore(subscribe, getModeSetting);
+	const mode =
+		setting === 'system' ? Appearance.getColorScheme() ?? 'light' : setting;
+	return { mode, setting, updateMode };
 };
