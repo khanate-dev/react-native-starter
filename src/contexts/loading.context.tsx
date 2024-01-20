@@ -35,17 +35,17 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
 	);
 };
 
+export const setIsLoading = (
+	value: SetStateAction<boolean> | Promise<unknown>,
+) => {
+	events.emit('setIsLoading', value);
+};
+
 export const useLoading = () => {
 	const isLoading = useContext(LoadingContext);
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	if (isLoading === undefined)
 		throw new Error('useLoading must be used within an LoadingProvider');
 
-	return isLoading;
-};
-
-export const setIsLoading = (
-	value: SetStateAction<boolean> | Promise<unknown>,
-) => {
-	events.emit('setIsLoading', value);
+	return { isLoading, setIsLoading };
 };
