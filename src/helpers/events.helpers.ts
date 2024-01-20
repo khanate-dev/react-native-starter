@@ -2,17 +2,11 @@ import { DeviceEventEmitter } from 'react-native';
 
 import type { SetStateAction } from 'react';
 import type { AlertModalProps } from '../components/feedback/alert-modal.component.tsx';
-import type { Language } from '../i18n';
-import type { LoggedInUser } from '../schemas/user.schemas.ts';
 
 export type EventMap = {
-	login: LoggedInUser;
-	logout: undefined;
-	toggleMode: undefined;
 	addAlert: string | Error | AlertModalProps;
 	removeAlert: undefined;
 	setIsLoading: SetStateAction<boolean> | Promise<unknown>;
-	updateLanguage: SetStateAction<Language>;
 };
 
 export const events = {
