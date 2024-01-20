@@ -1,7 +1,7 @@
 import { Button } from '../../components/controls/button.component.tsx';
 import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
-import { logout } from '../../contexts/auth.context.tsx';
-import { useI18n } from '../../contexts/i18n.context.tsx';
+import { logout } from '../../hooks/user.hook.tsx';
+import { useI18n } from '../../i18n.ts';
 
 const App = () => {
 	const { content } = useI18n();

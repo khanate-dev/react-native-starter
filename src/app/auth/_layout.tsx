@@ -5,9 +5,7 @@ import { useUserOrNull } from '../../hooks/user.hook.tsx';
 const AppLayout = () => {
 	const { hasInitialized, user } = useUserOrNull();
 
-	if (!hasInitialized) return null;
-
-	if (!user) return <Redirect href='/' />;
+	if (hasInitialized && user) return <Redirect href='/(app)' />;
 
 	return <Stack />;
 };

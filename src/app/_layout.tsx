@@ -1,23 +1,40 @@
 import { loadAsync } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import * as Updates from 'expo-updates';
+import { useUpdates } from 'expo-updates';
 import { useEffect, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
 import { env } from '../config.ts';
 import { AlertProvider, addAlert } from '../contexts/alert.context.tsx';
-import { I18nProvider } from '../contexts/i18n.context.tsx';
 import { LoadingProvider } from '../contexts/loading.context.tsx';
-import { ModeProvider, useMode } from '../contexts/mode.context.tsx';
+import { useMode } from '../hooks/mode.hook.tsx';
 import { darkTheme, lightTheme } from '../theme.ts';
 
 SplashScreen.preventAutoHideAsync();
 
-const Providers = () => {
+const RootLayout = () => {
 	const mode = useMode();
+	const { isUpdateAvailable } = useUpdates();
 
 	const [loaded, setLoaded] = useState(false);
+
+	useEffect(() => {
+		if (env !== 'production' || typeof Updates.addListener !== 'function')
+			return;
+		addAlert({
+			title: 'Update Available!',
+			text: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',
+			closeLabel: 'Later',
+			noIcon: true,
+			actions: [
+				{
+					label: 'Restart & Update',
+					onPress: async () => Updates.reloadAsync(),
+				},
+			],
+		});
+	}, []);
 
 	useEffect(() => {
 		loadAsync({
@@ -34,51 +51,17 @@ const Providers = () => {
 	if (!loaded) return null;
 
 	return (
-		<I18nProvider>
-			<PaperProvider theme={mode.scheme === 'dark' ? darkTheme : lightTheme}>
-				<AlertProvider>
-					<LoadingProvider>
-						<StatusBar
-							style='light'
-							backgroundColor='#000000'
-						/>
-						<Slot />
-					</LoadingProvider>
-				</AlertProvider>
-			</PaperProvider>
-		</I18nProvider>
-	);
-};
-
-const RootLayout = () => {
-	useEffect(() => {
-		if (env !== 'production' || typeof Updates.addListener !== 'function')
-			return;
-
-		Updates.addListener((event) => {
-			if (event.type !== Updates.UpdateEventType.UPDATE_AVAILABLE) return;
-
-			setTimeout(() => {
-				addAlert({
-					title: 'Update Available!',
-					text: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',
-					closeLabel: 'Later',
-					noIcon: true,
-					actions: [
-						{
-							label: 'Restart & Update',
-							onPress: async () => Updates.reloadAsync(),
-						},
-					],
-				});
-			}, 1000);
-		});
-	}, []);
-
-	return (
-		<ModeProvider>
-			<Providers />
-		</ModeProvider>
+		<PaperProvider theme={mode.setting === 'dark' ? darkTheme : lightTheme}>
+			<AlertProvider>
+				<LoadingProvider>
+					<StatusBar
+						style='light'
+						backgroundColor='#000000'
+					/>
+					<Slot />
+				</LoadingProvider>
+			</AlertProvider>
+		</PaperProvider>
 	);
 };
 

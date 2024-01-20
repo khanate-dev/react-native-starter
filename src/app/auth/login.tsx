@@ -1,16 +1,17 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { Button } from '../../../components/controls/button.component.tsx';
-import { FormControl } from '../../../components/controls/form-control.component.tsx';
-import { Alert } from '../../../components/feedback/alert.component.tsx';
-import { ScreenWrapper } from '../../../components/layout/screen-wrapper.component.tsx';
-import { login } from '../../../contexts/auth.context.tsx';
-import { useI18n } from '../../../contexts/i18n.context.tsx';
-import { endpoints } from '../../../endpoints/endpoints.ts';
-import { useForm } from '../../../hooks/form.hook.tsx';
-import { useTheme } from '../../../hooks/theme.hook.tsx';
-import { userSchema } from '../../../schemas/user.schemas.ts';
+import { ButtonLink } from '../../components/controls/button-link.component.tsx';
+import { Button } from '../../components/controls/button.component.tsx';
+import { FormControl } from '../../components/controls/form-control.component.tsx';
+import { Alert } from '../../components/feedback/alert.component.tsx';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
+import { endpoints } from '../../endpoints/endpoints.ts';
+import { useForm } from '../../hooks/form.hook.tsx';
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { login } from '../../hooks/user.hook.tsx';
+import { useI18n } from '../../i18n.ts';
+import { userSchema } from '../../schemas/user.schemas.ts';
 
 const Login = () => {
 	const theme = useTheme();
@@ -26,8 +27,9 @@ const Login = () => {
 		},
 		onSubmit: async (values) => {
 			const user = await endpoints.user.login(values);
-			setTimeout(() => {
-				login(user);
+			setTimeout(async () => {
+				await login(user);
+				router.navigate('/(app)');
 			}, 1000);
 			return 'Logged In! Redirecting...';
 		},
@@ -70,7 +72,8 @@ const Login = () => {
 				label={content.action.login}
 			/>
 
-			<Button
+			<ButtonLink
+				href='/auth/forgot-password'
 				label={content.action.forgotPassword}
 				mode='contained-tonal'
 				style={{
@@ -78,9 +81,6 @@ const Login = () => {
 					marginLeft: 'auto',
 					marginRight: 'auto',
 					marginTop: 10,
-				}}
-				onPress={() => {
-					router.navigate('/auth/forgot-password');
 				}}
 			/>
 		</ScreenWrapper>
