@@ -5,6 +5,7 @@ import { IconButton } from './icon-button.component.tsx';
 
 import { modes, useMode } from '../../hooks/mode.hook.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
+import { appIconMap } from '../app/icon.component.tsx';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 
@@ -41,7 +42,7 @@ export const ThemeControl = ({ buttonStyle }: ThemeControlProps) => {
 				<Menu.Item
 					key={mode}
 					title={mode}
-					leadingIcon={`${mode}-mode`}
+					leadingIcon={appIconMap[`${mode}-mode`]}
 					titleStyle={{ textTransform: 'capitalize' }}
 					style={{
 						backgroundColor:
