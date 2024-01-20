@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
 import { ButtonLink } from '../../components/controls/button-link.component.tsx';
@@ -17,12 +17,12 @@ const Login = () => {
 	const theme = useTheme();
 	const { content } = useI18n();
 	const router = useRouter();
-	// // const { email } = useLocalSearchParams<{ email?: string }>();
+	const { email } = useLocalSearchParams<{ email?: string }>();
 
 	const { props, state } = useForm({
 		schema: userSchema.pick({ email: true, password: true }),
 		details: {
-			email: { type: 'email', next: 'password' },
+			email: { type: 'email', next: 'password', default: email },
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {

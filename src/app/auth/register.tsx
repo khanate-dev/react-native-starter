@@ -24,17 +24,13 @@ const Register = () => {
 			password: { type: 'password' },
 		},
 		onSubmit: async (values) => {
-			const { email: _ } = await endpoints.user.add({
+			const { email } = await endpoints.user.add({
 				...values,
 				image_url: null,
 			});
-			setTimeout(
-				// // () => router.navigate({ pathname: '/auth/login', params: { email } }),
-				() => {
-					router.navigate('/auth/login');
-				},
-				1000,
-			);
+			setTimeout(() => {
+				router.navigate({ pathname: '/auth/login', params: { email } });
+			}, 1000);
 			return 'user added! please wait...';
 		},
 	});
