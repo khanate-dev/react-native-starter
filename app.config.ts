@@ -41,6 +41,7 @@ export type Environment = typeof extra;
 const details = {
 	id: 'native-starter',
 	org: 'khanate-dev',
+	expoUsername: 'khanate-dev',
 	name: 'React Native Starter',
 	description: 'React Native Starter',
 	github: 'https://github.com/kahante-dev/react-native-starter',
@@ -114,6 +115,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 				project: extra.sentry.project,
 			},
 		],
+		['expo-updates', { username: details.expoUsername }],
 		'expo-router',
 	],
 });

@@ -1,7 +1,7 @@
 import { loadAsync } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useUpdates } from 'expo-updates';
+import { fetchUpdateAsync, reloadAsync, useUpdates } from 'expo-updates';
 import { useEffect, useState } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
@@ -20,8 +20,7 @@ const RootLayout = () => {
 	const [loaded, setLoaded] = useState(false);
 
 	useEffect(() => {
-		if (env !== 'production' || typeof Updates.addListener !== 'function')
-			return;
+		if (env !== 'production' || !isUpdateAvailable) return;
 		addAlert({
 			title: 'Update Available!',
 			text: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',
@@ -30,11 +29,11 @@ const RootLayout = () => {
 			actions: [
 				{
 					label: 'Restart & Update',
-					onPress: async () => Updates.reloadAsync(),
+					onPress: async () => fetchUpdateAsync().then(reloadAsync),
 				},
 			],
 		});
-	}, []);
+	}, [isUpdateAvailable]);
 
 	useEffect(() => {
 		loadAsync({
