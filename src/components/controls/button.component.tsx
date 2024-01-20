@@ -1,9 +1,10 @@
 import { Button as Component } from 'react-native-paper';
 
+import { fixedForwardRef } from '../../helpers/ref.helpers.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { appIconMap } from '../app/icon.component.tsx';
 
-import type { ReactNode } from 'react';
+import type { ElementRef, ReactNode, Ref } from 'react';
 import type { ButtonProps as Props } from 'react-native-paper';
 import type { ThemeColor } from '../../theme';
 import type { IconName } from '../app/icon.component.tsx';
@@ -19,47 +20,53 @@ export type ButtonProps = Omit<Props, 'icon' | 'children'> & {
 	color?: ThemeColor;
 };
 
-export const Button = ({
-	style,
-	color = 'primary',
-	label,
-	mode = 'contained',
-	disabled,
-	icon: iconName,
-	...restProps
-}: ButtonProps) => {
-	const { getColor, rtl } = useTheme();
+export const Button = fixedForwardRef(
+	(
+		{
+			style,
+			color = 'primary',
+			label,
+			mode = 'contained',
+			disabled,
+			icon: iconName,
+			...restProps
+		}: ButtonProps,
+		ref: Ref<ElementRef<typeof Component>>,
+	) => {
+		const { getColor, rtl } = useTheme();
 
-	const icon: Props['icon'] | undefined = iconName
-		? appIconMap[iconName]
-		: undefined;
+		const icon: Props['icon'] | undefined = iconName
+			? appIconMap[iconName]
+			: undefined;
 
-	return (
-		<Component
-			{...restProps}
-			mode={mode}
-			disabled={disabled || restProps.loading}
-			labelStyle={{ textTransform: 'capitalize' }}
-			icon={icon}
-			contentStyle={{ flexDirection: rtl ? 'row-reverse' : 'row' }}
-			style={[
-				{ borderRadius: 10, borderColor: getColor(color, 'normal') },
-				style,
-			]}
-			theme={{
-				colors: {
-					primary: getColor(color, 'normal'),
-					onPrimary: getColor(color, 'on-normal'),
-					primaryContainer: getColor(color, 'container'),
-					onPrimaryContainer: getColor(color, 'on-container'),
-					secondary: getColor(color, 'normal'),
-					onSecondary: getColor(color, 'on-normal'),
-					secondaryContainer: getColor(color, 'container'),
-					onSecondaryContainer: getColor(color, 'on-container'),
-				},
-			}}
-		>
-			{label}
-		</Component>
-	);
-};
+		return (
+			<Component
+				{...restProps}
+				ref={ref}
+				mode={mode}
+				disabled={disabled || restProps.loading}
+				labelStyle={{ textTransform: 'capitalize' }}
+				icon={icon}
+				contentStyle={{ flexDirection: rtl ? 'row-reverse' : 'row' }}
+				style={[
+					{ borderRadius: 10, borderColor: getColor(color, 'normal') },
+					style,
+				]}
+				theme={{
+					colors: {
+						primary: getColor(color, 'normal'),
+						onPrimary: getColor(color, 'on-normal'),
+						primaryContainer: getColor(color, 'container'),
+						onPrimaryContainer: getColor(color, 'on-container'),
+						secondary: getColor(color, 'normal'),
+						onSecondary: getColor(color, 'on-normal'),
+						secondaryContainer: getColor(color, 'container'),
+						onSecondaryContainer: getColor(color, 'on-container'),
+					},
+				}}
+			>
+				{label}
+			</Component>
+		);
+	},
+);
