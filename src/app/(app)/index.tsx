@@ -5,6 +5,7 @@ import { useI18n } from '../../i18n.ts';
 
 const App = () => {
 	const { content } = useI18n();
+
 	return (
 		<ScreenWrapper
 			style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}

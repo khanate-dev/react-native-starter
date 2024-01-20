@@ -7,9 +7,9 @@ const AppLayout = () => {
 
 	if (!hasInitialized) return null;
 
-	if (!user) return <Redirect href='/' />;
+	if (!user) return <Redirect href='/auth/' />;
 
-	return <Stack />;
+	return <Stack screenOptions={{ headerShown: false }} />;
 };
 
 export default AppLayout;
