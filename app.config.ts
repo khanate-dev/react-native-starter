@@ -116,15 +116,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 			},
 		],
 		['expo-updates', { username: details.expoUsername }],
-		[
-			'expo-font',
-			{
-				fonts: [
-					'./src/assets/fonts/inter-bold.otf',
-					'./src/assets/fonts/inter-regular.otf',
-				],
-			},
-		],
 		'expo-router',
 	],
 });

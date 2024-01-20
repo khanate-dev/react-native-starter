@@ -1,4 +1,5 @@
-import { Slot } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { Slot, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { fetchUpdateAsync, reloadAsync, useUpdates } from 'expo-updates';
 import { useEffect } from 'react';
@@ -11,6 +12,8 @@ import { useMode } from '../hooks/mode.hook.tsx';
 import { darkTheme, lightTheme } from '../theme.ts';
 
 import type { PropsWithChildren } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 const UpdateCheckerProvider = (props: PropsWithChildren) => {
 	const { isUpdateAvailable } = useUpdates();
@@ -35,6 +38,18 @@ const UpdateCheckerProvider = (props: PropsWithChildren) => {
 
 const RootLayout = () => {
 	const mode = useMode();
+	const [fontsLoaded, fontError] = useFonts({
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		'inter-regular': require('../assets/fonts/inter-regular.otf') as string,
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		'inter-bold': require('../assets/fonts/inter-bold.otf') as string,
+	});
+
+	useEffect(() => {
+		if (fontsLoaded || fontError) SplashScreen.hideAsync();
+	}, [fontsLoaded, fontError]);
+
+	if (!fontsLoaded && !fontError) return null;
 
 	return (
 		<PaperProvider theme={mode.setting === 'dark' ? darkTheme : lightTheme}>
