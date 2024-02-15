@@ -224,7 +224,15 @@ const config = {
 					},
 				],
 				'react/jsx-wrap-multilines': 'warn',
-				'react/no-access-state-in-setstate': 'warn',
+				'react/no-access-state-in-setstate': 'warn', // cSpell: disable-line
+				'react/jsx-key': [
+					'warn',
+					{
+						warnOnDuplicates: true,
+						checkKeyMustBeforeSpread: true,
+						checkFragmentShorthand: true,
+					},
+				],
 				'react/no-danger': 'warn',
 				'react/no-object-type-as-default-prop': 'warn',
 				'react/no-unstable-nested-components': ['warn', { allowAsProps: true }],
