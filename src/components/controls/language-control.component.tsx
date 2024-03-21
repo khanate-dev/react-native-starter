@@ -3,9 +3,9 @@ import { Menu } from 'react-native-paper';
 
 import { IconButton } from './icon-button.component.tsx';
 
+import { appIconMap } from '../../assets/icons.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { languageLabel, languages, useI18n } from '../../i18n.ts';
-import { appIconMap } from '../app/icon.component.tsx';
 
 import type { StyleProp, ViewStyle } from 'react-native';
 

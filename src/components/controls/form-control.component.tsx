@@ -7,10 +7,10 @@ import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { Button } from './button.component.tsx';
 import { FormControlWrapper } from './form-control-wrapper.component.tsx';
 
+import { appIconMap } from '../../assets/icons.ts';
 import { isSmallerScreen } from '../../config.ts';
 import { dayjsUtc } from '../../helpers/date.helpers.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
-import { appIconMap } from '../app/icon.component.tsx';
 
 import type { Dayjs } from 'dayjs';
 import type { ForwardedRef, RefObject } from 'react';
@@ -23,11 +23,11 @@ import type {
 import type { TextInputProps } from 'react-native-paper';
 import type { TextInputLabelProp } from 'react-native-paper/lib/typescript/components/TextInput/types';
 import type { z } from 'zod';
+import type { IconName } from '../../assets/icons.ts';
 import type { ZodTime } from '../../helpers/schema.helpers.ts';
-import type { IconName } from '../app/icon.component.tsx';
 import type { ButtonProps } from './button.component.tsx';
 
-export const formControlType = [
+const formControlType = [
 	'email',
 	'float',
 	'int',
