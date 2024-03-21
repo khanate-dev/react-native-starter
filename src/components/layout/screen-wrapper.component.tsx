@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+import { default as Constants } from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';

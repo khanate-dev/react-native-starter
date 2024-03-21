@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react-native';
-import Constants from 'expo-constants';
+import { default as Constants } from 'expo-constants';
 import { Dimensions } from 'react-native';
 
 import type { App } from './types/app.types.ts';
