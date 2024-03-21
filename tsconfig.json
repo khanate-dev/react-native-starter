@@ -57,6 +57,7 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"**/*.cjs",
+		"**/*.mjs",
 		"./.*.cjs",
 		".expo/types/**/*.ts",
 		"expo-env.d.ts",
