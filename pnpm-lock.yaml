@@ -154,6 +154,12 @@ devDependencies:
   eslint-plugin-react-hooks:
     specifier: ^4.6.0
     version: 4.6.0(eslint@8.56.0)
+  eslint-plugin-react-refresh:
+    specifier: ^0.4.6
+    version: 0.4.6(eslint@8.56.0)
+  eslint-plugin-sort-keys-plus:
+    specifier: ^1.4.0
+    version: 1.4.0
   eslint-plugin-testing-library:
     specifier: ^6.2.0
     version: 6.2.0(eslint@8.56.0)(typescript@5.3.3)
@@ -6162,6 +6168,14 @@ packages:
       eslint: 8.56.0
     dev: true
 
+  /eslint-plugin-react-refresh@0.4.6(eslint@8.56.0):
+    resolution: {integrity: sha512-NjGXdm7zgcKRkKMua34qVO9doI7VOxZ6ancSvBELJSSoX97jyndXcSoa8XBh69JoB31dNz3EEzlMcizZl7LaMA==}
+    peerDependencies:
+      eslint: '>=7'
+    dependencies:
+      eslint: 8.56.0
+    dev: true
+
   /eslint-plugin-react@7.33.2(eslint@8.56.0):
     resolution: {integrity: sha512-73QQMKALArI8/7xGLNI/3LylrEYrlKZSb5C9+q3OtOewTnMQi5cT+aE9E41sLCmli3I9PGGmD1yiZydyo4FEPw==}
     engines: {node: '>=4'}
@@ -6185,6 +6199,14 @@ packages:
       resolve: 2.0.0-next.5
       semver: 6.3.1
       string.prototype.matchall: 4.0.10
+    dev: true
+
+  /eslint-plugin-sort-keys-plus@1.4.0:
+    resolution: {integrity: sha512-4MsaETpu8+Atfhp3kyz+vu5ATHfst/vkAhVFUkzEDDgq39jpecGAbSVNGKd0OfDK7TDLGoeNzxnCLrMM06zvNg==}
+    engines: {node: '>=14'}
+    dependencies:
+      escape-string-regexp: 4.0.0
+      natural-compare: 1.4.0
     dev: true
 
   /eslint-plugin-testing-library@6.2.0(eslint@8.56.0)(typescript@5.3.3):
