@@ -154,7 +154,7 @@ export const bulkPostRequest = async <Type extends Obj>(
 		requests.map(async (row) => {
 			await postRequest(apiPath, row, isPublic)
 				.then(() => response.successful.push(row))
-				.catch((error) =>
+				.catch((error: unknown) =>
 					response.failed.push({
 						...row,
 						error: stringifyError(error),

@@ -4,7 +4,7 @@ import { formatToken } from './format-token.helpers.ts';
 
 describe('test formatString', () => {
 	it('should convert the 1st test string', () => {
-		const input = 'thisIsSomeTestString' as const;
+		const input = 'thisIsSomeTestString';
 		const expected = {
 			camel: 'thisIsSomeTestString',
 			pascal: 'ThisIsSomeTestString',
@@ -43,7 +43,7 @@ describe('test formatString', () => {
 
 	it('should convert the 2nd test string', () => {
 		const input =
-			'this is 1 VERY     badly   -----formatted.......##  STRING. \n sequence' as const;
+			'this is 1 VERY     badly   -----formatted.......##  STRING. \n sequence';
 		const expected = {
 			camel: 'thisIs1VeryBadlyFormattedStringSequence',
 			pascal: 'ThisIs1VeryBadlyFormattedStringSequence',
@@ -81,7 +81,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 3rd test string', () => {
-		const input = '----SaleOrderID----' as const;
+		const input = '----SaleOrderID----';
 		const expected = {
 			camel: 'saleOrderId',
 			pascal: 'SaleOrderId',
@@ -119,7 +119,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 4th test string', () => {
-		const input = 'alpha-   123numeric' as const;
+		const input = 'alpha-   123numeric';
 		const expected = {
 			camel: 'alpha123Numeric',
 			pascal: 'Alpha123Numeric',
@@ -157,7 +157,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 5th test string', () => {
-		const input = '    Folder - file-2' as const;
+		const input = '    Folder - file-2';
 		const expected = {
 			camel: 'folderFile2',
 			pascal: 'FolderFile2',
@@ -195,7 +195,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 6th test string', () => {
-		const input = 'api helpers.helpers.js' as const;
+		const input = 'api helpers.helpers.js';
 		const expected = {
 			camel: 'apiHelpersHelpersJs',
 			pascal: 'ApiHelpersHelpersJs',
@@ -233,7 +233,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 7th test string', () => {
-		const input = 'ThisIsSomeTestString' as const;
+		const input = 'ThisIsSomeTestString';
 		const expected = {
 			camel: 'thisIsSomeTestString',
 			pascal: 'ThisIsSomeTestString',
@@ -271,7 +271,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 8th test string', () => {
-		const input = 'this_is_some_test_string' as const;
+		const input = 'this_is_some_test_string';
 		const expected = {
 			camel: 'thisIsSomeTestString',
 			pascal: 'ThisIsSomeTestString',
@@ -309,7 +309,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 9th test string', () => {
-		const input = 'this-is-some-test-string' as const;
+		const input = 'this-is-some-test-string';
 		const expected = {
 			camel: 'thisIsSomeTestString',
 			pascal: 'ThisIsSomeTestString',
@@ -347,7 +347,7 @@ describe('test formatString', () => {
 	});
 
 	it('should convert the 10th test string', () => {
-		const input = 'THIS_IS_SOME_TEST_STRING' as const;
+		const input = 'THIS_IS_SOME_TEST_STRING';
 		const expected = {
 			camel: 'thisIsSomeTestString',
 			pascal: 'ThisIsSomeTestString',

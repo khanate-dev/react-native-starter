@@ -241,7 +241,7 @@ export const ForgotPassword = () => {
 									},
 						);
 					},
-					disabled: !codeEnabled || !code?.trim(),
+					disabled: !codeEnabled || !code.trim(),
 				}}
 				onChange={(value) => {
 					if (!codeEnabled) return;
@@ -305,7 +305,7 @@ export const ForgotPassword = () => {
 				loading={status === 'resetting'}
 				label={content.action.resetPassword}
 				disabled={
-					!passwordEnabled || !password?.trim() || password !== confirmPassword
+					!passwordEnabled || !password.trim() || password !== confirmPassword
 				}
 				onPress={async () => {
 					if (!passwordEnabled) return;
