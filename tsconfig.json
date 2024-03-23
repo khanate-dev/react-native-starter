@@ -50,7 +50,7 @@
 		"noErrorTruncation": true,
 
 		// completeness
-		"skipLibCheck": true,
+		"skipLibCheck": true
 	},
 	"exclude": ["node_modules", "cache", "coverage"],
 	"include": [
@@ -61,6 +61,6 @@
 		"./.*.cjs",
 		".expo/types/**/*.ts",
 		"expo-env.d.ts",
-		"metro.config.js",
-	],
+		"metro.config.js"
+	]
 }
