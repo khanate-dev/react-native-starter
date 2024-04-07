@@ -5,11 +5,11 @@ import { fetchUpdateAsync, reloadAsync, useUpdates } from 'expo-updates';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
-import { env } from '../config.ts';
-import { AlertProvider, addAlert } from '../contexts/alert.context.tsx';
-import { LoadingProvider } from '../contexts/loading.context.tsx';
-import { useMode } from '../hooks/mode.hook.tsx';
-import { darkTheme, lightTheme } from '../theme.ts';
+import { env } from '../config.js';
+import { AlertProvider, addAlert } from '../contexts/alert.context.js';
+import { LoadingProvider } from '../contexts/loading.context.js';
+import { useMode } from '../hooks/mode.hook.js';
+import { darkTheme, lightTheme } from '../theme.js';
 
 import type { PropsWithChildren } from 'react';
 

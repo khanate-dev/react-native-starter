@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { replaceString } from './replace-string.helpers.ts';
+import { replaceString } from './replace-string.helpers.js';
 
 test('test replaceString', () => {
 	const first = {

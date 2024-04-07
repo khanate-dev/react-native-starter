@@ -1,8 +1,8 @@
-import { wait } from './helpers/async.helpers.ts';
-import { dayjsUtc } from './helpers/date.helpers.ts';
+import { wait } from './helpers/async.helpers.js';
+import { dayjsUtc } from './helpers/date.helpers.js';
 
-import type { DbId, DbMeta, Jwt } from './helpers/schema.helpers.ts';
-import type { User } from './schemas/user.schemas.ts';
+import type { DbId, DbMeta, Jwt } from './helpers/schema.helpers.js';
+import type { User } from './schemas/user.schemas.js';
 
 export const mockToken =
 	/** cSpell: disable-next-line */

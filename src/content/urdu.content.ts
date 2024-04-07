@@ -1,6 +1,6 @@
 /* cSpell: disable */
 
-import type { Content } from '../i18n.ts';
+import type { Content } from '../i18n.js';
 
 export const urduContent: Content = {
 	action: {

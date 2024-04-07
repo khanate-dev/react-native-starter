@@ -1,13 +1,13 @@
 import { useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { ScreenWrapper } from './screen-wrapper.component.tsx';
+import { ScreenWrapper } from './screen-wrapper.component.js';
 
-import { isSmallerScreen } from '../../config.ts';
-import { useTheme } from '../../hooks/theme.hook.tsx';
-import { useI18n } from '../../i18n.ts';
-import { Icon } from '../app/icon.component.tsx';
-import { Button } from '../controls/button.component.tsx';
+import { isSmallerScreen } from '../../config.js';
+import { useTheme } from '../../hooks/theme.hook.js';
+import { useI18n } from '../../i18n.js';
+import { Icon } from '../app/icon.component.js';
+import { Button } from '../controls/button.component.js';
 
 export type ErrorPageProps = {
 	/** the title of the error page */

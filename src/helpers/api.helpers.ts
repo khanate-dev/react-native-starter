@@ -1,16 +1,16 @@
 import { getNetworkStateAsync } from 'expo-network';
 import { z } from 'zod';
 
-import { backendPath, disableAuth, isFetchMocked } from '../config.ts';
+import { backendPath, disableAuth, isFetchMocked } from '../config.js';
 import {
 	ApiError,
 	AuthError,
 	ConnectionError,
 	stringifyError,
-} from '../errors.ts';
-import { authStore, logout } from '../hooks/user.hook.tsx';
+} from '../errors.js';
+import { authStore, logout } from '../hooks/user.hook.js';
 
-import type { Utils } from '../types/utils.types.ts';
+import type { Utils } from '../types/utils.types.js';
 
 const responseSchema = z.strictObject({
 	errorCode: z.string(),

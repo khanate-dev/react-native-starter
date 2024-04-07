@@ -5,23 +5,23 @@ import {
 	getRequest,
 	postRequest,
 	putRequest,
-} from '../helpers/api.helpers.ts';
-import { omit } from '../helpers/object.helpers.ts';
+} from '../helpers/api.helpers.js';
+import { omit } from '../helpers/object.helpers.js';
 import {
 	mockToken,
 	mockedAdd,
 	mockedDelete,
 	mockedGet,
 	mockedUpdate,
-} from '../mocks.ts';
-import { loggedInUserSchema, userSchema } from '../schemas/user.schemas.ts';
+} from '../mocks.js';
+import { loggedInUserSchema, userSchema } from '../schemas/user.schemas.js';
 
-import type { DbId } from '../helpers/schema.helpers.ts';
+import type { DbId } from '../helpers/schema.helpers.js';
 import type {
 	LoggedInUser,
 	User,
 	UserSansMeta,
-} from '../schemas/user.schemas.ts';
+} from '../schemas/user.schemas.js';
 
 export const userEndpoints = {
 	login: async (body: {

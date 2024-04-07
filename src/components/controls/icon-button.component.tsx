@@ -1,10 +1,10 @@
 import { IconButton as Component } from 'react-native-paper';
 
-import { appIconMap } from '../../assets/icons.ts';
+import { appIconMap } from '../../assets/icons.js';
 
 import type { IconButtonProps as Props } from 'react-native-paper';
-import type { IconName } from '../../assets/icons.ts';
-import type { App } from '../../types/app.types.ts';
+import type { IconName } from '../../assets/icons.js';
+import type { App } from '../../types/app.types.js';
 
 export type IconButtonProps = Omit<Props, 'icon' | 'style'> &
 	App.propsWithStyle<{ icon: IconName }>;

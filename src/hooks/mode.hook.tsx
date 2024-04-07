@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react';
 import { Appearance } from 'react-native';
 import { z } from 'zod';
 
-import { Store } from '../helpers/store.helpers.ts';
+import { Store } from '../helpers/store.helpers.js';
 
 export const modes = ['system', 'dark', 'light'] as const;
 
