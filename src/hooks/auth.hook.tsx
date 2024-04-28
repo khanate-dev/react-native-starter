@@ -1,9 +1,10 @@
 import { useSyncExternalStore } from 'react';
 
-import { Store } from '../helpers/store.helpers.ts';
-import { loggedInUserSchema } from '../schemas/user.schemas.ts';
+import { AuthError } from '../errors.js';
+import { Store } from '../helpers/store.helpers.js';
+import { loggedInUserSchema } from '../schemas/user.schemas.js';
 
-import type { LoggedInUser } from '../schemas/user.schemas.ts';
+import type { LoggedInUser } from '../schemas/user.schemas.js';
 
 export const authStore = new Store({
 	key: 'user',
@@ -13,6 +14,12 @@ export const authStore = new Store({
 
 const getUser = () => {
 	return authStore.getSnapShot();
+};
+
+export const getUserOrThrowAuthError = () => {
+	const user = getUser();
+	if (!user) throw new AuthError('user auth token not found!');
+	return user;
 };
 
 const subscribe = (cb: () => void) => {
@@ -32,8 +39,8 @@ export const useUserOrNull = () => {
 	return { user, login, logout, hasInitialized: authStore.hasInitialized };
 };
 
-export const useUser = () => {
+export const useAuth = () => {
 	const user = useSyncExternalStore(subscribe, getUser);
-	if (!user) throw new Error('useUser must be used in an authenticated route');
+	if (!user) throw new Error('useAuth must be used in an authenticated route');
 	return { user, login, logout, hasInitialized: authStore.hasInitialized };
 };
