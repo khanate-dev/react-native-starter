@@ -8,11 +8,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Circle, default as Svg } from 'react-native-svg';
 
-import { useTheme } from '../../hooks/theme.hook.tsx';
+import { useTheme } from '../../hooks/theme.hook.js';
 
 import type { TextInputProps } from 'react-native';
 import type { CircleProps } from 'react-native-svg';
-import type { App } from '../../types/app.types.ts';
+import type { App } from '../../types/app.types.js';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedText = Animated.createAnimatedComponent(TextInput);

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { formatToken } from './format-token.helpers.ts';
+import { formatToken } from './format-token.helpers.js';
 
 describe('test formatString', () => {
 	it('should convert the 1st test string', () => {

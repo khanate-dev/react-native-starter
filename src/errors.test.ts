@@ -4,7 +4,7 @@ import {
 	AuthError,
 	ConnectionError,
 	stringifyError,
-} from './errors.ts';
+} from './errors.js';
 
 test('testing getCatchMessage', () => {
 	expect(stringifyError(new Error('error message'))).toBe('error message');

@@ -1,6 +1,6 @@
 import { Redirect, Slot } from 'expo-router';
 
-import { useUserOrNull } from '../../hooks/user.hook.tsx';
+import { useUserOrNull } from '../../hooks/user.hook.js';
 
 const AppLayout = () => {
 	const { hasInitialized, user } = useUserOrNull();

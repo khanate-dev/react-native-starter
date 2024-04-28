@@ -1,7 +1,7 @@
 import { useTheme as usePaperTheme } from 'react-native-paper';
 
-import { formatToken } from '../helpers/format-token.helpers.ts';
-import { useI18n } from '../i18n.ts';
+import { formatToken } from '../helpers/format-token.helpers.js';
+import { useI18n } from '../i18n.js';
 
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import type { AppTheme, ThemeColor } from '../theme';

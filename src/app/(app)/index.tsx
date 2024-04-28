@@ -1,7 +1,7 @@
-import { Button } from '../../components/controls/button.component.tsx';
-import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
-import { logout } from '../../hooks/user.hook.tsx';
-import { useI18n } from '../../i18n.ts';
+import { Button } from '../../components/controls/button.component.js';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.js';
+import { logout } from '../../hooks/user.hook.js';
+import { useI18n } from '../../i18n.js';
 
 const App = () => {
 	const { content } = useI18n();

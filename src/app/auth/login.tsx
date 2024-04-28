@@ -1,17 +1,17 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Text } from 'react-native-paper';
 
-import { ButtonLink } from '../../components/controls/button-link.component.tsx';
-import { Button } from '../../components/controls/button.component.tsx';
-import { FormControl } from '../../components/controls/form-control.component.tsx';
-import { Alert } from '../../components/feedback/alert.component.tsx';
-import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
-import { endpoints } from '../../endpoints/endpoints.ts';
-import { useForm } from '../../hooks/form.hook.tsx';
-import { useTheme } from '../../hooks/theme.hook.tsx';
-import { login } from '../../hooks/user.hook.tsx';
-import { useI18n } from '../../i18n.ts';
-import { userSchema } from '../../schemas/user.schemas.ts';
+import { ButtonLink } from '../../components/controls/button-link.component.js';
+import { Button } from '../../components/controls/button.component.js';
+import { FormControl } from '../../components/controls/form-control.component.js';
+import { Alert } from '../../components/feedback/alert.component.js';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.js';
+import { endpoints } from '../../endpoints/endpoints.js';
+import { useForm } from '../../hooks/form.hook.js';
+import { useTheme } from '../../hooks/theme.hook.js';
+import { login } from '../../hooks/user.hook.js';
+import { useI18n } from '../../i18n.js';
+import { userSchema } from '../../schemas/user.schemas.js';
 
 const Login = () => {
 	const theme = useTheme();
