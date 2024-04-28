@@ -33,10 +33,10 @@ export const getAudio = async (
 	return {
 		play: async () => {
 			if (!audio.status.isLoaded)
-				return audio.sound.loadAsync({ uri }, { shouldPlay: true });
-			return audio.sound.playAsync();
+				return await audio.sound.loadAsync({ uri }, { shouldPlay: true });
+			return await audio.sound.playAsync();
 		},
-		unload: async () => audio.sound.unloadAsync(),
+		unload: async () => await audio.sound.unloadAsync(),
 		duration,
 	};
 };

@@ -26,7 +26,7 @@ const subscribe = (callback: () => void) => {
 };
 
 export const updateMode = async (mode: Mode) => {
-	return store.set(mode);
+	await store.set(mode);
 };
 
 export const useMode = () => {

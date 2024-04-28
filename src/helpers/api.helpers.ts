@@ -86,11 +86,11 @@ export const getRequest = async <Schema extends z.ZodSchema = z.ZodUnknown>(
 	},
 ): Promise<z.infer<Schema>> => {
 	const response = apiRequest(apiPath, 'GET', undefined, options?.isPublic);
-	if (!options?.schema) return response;
-	return response.then(async (data) => {
-		return (options.schema ? options.schema.parse(data) : data) as Promise<
+	if (!options?.schema) return await response;
+	return await response.then(async (data) => {
+		return await ((options.schema ? options.schema.parse(data) : data) as Promise<
 			z.infer<Schema>
-		>;
+		>);
 	});
 };
 
@@ -104,7 +104,7 @@ export const patchRequest = async <Response = unknown>(
 	apiPath: string,
 	body: Obj | FormData,
 	isPublic?: boolean,
-) => apiRequest<Response>(apiPath, 'PATCH', body, isPublic);
+) => await apiRequest<Response>(apiPath, 'PATCH', body, isPublic);
 
 /**
  * the helper to send a `PUT` request to the backend
@@ -116,7 +116,7 @@ export const putRequest = async <Response = unknown>(
 	apiPath: string,
 	body: Obj | FormData,
 	isPublic?: boolean,
-) => apiRequest<Response>(apiPath, 'PUT', body, isPublic);
+) => await apiRequest<Response>(apiPath, 'PUT', body, isPublic);
 
 /**
  * the helper to send a `POST` request to the backend
@@ -128,7 +128,7 @@ export const postRequest = async <Response = unknown>(
 	apiPath: string,
 	body: Obj | Obj[] | FormData,
 	isPublic?: boolean,
-) => apiRequest<Response>(apiPath, 'POST', body, isPublic);
+) => await apiRequest<Response>(apiPath, 'POST', body, isPublic);
 
 export type BulkResponse<Type extends Obj = Obj> = {
 	successful: Type[];
@@ -173,4 +173,4 @@ export const bulkPostRequest = async <Type extends Obj>(
 export const deleteRequest = async <Response = unknown>(
 	apiPath: string,
 	isPublic?: boolean,
-) => apiRequest<Response>(apiPath, 'DELETE', undefined, isPublic);
+) => await apiRequest<Response>(apiPath, 'DELETE', undefined, isPublic);

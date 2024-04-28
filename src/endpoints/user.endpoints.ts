@@ -36,10 +36,10 @@ export const userEndpoints = {
 		return userSchema.parse(response);
 	},
 	get: async (): Promise<Omit<User, 'password'>[]> => {
-		return getRequest('user', { schema: z.array(userSchema) });
+		return await getRequest('user', { schema: z.array(userSchema) });
 	},
 	getById: async (id: DbId): Promise<Omit<User, 'password'>> => {
-		return getRequest(`user/${id}`, { schema: userSchema });
+		return await getRequest(`user/${id}`, { schema: userSchema });
 	},
 	update: async (
 		id: DbId,

@@ -20,11 +20,11 @@ const subscribe = (cb: () => void) => {
 };
 
 export const logout = async () => {
-	return authStore.remove();
+	await authStore.remove();
 };
 
 export const login = async (user: LoggedInUser) => {
-	return authStore.set(user);
+	await authStore.set(user);
 };
 
 export const useUserOrNull = () => {

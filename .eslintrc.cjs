@@ -1,5 +1,6 @@
 /** @type {import('eslint').Linter.Config} */
 const config = {
+	reportUnusedDisableDirectives: true,
 	env: { es2021: true },
 	extends: [
 		'eslint:recommended',
@@ -16,7 +17,25 @@ const config = {
 		project: true,
 		tsconfigRootDir: __dirname,
 	},
-	settings: { 'import/resolver': { typescript: true } },
+	settings: {
+		'import/resolver': { typescript: true },
+	},
+	ignorePatterns: [
+		'package-lock.json',
+		'pnpm-lock.yaml',
+		'node_modules',
+		'vscode-extension',
+		'.git/objects',
+		'.vscode',
+		'.vscode-insiders',
+		'coverage',
+		'build',
+		'dist',
+		'public',
+		'trace',
+		'**/*.mp3',
+		'tsconfig.vitest-temp.json',
+	],
 	rules: {
 		'no-extra-semi': 'off',
 		'no-mixed-spaces-and-tabs': 'off',
@@ -180,7 +199,7 @@ const config = {
 			'warn',
 			{ ignoreStringArrays: true },
 		],
-		'@typescript-eslint/return-await': 'warn',
+		'@typescript-eslint/return-await': ['warn', 'always'],
 		'@typescript-eslint/switch-exhaustiveness-check': 'warn',
 		'@typescript-eslint/restrict-template-expressions': [
 			'warn',
@@ -283,19 +302,19 @@ const config = {
 			},
 		},
 		{
-			files: ['src/app/**/*'],
-			rules: {
-				'import/no-default-export': 'off',
-				'import/prefer-default-export': ['error', { target: 'any' }],
-			},
-		},
-		{
 			files: ['**/*'],
 			excludedFiles: ['src/**/*'],
 			env: { es2021: true, node: true },
 			rules: {
 				'import/no-nodejs-modules': 'off',
 				'import/no-default-export': 'off',
+			},
+		},
+		{
+			files: ['src/app/**/*'],
+			rules: {
+				'import/no-default-export': 'off',
+				'import/prefer-default-export': ['error', { target: 'any' }],
 			},
 		},
 		{

@@ -27,7 +27,7 @@ const UpdateCheckerProvider = (props: PropsWithChildren) => {
 			actions: [
 				{
 					label: 'Restart & Update',
-					onPress: async () => fetchUpdateAsync().then(reloadAsync),
+					onPress: async () => { await fetchUpdateAsync().then(reloadAsync); },
 				},
 			],
 		});
