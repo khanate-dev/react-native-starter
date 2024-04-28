@@ -1,11 +1,21 @@
 import { z } from 'zod';
 
+import pkg from './package.json';
+
 import type { ConfigContext, ExpoConfig } from '@expo/config';
+
+const booleanEnvSchema = z
+	.enum(['false', 'true'])
+	.default('false')
+	.transform((row) => row === 'true');
 
 const parseEnvironment = () => {
 	const envSchema = z.object({
 		NODE_ENV: z.enum(['development', 'production', 'test']),
-		BACKEND_API_PATH: z.string().url(),
+		BACKEND_PATH: z.string().url(),
+		ENABLE_MOCKS: booleanEnvSchema,
+		DISABLE_AUTH: booleanEnvSchema,
+		ENABLE_AUTO_FILL: booleanEnvSchema,
 		SENTRY_ORG: z.string(),
 		SENTRY_PROJECT: z.string(),
 		SENTRY_AUTH_TOKEN: z.string(),
@@ -31,7 +41,10 @@ const parseEnvironment = () => {
 			organization: data.SENTRY_ORG,
 			project: data.SENTRY_PROJECT,
 		},
-		backendPath: data.BACKEND_API_PATH,
+		backendPath: data.BACKEND_PATH,
+		enableMocks: data.ENABLE_MOCKS,
+		disableAuth: data.DISABLE_AUTH,
+		enableAutoFill: data.ENABLE_AUTO_FILL,
 	};
 };
 
@@ -42,17 +55,21 @@ const details = {
 	id: 'native-starter',
 	org: 'khanate-dev',
 	expoUsername: 'khanate-dev',
-	name: 'React Native Starter',
+	name: pkg.name,
 	description: 'React Native Starter',
 	github: 'https://github.com/kahante-dev/react-native-starter',
-	version: '0.0.1',
+	version: pkg.version,
 	easProjectId: 'ea224914-8891-44d6-ad18-2a67bc487176',
 	primaryColor: '#6847c0',
 } as const;
 
-const semverToInt = (version: `${number}.${number}.${number}`): number => {
-	const [major, minor, patch] = version.split('.').map(Number);
-	return (major ?? 0) * 10000000 + (minor ?? 0) * 100000 + (patch ?? 0);
+const semverToInt = (version: string): number => {
+	const [major = NaN, minor = NaN, patch = NaN] = version
+		.split('.')
+		.map(Number);
+	if (isNaN(major) || isNaN(minor) || isNaN(patch))
+		throw new Error('Invalid version!');
+	return major * 10000000 + minor * 100000 + patch;
 };
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
