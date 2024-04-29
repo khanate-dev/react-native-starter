@@ -3,18 +3,18 @@ import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { Icon } from '../../components/app/icon.component.js';
-import { Button } from '../../components/controls/button.component.js';
-import { FormControl } from '../../components/controls/form-control.component.js';
-import { Alert } from '../../components/feedback/alert.component.js';
-import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.js';
-import { isSmallerScreen } from '../../config.js';
-import { wait } from '../../helpers/async.helpers.js';
-import { useTheme } from '../../hooks/theme.hook.js';
-import { useI18n } from '../../i18n.js';
+import { Icon } from '../../components/app/icon.component.tsx';
+import { Button } from '../../components/controls/button.component.tsx';
+import { FormControl } from '../../components/controls/form-control.component.tsx';
+import { Alert } from '../../components/feedback/alert.component.tsx';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
+import { isSmallerScreen } from '../../config.ts';
+import { wait } from '../../helpers/async.helpers.ts';
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { useI18n } from '../../i18n.ts';
 
 import type { TextInput } from 'react-native';
-import type { Utils } from '../../types/utils.types.js';
+import type { Utils } from '../../types/utils.types.ts';
 
 export type ResetCodeStatus =
 	| 'idle'
@@ -241,7 +241,7 @@ export const ForgotPassword = () => {
 									},
 						);
 					},
-					disabled: !codeEnabled || !code?.trim(),
+					disabled: !codeEnabled || !code.trim(),
 				}}
 				onChange={(value) => {
 					if (!codeEnabled) return;
@@ -305,7 +305,7 @@ export const ForgotPassword = () => {
 				loading={status === 'resetting'}
 				label={content.action.resetPassword}
 				disabled={
-					!passwordEnabled || !password?.trim() || password !== confirmPassword
+					!passwordEnabled || !password.trim() || password !== confirmPassword
 				}
 				onPress={async () => {
 					if (!passwordEnabled) return;

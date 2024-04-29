@@ -1,4 +1,4 @@
-import type { Utils } from '../types/utils.types.js';
+import type { Utils } from '../types/utils.types.ts';
 
 export const lowerAlphabet = 'abcdefghijklmnopqrstuvwxyz';
 export type LowerAlphabet = Utils.stringToUnion<typeof lowerAlphabet>;

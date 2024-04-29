@@ -10,7 +10,7 @@ import {
 } from '../errors.ts';
 import { authStore, logout } from '../hooks/auth.hook.tsx';
 
-import type { Utils } from '../types/utils.types.js';
+import type { Utils } from '../types/utils.types.ts';
 
 const responseSchema = z.strictObject({
 	errorCode: z.string(),

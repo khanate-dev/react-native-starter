@@ -1,6 +1,6 @@
-import { isObject } from './type.helpers.js';
+import { isObject } from './type.helpers.ts';
 
-import type { Utils } from '../types/utils.types.js';
+import type { Utils } from '../types/utils.types.ts';
 
 export const objectEntries = <T extends Record<string, unknown>>(
 	object: T,

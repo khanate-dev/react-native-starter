@@ -5,7 +5,7 @@ import {
 	numeric,
 	upperAlphabet,
 	wordSeparators,
-} from './string-literals.helpers.js';
+} from './string-literals.helpers.ts';
 
 import type {
 	Alphabet,
@@ -14,7 +14,7 @@ import type {
 	Numeric,
 	UpperAlphabet,
 	WordSeparators,
-} from './string-literals.helpers.js';
+} from './string-literals.helpers.ts';
 
 const formatStrategies = [
 	'camel',

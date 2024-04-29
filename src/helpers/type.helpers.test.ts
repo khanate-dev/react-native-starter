@@ -6,9 +6,9 @@ import {
 	isArray,
 	isObject,
 	readableTypeOf,
-} from './type.helpers.js';
+} from './type.helpers.ts';
 
-import type { Utils } from '../types/utils.types.js';
+import type { Utils } from '../types/utils.types.ts';
 
 const isNumber = (value: unknown): value is number => typeof value === 'number';
 

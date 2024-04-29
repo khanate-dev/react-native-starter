@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from 'react';
 import { z } from 'zod';
 
-import { englishContent } from './content/english.content.js';
-import { urduContent } from './content/urdu.content.js';
-import { Store } from './helpers/store.helpers.js';
+import { englishContent } from './content/english.content.ts';
+import { urduContent } from './content/urdu.content.ts';
+import { Store } from './helpers/store.helpers.ts';
 
 export const languages = ['english', 'urdu'] as const;
 

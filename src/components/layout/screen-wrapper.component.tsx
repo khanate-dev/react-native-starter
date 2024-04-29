@@ -4,17 +4,17 @@ import { SafeAreaView, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import Animated, { SlideInLeft, SlideOutRight } from 'react-native-reanimated';
 
-import { useTheme } from '../../hooks/theme.hook.js';
-import { Background } from '../app/background.component.js';
-import { UserControl } from '../app/user-control.component.js';
-import { IconButton } from '../controls/icon-button.component.js';
-import { LanguageControl } from '../controls/language-control.component.js';
-import { ThemeControl } from '../controls/theme-control.component.js';
+import { useTheme } from '../../hooks/theme.hook.tsx';
+import { Background } from '../app/background.component.tsx';
+import { UserControl } from '../app/user-control.component.tsx';
+import { IconButton } from '../controls/icon-button.component.tsx';
+import { LanguageControl } from '../controls/language-control.component.tsx';
+import { ThemeControl } from '../controls/theme-control.component.tsx';
 
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { App } from '../../types/app.types.js';
-import type { Utils } from '../../types/utils.types.js';
+import type { App } from '../../types/app.types.ts';
+import type { Utils } from '../../types/utils.types.ts';
 
 export type ScreenWrapperProps = App.propsWithStyle<{
 	/** the title to show on the page header */

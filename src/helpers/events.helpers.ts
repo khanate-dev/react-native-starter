@@ -1,7 +1,7 @@
 import { DeviceEventEmitter } from 'react-native';
 
 import type { SetStateAction } from 'react';
-import type { AlertModalProps } from '../components/feedback/alert-modal.component.js';
+import type { AlertModalProps } from '../components/feedback/alert-modal.component.tsx';
 
 export type EventMap = {
 	addAlert: string | Error | AlertModalProps;

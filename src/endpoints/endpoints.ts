@@ -1,6 +1,6 @@
-import { userEndpoints, userMocks } from './user.endpoints.js';
+import { userEndpoints, userMocks } from './user.endpoints.ts';
 
-import { isFetchMocked } from '../config.js';
+import { isFetchMocked } from '../config.ts';
 
 export const endpoints = {
 	user: isFetchMocked ? userMocks : userEndpoints,

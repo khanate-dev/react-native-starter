@@ -2,7 +2,7 @@
 
 /** cSpell: disable */
 
-import { pluralize } from './pluralize.helpers.js';
+import { pluralize } from './pluralize.helpers.ts';
 
 test('testing pluralize with simple number quantifier', () => {
 	expect(pluralize`I have ${1} kitt[en|ies]`).toBe('I have 1 kitten');
