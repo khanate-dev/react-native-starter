@@ -7,9 +7,9 @@ import { FormControl } from '../../components/controls/form-control.component.ts
 import { Alert } from '../../components/feedback/alert.component.tsx';
 import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
 import { endpoints } from '../../endpoints/endpoints.ts';
+import { login } from '../../hooks/auth.hook.tsx';
 import { useForm } from '../../hooks/form.hook.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
-import { login } from '../../hooks/user.hook.tsx';
 import { useI18n } from '../../i18n.ts';
 import { userSchema } from '../../schemas/user.schemas.ts';
 

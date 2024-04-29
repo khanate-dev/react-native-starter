@@ -1,10 +1,10 @@
 import { useSyncExternalStore } from 'react';
 
-import { AuthError } from '../errors.js';
-import { Store } from '../helpers/store.helpers.js';
-import { loggedInUserSchema } from '../schemas/user.schemas.js';
+import { AuthError } from '../errors.ts';
+import { Store } from '../helpers/store.helpers.ts';
+import { loggedInUserSchema } from '../schemas/user.schemas.ts';
 
-import type { LoggedInUser } from '../schemas/user.schemas.js';
+import type { LoggedInUser } from '../schemas/user.schemas.ts';
 
 export const authStore = new Store({
 	key: 'user',

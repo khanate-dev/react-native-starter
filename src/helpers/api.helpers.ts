@@ -8,7 +8,7 @@ import {
 	ConnectionError,
 	stringifyError,
 } from '../errors.ts';
-import { authStore, logout } from '../hooks/user.hook.tsx';
+import { authStore, logout } from '../hooks/auth.hook.tsx';
 
 import type { Utils } from '../types/utils.types.ts';
 
@@ -88,9 +88,9 @@ export const getRequest = async <Schema extends z.ZodSchema = z.ZodUnknown>(
 	const response = apiRequest(apiPath, 'GET', undefined, options?.isPublic);
 	if (!options?.schema) return await response;
 	return await response.then(async (data) => {
-		return await ((options.schema ? options.schema.parse(data) : data) as Promise<
-			z.infer<Schema>
-		>);
+		return await ((
+			options.schema ? options.schema.parse(data) : data
+		) as Promise<z.infer<Schema>>);
 	});
 };
 

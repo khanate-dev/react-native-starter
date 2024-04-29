@@ -1,4 +1,5 @@
-import Component from '@expo/vector-icons/MaterialCommunityIcons';
+ 
+import Component from '@expo/vector-icons/MaterialIcons.js';
 
 import { appIconMap } from '../../assets/icons.ts';
 

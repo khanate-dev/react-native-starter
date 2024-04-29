@@ -1,4 +1,4 @@
-import type { Utils } from './utils.types.js';
+import type { Utils } from './utils.types.ts';
 
 type trueTuple<T extends true[]> = T[number] extends true ? true : false;
 type falseTuple<T extends false[]> = T[number] extends false ? true : false;

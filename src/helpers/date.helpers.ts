@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc.js';
 import { z } from 'zod';
 
 import type { Dayjs } from 'dayjs';
-import type { Utils } from '../types/utils.types.js';
+import type { Utils } from '../types/utils.types.ts';
 
 dayjs.extend(utc);
 

@@ -4,8 +4,8 @@ import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
 import { Icon } from './icon.component.tsx';
 
+import { logout, useUserOrNull } from '../../hooks/auth.hook.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
-import { logout, useUserOrNull } from '../../hooks/user.hook.tsx';
 import { useI18n } from '../../i18n.ts';
 import { Button } from '../controls/button.component.tsx';
 
