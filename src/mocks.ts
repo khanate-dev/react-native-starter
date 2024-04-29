@@ -1,5 +1,7 @@
+import { config } from './config.ts';
 import { wait } from './helpers/async.helpers.ts';
 import { dayjsUtc } from './helpers/date.helpers.ts';
+import { getUserOrThrowAuthError } from './hooks/auth.hook.tsx';
 
 import type { DbId, DbMeta, Jwt } from './helpers/schema.helpers.ts';
 import type { User } from './schemas/user.schemas.ts';
@@ -41,6 +43,7 @@ type MockedGet = {
 };
 
 export const mockedGet: MockedGet = async (key: keyof MockData, id?: DbId) => {
+	if (!config.disableAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	if (!id) {
 		await wait(500);
@@ -58,6 +61,7 @@ export const mockedAdd = async <
 	key: Key,
 	body: Omit<Type, keyof DbMeta>,
 ): Promise<Type> => {
+	if (!config.disableAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const newId = Math.max(...list.map((curr) => curr.id), 0) + 1;
 	const now = dayjsUtc();
@@ -80,6 +84,7 @@ export const mockedUpdate = async <
 	id: DbId,
 	body: Omit<Type, keyof DbMeta>,
 ): Promise<Type> => {
+	if (!config.disableAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);
 	if (!row) throw new Error(`No record found by ID ${id}`);
@@ -96,6 +101,7 @@ export const mockedDelete = async <
 	key: Key,
 	id: DbId,
 ): Promise<Type> => {
+	if (!config.disableAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);
 	if (!row) throw new Error(`No record found by ID ${id}`);
