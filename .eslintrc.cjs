@@ -125,6 +125,11 @@ const config = {
 		'import/namespace': 'off',
 		'import/no-duplicates': 'warn',
 		'import/export': 'off',
+		'import/extensions': [
+			'warn',
+			'always',
+			{ ignorePackages: true, js: 'never', jsx: 'never' },
+		],
 		'import/no-empty-named-blocks': 'warn',
 		'import/no-nodejs-modules': 'error',
 		'import/no-self-import': 'warn',
