@@ -4,7 +4,7 @@ import {
 	createSchema,
 	emailSchema,
 	jwtSchema,
-} from '../helpers/schema.helpers.ts';
+} from '../helpers/schema.helpers.js';
 
 const passwordSchema = z
 	.string()

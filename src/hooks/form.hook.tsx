@@ -2,18 +2,18 @@ import { useReducer, useRef } from 'react';
 import { Keyboard } from 'react-native';
 import { z } from 'zod';
 
-import { shouldAutoFill } from '../config.ts';
-import { stringifyError } from '../errors.ts';
-import { dayjsUtc } from '../helpers/date.helpers.ts';
-import { humanizeToken } from '../helpers/humanize-token.helpers.ts';
-import { objectEntries } from '../helpers/object.helpers.ts';
+import { shouldAutoFill } from '../config.js';
+import { stringifyError } from '../errors.js';
+import { dayjsUtc } from '../helpers/date.helpers.js';
+import { humanizeToken } from '../helpers/humanize-token.helpers.js';
+import { objectEntries } from '../helpers/object.helpers.js';
 
 import type { RefObject } from 'react';
 import type { TextInput } from 'react-native';
-import type { ButtonProps } from '../components/controls/button.component.tsx';
-import type { AlertProps } from '../components/feedback/alert.component.tsx';
-import type { ZodDate, ZodTime } from '../helpers/schema.helpers.ts';
-import type { Utils } from '../types/utils.types.ts';
+import type { ButtonProps } from '../components/controls/button.component.js';
+import type { AlertProps } from '../components/feedback/alert.component.js';
+import type { ZodDate, ZodTime } from '../helpers/schema.helpers.js';
+import type { Utils } from '../types/utils.types.js';
 
 type fieldMap = {
 	string: z.ZodString;

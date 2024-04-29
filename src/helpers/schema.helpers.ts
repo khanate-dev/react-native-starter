@@ -1,10 +1,10 @@
 import { isDayjs } from 'dayjs';
 import { z } from 'zod';
 
-import { dayjsUtc } from './date.helpers.ts';
+import { dayjsUtc } from './date.helpers.js';
 
-import type { Utils } from '../types/utils.types.ts';
-import type { BulkResponse } from './api.helpers.ts';
+import type { Utils } from '../types/utils.types.js';
+import type { BulkResponse } from './api.helpers.js';
 
 export const dbIdSchema = z.number().int().positive().finite().brand('DbId');
 

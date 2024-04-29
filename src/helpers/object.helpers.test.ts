@@ -7,7 +7,7 @@ import {
 	objectValues,
 	omit,
 	pick,
-} from './object.helpers.ts';
+} from './object.helpers.js';
 
 describe('testing objectEntries', () => {
 	it('should return the correct value and types for object entries', () => {

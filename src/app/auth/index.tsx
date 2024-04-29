@@ -1,9 +1,9 @@
 import { Text } from 'react-native-paper';
 
-import { ButtonLink } from '../../components/controls/button-link.component.tsx';
-import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
-import { useTheme } from '../../hooks/theme.hook.tsx';
-import { useI18n } from '../../i18n.ts';
+import { ButtonLink } from '../../components/controls/button-link.component.js';
+import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.js';
+import { useTheme } from '../../hooks/theme.hook.js';
+import { useI18n } from '../../i18n.js';
 
 const Auth = () => {
 	const theme = useTheme();
