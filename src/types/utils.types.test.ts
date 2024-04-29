@@ -1,9 +1,9 @@
-import type { Utils } from './utils.types.ts';
+import { z } from 'zod';
+
+import type { Utils } from './utils.types.js';
 
 type trueTuple<T extends true[]> = T[number] extends true ? true : false;
 type falseTuple<T extends false[]> = T[number] extends false ? true : false;
-
-declare function assertType<T>(val: T): void;
 
 test('test prettify type util', () => {
 	type tests = trueTuple<
@@ -14,16 +14,31 @@ test('test prettify type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test equal type util', () => {
+	interface Int1 {
+		x: 1;
+	}
+	interface Int2 extends Int1 {
+		y: 2;
+	}
 	type trueTests = trueTuple<
 		[
 			Utils.equal<1, 1>,
 			Utils.equal<1 | 2 | 3, 1 | 2 | 3>,
 			Utils.equal<[1, 2, 3], [1, 2, 3]>,
-			Utils.equal<Utils.prettify<{ x: 1 } & { y: 2 }>, { x: 1; y: 2 }>,
+			Utils.equal<[2] | [1, 2, 3], [1, 2, 3] | [2]>,
+			Utils.equal<{ x: 1 } | { y: 2 }, { y: 2 } | { x: 1 }>,
+			Utils.equal<{ x: 1 } & { y: 2 }, { x: 1; y: 2 }>,
+			Utils.equal<Int2, { x: 1; y: 2 }>,
+			Utils.equal<
+				Int2 & { z: { a: 3; b: 4 } },
+				{ x: 1; y: 2; z: { a: 3 } & { b: 4 } }
+			>,
+			Utils.equal<Int2[] | Int2, { x: 1; y: 2 }[] | { x: 1; y: 2 }>,
+			Utils.equal<Record<string, unknown>, Record<string, unknown>>,
 		]
 	>;
 	type falseTests = falseTuple<
@@ -41,10 +56,11 @@ test('test equal type util', () => {
 			Utils.equal<1, 1 | 2 | 3>,
 			Utils.equal<[1], [1 | 2 | 3]>,
 			Utils.equal<{ foo: 1 }, { foo: 2 }>,
-			Utils.equal<{ x: 1 } & { y: 2 }, { x: 1; y: 2 }>,
+			Utils.equal<{ x: 1 }, Record<string, unknown>>,
+			Utils.equal<object, Record<string, unknown>>,
 		]
 	>;
-	assertType<[trueTests, falseTests]>([true, true]);
+	z.util.assertIs<[trueTests, falseTests]>([true, true]);
 });
 
 test('test satisfies type util', () => {
@@ -71,7 +87,7 @@ test('test dropFirst type util', () => {
 			Utils.equal<Utils.dropFirst<readonly string[]>, readonly string[]>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test tuple type util', () => {
@@ -83,7 +99,7 @@ test('test tuple type util', () => {
 			Utils.equal<Utils.tuple<1, string | { foo: 1 }>, [string | { foo: 1 }]>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test repeatString type util', () => {
@@ -95,7 +111,19 @@ test('test repeatString type util', () => {
 			Utils.equal<Utils.repeatString<'foo' | 'bar', 2>, 'foofoo' | 'barbar'>, // cSpell: disable-line,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
+});
+
+test('test trim type util', () => {
+	type tests = trueTuple<
+		[
+			Utils.equal<Utils.trim<'  1   '>, '1'>,
+			Utils.equal<Utils.trim<''>, ''>,
+			Utils.equal<Utils.trim<'  foo'>, 'foo'>,
+			Utils.equal<Utils.trim<'foo  ' | ' bar' | 'baz'>, 'foo' | 'bar' | 'baz'>,
+		]
+	>;
+	z.util.assertIs<tests>(true);
 });
 
 test('test distributedArray type util', () => {
@@ -105,7 +133,7 @@ test('test distributedArray type util', () => {
 			Utils.equal<Utils.distributedArray<{ foo: 1 | 2 }>, { foo: 1 | 2 }[]>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test assertFunction type util', () => {
@@ -113,17 +141,17 @@ test('test assertFunction type util', () => {
 		return undefined;
 	};
 	const val1 = {} as unknown;
-	assertType<unknown>(val1);
+	z.util.assertIs<unknown>(val1);
 	func1(val1);
-	assertType<string>(val1);
+	z.util.assertIs<string>(val1);
 
 	const func2: Utils.assertFunction<{ foo: 1 }> = () => {
 		return undefined;
 	};
 	const val2 = {} as unknown;
-	assertType<unknown>(val2);
+	z.util.assertIs<unknown>(val2);
 	func2(val2);
-	assertType<{ foo: 1 }>(val2);
+	z.util.assertIs<{ foo: 1 }>(val2);
 });
 
 test('test keysOfType type util', () => {
@@ -140,7 +168,7 @@ test('test keysOfType type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test allUnionKeys type util', () => {
@@ -151,7 +179,7 @@ test('test allUnionKeys type util', () => {
 			Utils.equal<Utils.allUnionKeys<never>, never>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test includeUnionKeys type util', () => {
@@ -164,7 +192,7 @@ test('test includeUnionKeys type util', () => {
 			Utils.equal<Utils.includeUnionKeys<{ x: 1 }>, { x: 1 }>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test noUndefinedKeys type util', () => {
@@ -180,7 +208,7 @@ test('test noUndefinedKeys type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test strictly type util', () => {
@@ -192,7 +220,7 @@ test('test strictly type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test allOrNone type util', () => {
@@ -207,7 +235,7 @@ test('test allOrNone type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test makeUndefinedOptional type util', () => {
@@ -220,7 +248,7 @@ test('test makeUndefinedOptional type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test removeIndexSignature type util', () => {
@@ -233,7 +261,19 @@ test('test removeIndexSignature type util', () => {
 			Utils.equal<Utils.removeIndexSignature<{ x: 1 }>, { x: 1 }>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
+});
+
+test('test distributiveOmit type util', () => {
+	type tests = trueTuple<
+		[
+			Utils.equal<
+				Utils.distributiveOmit<{ x: 1; y: 2 } | { z: 3 }, 'y'>,
+				{ x: 1 } | { z: 3 }
+			>,
+		]
+	>;
+	z.util.assertIs<tests>(true);
 });
 
 test('test stringToUnion type util', () => {
@@ -247,7 +287,7 @@ test('test stringToUnion type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test unionToIntersection type util', () => {
@@ -263,7 +303,23 @@ test('test unionToIntersection type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
+});
+
+test('test unionToSingleTuple type util', () => {
+	type tests = trueTuple<
+		[
+			Utils.equal<
+				Utils.unionToSingleTuple<'foo' | 42 | true>,
+				['foo' | 42 | true, 'foo' | 42 | true, 'foo' | 42 | true]
+			>,
+			Utils.equal<
+				Utils.unionToSingleTuple<(() => 'foo') | ((i: 42) => true)>,
+				[(() => 'foo') | ((i: 42) => true), (() => 'foo') | ((i: 42) => true)]
+			>,
+		]
+	>;
+	z.util.assertIs<tests>(true);
 });
 
 test('test deepMerge type util', () => {
@@ -278,7 +334,7 @@ test('test deepMerge type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
 });
 
 test('test unionToTuples type util', () => {
@@ -291,5 +347,22 @@ test('test unionToTuples type util', () => {
 			>,
 		]
 	>;
-	assertType<tests>(true);
+	z.util.assertIs<tests>(true);
+});
+
+test('test nullableKeys type util', () => {
+	type tests = trueTuple<
+		[
+			Utils.equal<Utils.nullableKeys<{ foo: 1 }>, { foo: 1 | null }>,
+			Utils.equal<
+				Utils.nullableKeys<{ foo: 1; bar: 2 }, 'foo'>,
+				{ foo: 1 | null; bar: 2 }
+			>,
+			Utils.equal<
+				Utils.nullableKeys<{ foo: 1; bar?: 2 | 3; baz: 4 | null }>,
+				{ foo: 1 | null; bar?: 2 | 3 | null; baz: 4 | null }
+			>,
+		]
+	>;
+	z.util.assertIs<tests>(true);
 });

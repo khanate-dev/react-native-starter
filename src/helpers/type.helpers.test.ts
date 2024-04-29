@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+	assert,
 	assertArray,
 	assertObject,
 	isArray,
@@ -8,14 +9,7 @@ import {
 	readableTypeOf,
 } from './type.helpers.ts';
 
-import type { Utils } from '../types/utils.types.ts';
-
 const isNumber = (value: unknown): value is number => typeof value === 'number';
-
-const assertNumber: Utils.assertFunction<number> = (value) => {
-	const type = readableTypeOf(value);
-	if (type !== 'number') throw new Error(`Expected number, received ${type}`);
-};
 
 test('should test readableTypeof helper', () => {
 	expect(readableTypeOf(2)).toBe('number');
@@ -30,11 +24,27 @@ test('should test readableTypeof helper', () => {
 	expect(readableTypeOf(() => false)).toBe('function');
 });
 
+test('should test assert helper', () => {
+	const error = 'invalid object!';
+	expect(() => {
+		const a: unknown = 2;
+		z.util.assertIs<unknown>(a);
+		assert(isObject(a), error);
+		z.util.assertIs<object>(a);
+	}).toThrow(error);
+	expect(() => {
+		const a: unknown = { fist: 'of fury' };
+		z.util.assertIs<unknown>(a);
+		assert(isObject(a), error);
+		z.util.assertIs<object>(a);
+	}).not.toThrow();
+});
+
 test('should test isObject helper', () => {
 	expect(isObject(2)).toBeFalsy();
 	expect(isObject({ fist: 'of fury' })).toBeTruthy();
 	const a: unknown = 2;
-	isObject(a) && z.util.assertIs<Obj>(a);
+	isObject(a) && z.util.assertIs<object>(a);
 });
 
 test('should test isArray helper', () => {
@@ -47,19 +57,19 @@ test('should test isArray helper', () => {
 	const a: unknown = 2;
 	isArray(a) && z.util.assertIs<unknown[]>(a);
 	isArray(a, isNumber) && z.util.assertIs<number[]>(a);
-	isArray(a, isObject) && z.util.assertIs<Obj[]>(a);
+	isArray(a, isObject) && z.util.assertIs<object[]>(a);
 });
 
 test('should test assertObject helper', () => {
 	let a: unknown = 2;
 	expect(() => {
 		assertObject(a);
-		z.util.assertIs<Obj>(a);
+		z.util.assertIs<object>(a);
 	}).toThrow('Expected object, received number');
 	expect(() => {
 		a = { fist: 'of fury' };
 		assertObject(a);
-		z.util.assertIs<Obj>(a);
+		z.util.assertIs<object>(a);
 	}).not.toThrow();
 	expect(() => {
 		assertObject({ fist: 'of fury' });
@@ -72,7 +82,7 @@ test('should test assertArray helper', () => {
 		a = 2;
 		assertArray(a);
 		z.util.assertIs<unknown[]>(a);
-	}).toThrow('Expected array, received number');
+	}).toThrow('Invalid array type');
 	expect(() => {
 		a = [2];
 		assertArray(a);
@@ -80,22 +90,22 @@ test('should test assertArray helper', () => {
 	}).not.toThrow();
 	expect(() => {
 		a = [2, 3];
-		assertArray(a, assertObject);
-		z.util.assertIs<Obj[]>(a);
-	}).toThrow('Invalid array member. Expected object, received number');
+		assertArray(a, isObject);
+		z.util.assertIs<object[]>(a);
+	}).toThrow('Invalid array type');
 	expect(() => {
 		a = [2];
-		assertArray(a, assertNumber);
+		assertArray(a, isNumber);
 		z.util.assertIs<number[]>(a);
 	}).not.toThrow();
 	expect(() => {
 		a = { fist: 'of fury' };
 		assertArray(a);
 		z.util.assertIs<unknown[]>(a);
-	}).toThrow('Expected array, received object');
+	}).toThrow('Invalid array type');
 	expect(() => {
 		a = [[2]];
-		assertArray(a, assertArray);
+		assertArray(a, isArray);
 		z.util.assertIs<unknown[][]>(a);
 	}).not.toThrow();
 });

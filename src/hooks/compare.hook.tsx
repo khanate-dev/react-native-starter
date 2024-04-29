@@ -19,7 +19,7 @@ export const useArrayCompare = (array: unknown[]): number[] => {
 };
 
 /** shallow compare an object for changed keys */
-export const useObjectCompare = <T extends Obj>(object: T): (keyof T)[] => {
+export const useObjectCompare = <T extends object>(object: T): (keyof T)[] => {
 	const previousObject = usePrevious(object);
 	const changedKeys = objectKeys(object).filter(
 		(key) => object[key] !== previousObject?.[key],
