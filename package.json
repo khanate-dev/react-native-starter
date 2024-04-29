@@ -16,7 +16,7 @@
 		"update-deps": "pnpm upgrade -Li && expo install --fix && pnpm dlx expo-doctor",
 		"test": "jest --watch --coverage=false --changedSince=origin/main",
 		"test:all": "jest",
-		"lint": "eslint . --max-warnings=0 --fix --report-unused-disable-directives && pnpm format && pnpm spellcheck",
+		"lint": "eslint . --max-warnings=0 --fix && pnpm format && pnpm spellcheck",
 		"format": "prettier --write --log-level silent .",
 		"spellcheck": "cspell . --quiet",
 		"generate-icons": "node ./scripts/generate-icons.ts",
