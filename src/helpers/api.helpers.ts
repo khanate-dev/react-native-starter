@@ -1,159 +1,151 @@
 import { getNetworkStateAsync } from 'expo-network';
 import { z } from 'zod';
 
-import { backendPath, disableAuth, isFetchMocked } from '../config.ts';
-import {
-	ApiError,
-	AuthError,
-	ConnectionError,
-	stringifyError,
-} from '../errors.ts';
-import { authStore, logout } from '../hooks/auth.hook.tsx';
+import { config } from '../config.ts';
+import { AuthError, stringifyError } from '../errors.ts';
+import { getUserOrThrowAuthError, logout } from '../hooks/auth.hook.tsx';
 
 import type { Utils } from '../types/utils.types.ts';
 
-const responseSchema = z.strictObject({
-	errorCode: z.string(),
-	errorDescription: z.string(),
+const responseSchema = z.object({
+	statusCode: z.number(),
+	error: z.string(),
+	message: z.string(),
 	data: z.unknown().optional(),
 });
 
-/**
- * the helper to send a request to the backend
- * @param apiPath the path of the api request
- * @param method the method of the current request. defaults to `GET`
- * @param body the body to sen with the request
- * @param isPublic is the request to a public endpoint? auth header will be excluded if `true`
- */
-const apiRequest = async <Response = unknown>(
+type ApiMethod = 'GET' | 'PATCH' | 'PUT' | 'POST' | 'DELETE';
+
+type ApiBody = object | FormData;
+
+const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	method: 'GET' | 'PATCH' | 'PUT' | 'POST' | 'DELETE',
-	body?: Obj | Obj[] | FormData,
-	isPublic: boolean = false,
-): Promise<Response> => {
+	method: ApiMethod,
+	body?: object | FormData,
+	opts?: {
+		schema?: Schema;
+		noAuth?: boolean;
+	},
+): Promise<Schema['_output']> => {
 	try {
-		if (!isFetchMocked) {
+		if (!config.enableMocks) {
 			const { isInternetReachable } = await getNetworkStateAsync();
 			if (!isInternetReachable)
-				throw new ConnectionError('not connected to the internet!');
+				throw new Error('not connected to the internet!');
 		}
 
-		const options: Omit<RequestInit, 'headers'> & { headers: Headers } = {
+		const fetchOpts: Omit<RequestInit, 'headers'> & { headers: Headers } = {
 			method,
 			headers: new Headers(),
 		};
 
-		if (!isPublic && !disableAuth) {
-			const user = await authStore.get();
-			if (!user) throw new AuthError('user auth token not found!');
-			options.headers.set('Authorization', `Bearer ${user.token}`);
+		if (!opts?.noAuth && !config.disableAuth) {
+			const user = getUserOrThrowAuthError();
+			fetchOpts.headers.set('Authorization', `Bearer ${user.token}`);
 		}
 
 		if (body && !(body instanceof FormData)) {
-			options.body = JSON.stringify(body);
-			options.headers.set('Content-Type', 'application/json');
+			fetchOpts.body = JSON.stringify(body);
+			fetchOpts.headers.set('Content-Type', 'application/json');
 		} else {
-			options.body = body;
+			fetchOpts.body = body;
 		}
 
-		const response = await fetch(`${backendPath}/${apiPath}`, options);
+		const response = await fetch(`${config.backendPath}/${apiPath}`, fetchOpts);
 		if (response.status === 401) throw new AuthError('login expired!');
 
 		const result = responseSchema.safeParse(await response.json());
-		if (!result.success) throw new ApiError('invalid api response format!');
-		const { errorCode, errorDescription, data } = result.data;
-		if (errorCode !== '0') throw new ApiError(errorDescription);
-		return data as Response;
+		if (!result.success) throw new Error('invalid api response format!');
+		const { statusCode, message, data } = result.data;
+		if (statusCode !== 200) throw new Error(message);
+		else if (!response.ok) throw new Error('Unknown api error');
+		if (opts?.schema) return opts.schema.parse(data) as never;
+		// eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+		return z.void().parse(data) as never;
 	} catch (error) {
 		if (error instanceof AuthError) logout();
 		throw error;
 	}
 };
 
-/**
- * the helper to send a `GET` request to the backend
- * @param apiPath the path of the api request
- * @param options the options to send with the request
- * @param options.schema the zod schema to parse the response with
- * @param options.isPublic is the request to a public endpoint? auth header will be excluded if `true`
- * @param options.shouldSort should the response should be sorted?
- */
-export const getRequest = async <Schema extends z.ZodSchema = z.ZodUnknown>(
+export const getRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	options?: {
+	opts?: {
 		schema?: Schema;
-		isPublic?: boolean;
+		noAuth?: boolean;
 	},
-): Promise<z.infer<Schema>> => {
-	const response = apiRequest(apiPath, 'GET', undefined, options?.isPublic);
-	if (!options?.schema) return await response;
-	return await response.then(async (data) => {
-		return await ((
-			options.schema ? options.schema.parse(data) : data
-		) as Promise<z.infer<Schema>>);
-	});
+): Promise<Schema['_output']> => {
+	return (await apiRequest(apiPath, 'GET', undefined, opts)) as never;
 };
 
-/**
- * the helper to send a `PATCH` request to the backend
- * @param apiPath the path of the api request
- * @param body the body of the request
- * @param isPublic is the request to a public endpoint? auth header will be excluded if true
- */
-export const patchRequest = async <Response = unknown>(
+export const putRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body: Obj | FormData,
-	isPublic?: boolean,
-) => await apiRequest<Response>(apiPath, 'PATCH', body, isPublic);
+	body: object | FormData,
+	opts?: {
+		schema?: Schema;
+		noAuth?: boolean;
+	},
+): Promise<Schema['_output']> => {
+	return (await apiRequest(apiPath, 'PUT', body, opts)) as never;
+};
 
-/**
- * the helper to send a `PUT` request to the backend
- * @param apiPath the path of the api request
- * @param body the body of the request
- * @param isPublic is the request to a public endpoint? auth header will be excluded if true
- */
-export const putRequest = async <Response = unknown>(
+export const postRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body: Obj | FormData,
-	isPublic?: boolean,
-) => await apiRequest<Response>(apiPath, 'PUT', body, isPublic);
+	body: object | object[] | FormData,
+	opts?: {
+		schema?: Schema;
+		noAuth?: boolean;
+	},
+): Promise<Schema['_output']> => {
+	return (await apiRequest(apiPath, 'POST', body, opts)) as never;
+};
 
-/**
- * the helper to send a `POST` request to the backend
- * @param apiPath the path of the api request
- * @param body the body of the request
- * @param isPublic is the request to a public endpoint? auth header will be excluded if true
- */
-export const postRequest = async <Response = unknown>(
+export const deleteRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body: Obj | Obj[] | FormData,
-	isPublic?: boolean,
-) => await apiRequest<Response>(apiPath, 'POST', body, isPublic);
+	body?: object | object[] | FormData,
+	opts?: {
+		schema?: Schema;
+		noAuth?: boolean;
+	},
+): Promise<Schema['_output']> => {
+	return (await apiRequest(apiPath, 'DELETE', body, opts)) as never;
+};
 
-export type BulkResponse<Type extends Obj = Obj> = {
+export type BulkResponse<Type extends object> = {
 	successful: Type[];
 	failed: Utils.prettify<Type & { error: string }>[];
 };
 
-/**
- * the helper to send many `POST` requests to the same endpoint
- * @param apiPath the path of the api request
- * @param requests the array of requests to send to the endpoint
- * @param isPublic is the request to a public endpoint? auth header will be excluded if true
- */
-export const bulkPostRequest = async <Type extends Obj>(
-	apiPath: string,
-	requests: Type[],
-	isPublic?: boolean,
-) => {
+type BulkOptDetails = {
+	path: string;
+	method: Exclude<ApiMethod, 'GET'>;
+	noAuth?: boolean;
+};
+
+type BulkRequestOpts<Type extends object> = {
+	data: Type[];
+	details:
+		| BulkOptDetails
+		| ((row: Type) => BulkOptDetails & { body?: ApiBody | null });
+};
+
+export const bulkRequest = async <Type extends object>({
+	data,
+	details,
+}: BulkRequestOpts<Type>) => {
 	const response: BulkResponse<Type> = {
 		successful: [],
 		failed: [],
 	};
 	await Promise.all(
-		requests.map(async (row) => {
-			await postRequest(apiPath, row, isPublic)
-				.then(() => response.successful.push(row))
+		data.map(async (row) => {
+			const opts =
+				typeof details === 'function'
+					? details(row)
+					: { ...details, body: row };
+			const body = opts.body === null ? undefined : opts.body;
+			await apiRequest(opts.path, opts.method, body, opts)
+				.then(() => response.successful.push(row as never))
 				.catch((error: unknown) =>
 					response.failed.push({
 						...row,
@@ -164,13 +156,3 @@ export const bulkPostRequest = async <Type extends Obj>(
 	);
 	return response;
 };
-
-/**
- * the helper to send a `DELETE` request to the backend
- * @param apiPath the path of the api request
- * @param isPublic is the request to a public endpoint? auth header will be excluded if true
- */
-export const deleteRequest = async <Response = unknown>(
-	apiPath: string,
-	isPublic?: boolean,
-) => await apiRequest<Response>(apiPath, 'DELETE', undefined, isPublic);
