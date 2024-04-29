@@ -5,7 +5,7 @@ import { fetchUpdateAsync, reloadAsync, useUpdates } from 'expo-updates';
 import { useEffect } from 'react';
 import { PaperProvider } from 'react-native-paper';
 
-import { env } from '../config.ts';
+import { config } from '../config.ts';
 import { AlertProvider, addAlert } from '../contexts/alert.context.tsx';
 import { LoadingProvider } from '../contexts/loading.context.tsx';
 import { useMode } from '../hooks/mode.hook.tsx';
@@ -18,7 +18,7 @@ SplashScreen.preventAutoHideAsync();
 const UpdateCheckerProvider = (props: PropsWithChildren) => {
 	const { isUpdateAvailable } = useUpdates();
 	useEffect(() => {
-		if (env !== 'production' || !isUpdateAvailable) return;
+		if (config.env !== 'production' || !isUpdateAvailable) return;
 		addAlert({
 			title: 'Update Available!',
 			text: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',

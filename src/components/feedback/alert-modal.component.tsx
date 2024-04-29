@@ -1,7 +1,7 @@
 import { DeviceEventEmitter, Dimensions, ScrollView, View } from 'react-native';
 import { Dialog, Portal, Text } from 'react-native-paper';
 
-import { isSmallerScreen } from '../../config.ts';
+import { config } from '../../config.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { useI18n } from '../../i18n.ts';
 import { Icon } from '../app/icon.component.tsx';
@@ -77,8 +77,8 @@ export const AlertModal = ({
 				dismissable={dismissable}
 				dismissableBackButton={dismissableBackButton}
 				style={{
-					width: screenWidth - (isSmallerScreen ? 50 : 100),
-					height: screenHeight - (isSmallerScreen ? 80 : 160),
+					width: screenWidth - (config.isSmallerScreen ? 50 : 100),
+					height: screenHeight - (config.isSmallerScreen ? 80 : 160),
 					marginTop: 'auto',
 					marginBottom: 'auto',
 					marginLeft: 'auto',

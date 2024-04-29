@@ -3,7 +3,7 @@ import { Text } from 'react-native-paper';
 
 import { ScreenWrapper } from './screen-wrapper.component.tsx';
 
-import { isSmallerScreen } from '../../config.ts';
+import { config } from '../../config.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { useI18n } from '../../i18n.ts';
 import { Icon } from '../app/icon.component.tsx';
@@ -45,7 +45,7 @@ export const ErrorPage = ({
 		>
 			<Icon
 				name='error'
-				size={isSmallerScreen ? 100 : 125}
+				size={config.isSmallerScreen ? 100 : 125}
 				color={theme.colors.error}
 			/>
 

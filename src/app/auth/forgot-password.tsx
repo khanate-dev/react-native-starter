@@ -8,7 +8,7 @@ import { Button } from '../../components/controls/button.component.tsx';
 import { FormControl } from '../../components/controls/form-control.component.tsx';
 import { Alert } from '../../components/feedback/alert.component.tsx';
 import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
-import { isSmallerScreen } from '../../config.ts';
+import { config } from '../../config.ts';
 import { wait } from '../../helpers/async.helpers.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { useI18n } from '../../i18n.ts';
@@ -124,17 +124,17 @@ export const ForgotPassword = () => {
 					theme.styles.view.row,
 					{
 						backgroundColor: theme.colors.primary,
-						padding: isSmallerScreen ? 20 : 40,
-						borderRadius: isSmallerScreen ? 10 : 20,
-						gap: isSmallerScreen ? 10 : 20,
-						marginBottom: isSmallerScreen ? 10 : 20,
+						padding: config.isSmallerScreen ? 20 : 40,
+						borderRadius: config.isSmallerScreen ? 10 : 20,
+						gap: config.isSmallerScreen ? 10 : 20,
+						marginBottom: config.isSmallerScreen ? 10 : 20,
 					},
 				]}
 			>
 				<Icon
 					name='restore'
 					color={theme.colors.onPrimary}
-					size={isSmallerScreen ? 40 : 60}
+					size={config.isSmallerScreen ? 40 : 60}
 				/>
 
 				<View>

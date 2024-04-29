@@ -2,7 +2,7 @@ import { useReducer, useRef } from 'react';
 import { Keyboard } from 'react-native';
 import { z } from 'zod';
 
-import { shouldAutoFill } from '../config.ts';
+import { config } from '../config.ts';
 import { stringifyError } from '../errors.ts';
 import { dayjsUtc } from '../helpers/date.helpers.ts';
 import { humanizeToken } from '../helpers/humanize-token.helpers.ts';
@@ -175,7 +175,7 @@ export const useForm = <
 					...obj,
 					[key]:
 						field.default ??
-						(shouldAutoFill
+						(config.enableAutoFill
 							? formDefaults[field.type]
 							: field.type === 'boolean'
 								? false

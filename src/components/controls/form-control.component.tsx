@@ -8,7 +8,7 @@ import { Button } from './button.component.tsx';
 import { FormControlWrapper } from './form-control-wrapper.component.tsx';
 
 import { appIconMap } from '../../assets/icons.ts';
-import { isSmallerScreen } from '../../config.ts';
+import { config } from '../../config.ts';
 import { dayjsUtc } from '../../helpers/date.helpers.ts';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 
@@ -253,7 +253,7 @@ const FormControlComponent = (
 					{inputJsx}
 					<Button
 						{...button}
-						labelStyle={{ fontSize: isSmallerScreen ? 11 : 14 }}
+						labelStyle={{ fontSize: config.isSmallerScreen ? 11 : 14 }}
 						style={[
 							{ borderRadius: 5, marginTop: 5 },
 							styles?.button,
