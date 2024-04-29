@@ -52,12 +52,12 @@ const extra = parseEnvironment();
 export type Environment = typeof extra;
 
 const details = {
-	id: 'native-starter',
+	id: pkg.name,
 	org: 'khanate-dev',
 	expoUsername: 'khanate-dev',
-	name: pkg.name,
+	name: 'React Native Starter',
 	description: 'React Native Starter',
-	github: 'https://github.com/kahante-dev/react-native-starter',
+	github: pkg.repository.url,
 	version: pkg.version,
 	easProjectId: 'ea224914-8891-44d6-ad18-2a67bc487176',
 	primaryColor: '#6847c0',

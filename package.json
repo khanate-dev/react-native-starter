@@ -1,6 +1,9 @@
 {
 	"name": "react-native-starter",
 	"version": "1.0.0",
+	"repository": {
+		"url": "https://github.com/kahante-dev/react-native-starter"
+	},
 	"author": {
 		"name": "Khanate",
 		"email": "dev@khanate.pk",
