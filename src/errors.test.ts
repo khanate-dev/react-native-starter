@@ -1,12 +1,14 @@
-/* eslint-disable vitest/max-expects */
-import {
-	ApiError,
-	AuthError,
-	ConnectionError,
-	stringifyError,
-} from './errors.ts';
+import { AuthError, stringifyError } from './errors.ts';
 
-test('testing getCatchMessage', () => {
+test('testing AuthError', () => {
+	const error = new AuthError('error message');
+	expect(error).toBeInstanceOf(Error);
+	expect(error.type).toBe('auth-error');
+	expect(error.message).toBe('error message');
+	expect(stringifyError(error)).toBe('error message');
+});
+
+test('testing stringifyError', () => {
 	expect(stringifyError(new Error('error message'))).toBe('error message');
 	expect(stringifyError(new Error(''))).toBe('');
 	expect(stringifyError({})).toBe(JSON.stringify({}));
@@ -17,9 +19,4 @@ test('testing getCatchMessage', () => {
 	expect(stringifyError(true)).toBe('true');
 	expect(stringifyError(false)).toBe('false');
 	expect(stringifyError(NaN)).toBe('NaN');
-	expect(stringifyError(new AuthError('error message'))).toBe('error message');
-	expect(stringifyError(new ApiError('error message'))).toBe('error message');
-	expect(stringifyError(new ConnectionError('error message'))).toBe(
-		'error message',
-	);
 });
