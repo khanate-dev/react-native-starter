@@ -7,7 +7,10 @@ import type { ButtonProps } from './button.component.tsx';
 
 export type ButtonLinkProps<T extends string> = Omit<LinkProps<T>, 'children'> &
 	Pick<ButtonProps, 'label' | 'icon' | 'color' | 'mode'> & {
-		buttonProps?: Omit<ButtonProps, 'disabled'>;
+		buttonProps?: Omit<
+			ButtonProps,
+			'disabled' | 'label' | 'icon' | 'color' | 'mode'
+		>;
 	};
 
 export const ButtonLink = <T extends string>({
