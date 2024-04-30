@@ -123,6 +123,8 @@ type State<T extends details<any>> = {
 		| { type: 'success'; message: string };
 };
 
+// TODO Add boolean type field
+
 export const useForm = <
 	Zod extends validSchema,
 	Details extends details<Zod>,
