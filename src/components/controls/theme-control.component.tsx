@@ -43,7 +43,10 @@ export const ThemeControl = ({ buttonStyle }: ThemeControlProps) => {
 					key={mode}
 					title={mode}
 					leadingIcon={appIconMap[`${mode}-mode`]}
-					titleStyle={{ textTransform: 'capitalize' }}
+					titleStyle={{
+						textTransform: 'capitalize',
+						color: theme.getColor('primary', 'on-container'),
+					}}
 					style={{
 						backgroundColor:
 							setting === mode
