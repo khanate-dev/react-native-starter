@@ -3,9 +3,9 @@ import { Redirect, Slot } from 'expo-router';
 import { useUserOrNull } from '../../hooks/auth.hook.tsx';
 
 const AppLayout = () => {
-	const { hasInitialized, user } = useUserOrNull();
+	const { authStore, user } = useUserOrNull();
 
-	if (hasInitialized && user) return <Redirect href='/(app)' />;
+	if (authStore.hasInitialized && user) return <Redirect href='/(app)' />;
 
 	return <Slot />;
 };

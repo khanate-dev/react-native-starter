@@ -7,7 +7,7 @@ import { FormControl } from '../../components/controls/form-control.component.ts
 import { Alert } from '../../components/feedback/alert.component.tsx';
 import { ScreenWrapper } from '../../components/layout/screen-wrapper.component.tsx';
 import { endpoints } from '../../endpoints/endpoints.ts';
-import { login } from '../../hooks/auth.hook.tsx';
+import { authStore } from '../../hooks/auth.hook.tsx';
 import { useForm } from '../../hooks/form.hook.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { useI18n } from '../../i18n.ts';
@@ -28,7 +28,7 @@ const Login = () => {
 		onSubmit: async (values) => {
 			const user = await endpoints.user.login(values);
 			setTimeout(async () => {
-				await login(user);
+				await authStore.set(user);
 				router.navigate('/(app)');
 			}, 1000);
 			return 'Logged In! Redirecting...';

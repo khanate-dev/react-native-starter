@@ -4,7 +4,7 @@ import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper';
 
 import { Icon } from './icon.component.tsx';
 
-import { logout, useUserOrNull } from '../../hooks/auth.hook.tsx';
+import { authStore, useUserOrNull } from '../../hooks/auth.hook.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { useI18n } from '../../i18n.ts';
 import { Button } from '../controls/button.component.tsx';
@@ -129,7 +129,9 @@ export const UserControl = ({ buttonStyle }: UserControlProps) => {
 					label={content.action.logout}
 					color='error'
 					mode='outlined'
-					onPress={logout}
+					onPress={() => {
+						authStore.remove();
+					}}
 				/>
 			</View>
 		</Menu>

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { config } from '../config.ts';
 import { AuthError, stringifyError } from '../errors.ts';
-import { getUserOrThrowAuthError, logout } from '../hooks/auth.hook.tsx';
+import { authStore, getUserOrThrowAuthError } from '../hooks/auth.hook.tsx';
 
 import type { Utils } from '../types/utils.types.ts';
 
@@ -63,7 +63,7 @@ const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 		// eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
 		return z.void().parse(data) as never;
 	} catch (error) {
-		if (error instanceof AuthError) logout();
+		if (error instanceof AuthError) authStore.remove();
 		throw error;
 	}
 };
