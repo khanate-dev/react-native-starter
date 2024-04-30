@@ -28,13 +28,15 @@ export const userEndpoints = {
 		email: string;
 		password: string;
 	}): Promise<LoggedInUser> => {
-		return await postRequest('user/login', body, {
+		return await postRequest('user/login', {
+			body,
 			noAuth: true,
 			schema: loggedInUserSchema,
 		});
 	},
 	add: async (body: UserSansMeta): Promise<Omit<User, 'password'>> => {
-		return await postRequest('user', body, {
+		return await postRequest('user', {
+			body,
 			noAuth: true,
 			schema: userSchema,
 		});
@@ -49,10 +51,10 @@ export const userEndpoints = {
 		id: DbId,
 		body: UserSansMeta,
 	): Promise<Omit<User, 'password'>> => {
-		return await putRequest(`user/${id}`, body, { schema: userSchema });
+		return await putRequest(`user/${id}`, { body, schema: userSchema });
 	},
 	delete: async (id: DbId): Promise<Omit<User, 'password'>> => {
-		return await deleteRequest(`user/${id}`, undefined, { schema: userSchema });
+		return await deleteRequest(`user/${id}`, { schema: userSchema });
 	},
 };
 

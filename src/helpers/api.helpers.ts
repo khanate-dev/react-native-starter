@@ -16,16 +16,22 @@ const responseSchema = z.object({
 
 type ApiMethod = 'GET' | 'PATCH' | 'PUT' | 'POST' | 'DELETE';
 
-type ApiBody = object | FormData;
+type ApiBody = object | FormData | null;
+
+interface BaseApiOpts {
+	body?: ApiBody;
+	noAuth?: boolean;
+	tokenOverride?: string;
+}
+
+interface ApiRequestOpts<Schema extends z.ZodSchema> extends BaseApiOpts {
+	schema?: Schema;
+}
 
 const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
 	method: ApiMethod,
-	body?: object | FormData,
-	opts?: {
-		schema?: Schema;
-		noAuth?: boolean;
-	},
+	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
 	try {
 		if (!config.enableMocks) {
@@ -40,15 +46,16 @@ const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 		};
 
 		if (!opts?.noAuth && !config.disableAuth) {
-			const user = getUserOrThrowAuthError();
-			fetchOpts.headers.set('Authorization', `Bearer ${user.token}`);
+			const token = opts?.tokenOverride ?? getUserOrThrowAuthError().Token;
+			fetchOpts.headers.set('Authorization', `Bearer ${token}`);
 		}
 
+		const body = opts?.body;
 		if (body && !(body instanceof FormData)) {
 			fetchOpts.body = JSON.stringify(body);
 			fetchOpts.headers.set('Content-Type', 'application/json');
 		} else {
-			fetchOpts.body = body;
+			fetchOpts.body = body ?? null;
 		}
 
 		const response = await fetch(`${config.backendPath}/${apiPath}`, fetchOpts);
@@ -70,45 +77,30 @@ const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 
 export const getRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	opts?: {
-		schema?: Schema;
-		noAuth?: boolean;
-	},
+	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
-	return (await apiRequest(apiPath, 'GET', undefined, opts)) as never;
+	return await apiRequest(apiPath, 'GET', opts);
 };
 
 export const putRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body: object | FormData,
-	opts?: {
-		schema?: Schema;
-		noAuth?: boolean;
-	},
+	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
-	return (await apiRequest(apiPath, 'PUT', body, opts)) as never;
+	return (await apiRequest(apiPath, 'PUT', opts)) as never;
 };
 
 export const postRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body: object | object[] | FormData,
-	opts?: {
-		schema?: Schema;
-		noAuth?: boolean;
-	},
+	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
-	return (await apiRequest(apiPath, 'POST', body, opts)) as never;
+	return (await apiRequest(apiPath, 'POST', opts)) as never;
 };
 
 export const deleteRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
-	body?: object | object[] | FormData,
-	opts?: {
-		schema?: Schema;
-		noAuth?: boolean;
-	},
+	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
-	return (await apiRequest(apiPath, 'DELETE', body, opts)) as never;
+	return (await apiRequest(apiPath, 'DELETE', opts)) as never;
 };
 
 export type BulkResponse<Type extends object> = {
@@ -116,17 +108,14 @@ export type BulkResponse<Type extends object> = {
 	failed: Utils.prettify<Type & { error: string }>[];
 };
 
-type BulkOptDetails = {
+interface BulkRequestDetails extends BaseApiOpts {
 	path: string;
 	method: Exclude<ApiMethod, 'GET'>;
-	noAuth?: boolean;
-};
+}
 
 type BulkRequestOpts<Type extends object> = {
 	data: Type[];
-	details:
-		| BulkOptDetails
-		| ((row: Type) => BulkOptDetails & { body?: ApiBody | null });
+	details: BulkRequestDetails | ((row: Type) => BulkRequestDetails);
 };
 
 export const bulkRequest = async <Type extends object>({
@@ -143,8 +132,7 @@ export const bulkRequest = async <Type extends object>({
 				typeof details === 'function'
 					? details(row)
 					: { ...details, body: row };
-			const body = opts.body === null ? undefined : opts.body;
-			await apiRequest(opts.path, opts.method, body, opts)
+			await apiRequest(opts.path, opts.method, opts)
 				.then(() => response.successful.push(row as never))
 				.catch((error: unknown) =>
 					response.failed.push({
