@@ -67,7 +67,12 @@ export const ScreenWrapper = ({
 						justifyContent: 'flex-end',
 					}}
 				>
-					<View style={[theme.styles.view.row, { flexShrink: 1, padding: 7 }]}>
+					<View
+						style={[
+							theme.styles.view.row,
+							{ flexShrink: 1, padding: 7, marginRight: 'auto' },
+						]}
+					>
 						{back && (
 							<IconButton
 								icon={theme.rtl ? 'arrow-next' : 'arrow-back'}
