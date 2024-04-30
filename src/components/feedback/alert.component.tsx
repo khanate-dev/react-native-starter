@@ -41,12 +41,12 @@ export const Alert = ({
 
 	const textJsx = (
 		<Text
-			variant='bodyMedium'
+			variant='bodySmall'
 			numberOfLines={1}
 			style={{
 				color: foreground,
-				textTransform: 'capitalize',
 				lineHeight: 13,
+				flexShrink: 1,
 			}}
 		>
 			{text}
@@ -58,7 +58,6 @@ export const Alert = ({
 			entering={SlideInLeft}
 			exiting={SlideOutRight}
 			style={[
-				style,
 				{
 					flexDirection: 'row',
 					alignItems: 'center',
@@ -69,6 +68,7 @@ export const Alert = ({
 					borderColor: foreground,
 					borderRadius: 5,
 				},
+				style,
 			]}
 		>
 			{!noIcon && (
@@ -90,6 +90,7 @@ export const Alert = ({
 							textTransform: 'capitalize',
 							lineHeight: 15,
 							fontWeight: 'bold',
+							flexShrink: 1,
 						}}
 					>
 						{title}
