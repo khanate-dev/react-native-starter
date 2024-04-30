@@ -37,22 +37,22 @@ export const mockData = {
 
 type MockData = typeof mockData;
 
-type MockedGet = {
-	<Key extends keyof MockData>(key: Key): Promise<MockData[Key]>;
-	<Key extends keyof MockData>(
-		key: Key,
-		id: DbId,
-	): Promise<MockData[Key][number]>;
-};
-
-export const mockedGet: MockedGet = async (key: keyof MockData, id?: DbId) => {
-	if (!config.disableAuth) getUserOrThrowAuthError();
+export const mockedGet = async <
+	Key extends keyof MockData,
+	ID extends DbId = never,
+>(
+	key: Key,
+	opts?: { id?: ID; noAuth?: boolean },
+): Promise<
+	[ID] extends [never] ? MockData[Key] : MockData[Key][number] | undefined
+> => {
+	if (!config.disableAuth && !opts?.noAuth) getTokenOrThrowAuthError();
 	const list = mockData[key];
-	if (!id) {
+	if (!opts?.id) {
 		await wait(500);
 		return list as never;
 	}
-	const row = list.find((curr) => curr.id === id);
+	const row = list.find((curr) => curr.Id === opts.id);
 	await wait(500);
 	return row as never;
 };
@@ -63,8 +63,9 @@ export const mockedAdd = async <
 >(
 	key: Key,
 	body: Omit<Type, keyof DbMeta>,
+	opts?: { noAuth?: boolean },
 ): Promise<Type> => {
-	if (!config.disableAuth) getUserOrThrowAuthError();
+	if (!config.disableAuth && !opts?.noAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const newId = Math.max(...list.map((curr) => curr.id), 0) + 1;
 	const now = dayjsUtc();
@@ -74,7 +75,7 @@ export const mockedAdd = async <
 		updated_at: now,
 		...body,
 	} as Type;
-	list.push(added);
+	list.push(added as never);
 	await wait(500);
 	return added;
 };
@@ -86,8 +87,9 @@ export const mockedUpdate = async <
 	key: Key,
 	id: DbId,
 	body: Omit<Type, keyof DbMeta>,
+	opts?: { noAuth?: boolean },
 ): Promise<Type> => {
-	if (!config.disableAuth) getUserOrThrowAuthError();
+	if (!config.disableAuth && !opts?.noAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);
 	if (!row) throw new Error(`No record found by ID ${id}`);
@@ -103,8 +105,9 @@ export const mockedDelete = async <
 >(
 	key: Key,
 	id: DbId,
+	opts?: { noAuth?: boolean },
 ): Promise<Type> => {
-	if (!config.disableAuth) getUserOrThrowAuthError();
+	if (!config.disableAuth && !opts?.noAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	const row = list.find((curr) => curr.id === id);
 	if (!row) throw new Error(`No record found by ID ${id}`);
