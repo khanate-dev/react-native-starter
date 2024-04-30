@@ -29,6 +29,8 @@ export const Button = fixedForwardRef(
 			mode = 'contained',
 			disabled,
 			icon: iconName,
+			labelStyle,
+			contentStyle,
 			...restProps
 		}: ButtonProps,
 		ref: Ref<ElementRef<typeof Component>>,
@@ -45,9 +47,12 @@ export const Button = fixedForwardRef(
 				ref={ref}
 				mode={mode}
 				disabled={disabled || restProps.loading}
-				labelStyle={{ textTransform: 'capitalize' }}
 				icon={icon}
-				contentStyle={{ flexDirection: rtl ? 'row-reverse' : 'row' }}
+				labelStyle={[{ textTransform: 'uppercase' }, labelStyle]}
+				contentStyle={[
+					{ flexDirection: rtl ? 'row-reverse' : 'row' },
+					contentStyle,
+				]}
 				style={[
 					{ borderRadius: 10, borderColor: getColor(color, 'normal') },
 					style,
