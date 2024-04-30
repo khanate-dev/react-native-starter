@@ -26,6 +26,7 @@ import type { z } from 'zod';
 import type { IconName } from '../../assets/icons.ts';
 import type { ZodTime } from '../../helpers/schema.helpers.ts';
 import type { ButtonProps } from './button.component.tsx';
+import type { FormControlWrapperProps } from './form-control-wrapper.component.tsx';
 
 const formControlType = [
 	'email',
@@ -77,66 +78,64 @@ type styles = {
 	};
 };
 
-export type FormControlProps = Pick<TextInputProps, 'disabled'> & {
-	/** the type of the input field */
-	type: unknown;
+export type FormControlProps = Pick<
+	FormControlWrapperProps,
+	'caption' | 'error' | 'onlyRenderHelperOnError'
+> &
+	Pick<TextInputProps, 'disabled'> & {
+		/** the type of the input field */
+		type: unknown;
 
-	/** the current value of the input field */
-	value: unknown;
+		/** the current value of the input field */
+		value: unknown;
 
-	/** the function to call when the input changes */
-	onChange: unknown;
+		/** the function to call when the input changes */
+		onChange: unknown;
 
-	/** the styles to apply the control */
-	styles?: styles;
+		/** the styles to apply the control */
+		styles?: styles;
 
-	/** the label to show above the input */
-	label: TextInputLabelProp;
+		/** the label to show above the input */
+		label: TextInputLabelProp;
 
-	/** the error message to show beneath the input */
-	error?: string;
+		/** the button to show on the right side of the input */
+		button?: Pick<
+			ButtonProps,
+			'color' | 'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
+		>;
 
-	/** the caption to show beneath the input */
-	caption?: string;
+		/** the text input to select after this */
+		next?: RefObject<RefType> | (() => RefType | null);
 
-	/** the button to show on the right side of the input */
-	button?: Pick<
-		ButtonProps,
-		'color' | 'label' | 'onPress' | 'icon' | 'style' | 'disabled' | 'loading'
-	>;
+		/** the props to apply to the TextInput */
+		inputProps?: Omit<
+			TextInputProps,
+			| 'disabled'
+			| 'label'
+			| 'underlineStyle'
+			| 'outlineStyle'
+			| 'contentStyle'
+			| 'style'
+			| 'type'
+			| 'value'
+			| 'onChangeText'
+			| 'left'
+			| 'right'
+			| 'keyboardType'
+			| 'secureTextEntry'
+			| 'error'
+			| 'dense'
+			| 'editable'
+			| 'returnKeyType'
+			| 'onSubmitEditing'
+		>;
 
-	/** the text input to select after this */
-	next?: RefObject<RefType> | (() => RefType | null);
+		/** is the form field not required? */
+		notRequired?: boolean;
 
-	/** the props to apply to the TextInput */
-	inputProps?: Omit<
-		TextInputProps,
-		| 'disabled'
-		| 'label'
-		| 'underlineStyle'
-		| 'outlineStyle'
-		| 'contentStyle'
-		| 'style'
-		| 'type'
-		| 'value'
-		| 'onChangeText'
-		| 'left'
-		| 'right'
-		| 'keyboardType'
-		| 'secureTextEntry'
-		| 'error'
-		| 'dense'
-		| 'editable'
-		| 'returnKeyType'
-		| 'onSubmitEditing'
-	>;
-
-	/** is the form field not required? */
-	notRequired?: boolean;
-
-	/** should the input have an icon to the left side */
-	hasIcon?: boolean;
-} & (
+		/** should the input have an icon to the left side */
+		hasIcon?: boolean;
+	} & (
 		| {
 				type: 'date';
 				value: Dayjs | null;
@@ -169,6 +168,7 @@ const FormControlComponent = (
 		notRequired,
 		hasIcon,
 		disabled,
+		onlyRenderHelperOnError,
 	}: FormControlProps,
 	ref: ForwardedRef<RefType>,
 ) => {
@@ -246,6 +246,7 @@ const FormControlComponent = (
 			style={styles?.container}
 			caption={caption}
 			error={error}
+			onlyRenderHelperOnError={onlyRenderHelperOnError}
 			disabled={disabled}
 		>
 			{button ? (
