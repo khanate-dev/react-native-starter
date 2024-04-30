@@ -6,9 +6,12 @@ import { getUserOrThrowAuthError } from './hooks/auth.hook.tsx';
 import type { DbId, DbMeta, Jwt } from './helpers/schema.helpers.ts';
 import type { User } from './schemas/user.schemas.ts';
 
-export const mockToken =
+export const placeholderData = {
 	/** cSpell: disable-next-line */
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c' as Jwt;
+	token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI' as Jwt,
+	image: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12',
+	date: dayjsUtc.utc('11/25/2021 4:23:22 PM'),
+};
 
 export const createMockedData = <T extends DbMeta>(
 	data: Omit<T, keyof DbMeta>[],
@@ -27,7 +30,7 @@ export const mockData = {
 			email: 'testing@test.com',
 			name: 'test',
 			password: '12345',
-			image_url: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12',
+			image_url: placeholderData.image,
 		},
 	]),
 };

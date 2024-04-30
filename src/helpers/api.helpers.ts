@@ -46,7 +46,7 @@ const apiRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 		};
 
 		if (!opts?.noAuth && !config.disableAuth) {
-			const token = opts?.tokenOverride ?? getUserOrThrowAuthError().Token;
+			const token = opts?.tokenOverride ?? getUserOrThrowAuthError().token;
 			fetchOpts.headers.set('Authorization', `Bearer ${token}`);
 		}
 
@@ -79,7 +79,7 @@ export const getRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(
 	apiPath: string,
 	opts?: ApiRequestOpts<Schema>,
 ): Promise<Schema['_output']> => {
-	return await apiRequest(apiPath, 'GET', opts);
+	return (await apiRequest(apiPath, 'GET', opts)) as never;
 };
 
 export const putRequest = async <Schema extends z.ZodSchema = z.ZodVoid>(

@@ -8,11 +8,11 @@ import {
 } from '../helpers/api.helpers.ts';
 import { omit } from '../helpers/object.helpers.ts';
 import {
-	mockToken,
 	mockedAdd,
 	mockedDelete,
 	mockedGet,
 	mockedUpdate,
+	placeholderData,
 } from '../mocks.ts';
 import { loggedInUserSchema, userSchema } from '../schemas/user.schemas.ts';
 
@@ -65,7 +65,7 @@ export const userMocks: typeof userEndpoints = {
 		);
 		if (!user) throw new Error('user not found');
 		if (user.password !== password) throw new Error('incorrect password');
-		return { ...omit(user, 'password'), token: mockToken };
+		return { ...omit(user, 'password'), token: placeholderData.token };
 	},
 	get: async () =>
 		(await mockedGet('user')).map((user) => omit(user, 'password')),
