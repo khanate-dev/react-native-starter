@@ -7,38 +7,44 @@ import { FormControlWrapper } from './form-control-wrapper.component.tsx';
 import { useTheme } from '../../hooks/theme.hook.tsx';
 import { Icon } from '../app/icon.component.tsx';
 
-import type { Switch as RefType, StyleProp, ViewStyle } from 'react-native';
+import type {
+	Switch as RefType,
+	StyleProp,
+	TextStyle,
+	ViewStyle,
+} from 'react-native';
 import type { SwitchProps } from 'react-native-paper';
+import type { FormControlWrapperProps } from './form-control-wrapper.component.tsx';
 
 type styles = {
 	container?: StyleProp<ViewStyle>;
 	icon?: StyleProp<ViewStyle>;
 	button?: StyleProp<ViewStyle>;
 	control?: StyleProp<ViewStyle>;
+	text?: StyleProp<TextStyle>;
+	switch?: StyleProp<ViewStyle>;
 };
 
-export type FormSwitchProps = Pick<SwitchProps, 'disabled'> & {
-	/** the current value of the input field */
-	value: boolean;
+export type FormSwitchProps = Pick<
+	FormControlWrapperProps,
+	'caption' | 'error' | 'onlyRenderHelperOnError'
+> &
+	Pick<SwitchProps, 'disabled'> & {
+		/** the current value of the input field */
+		value: boolean;
 
-	/** the function to call when the input changes */
-	onChange: (value: boolean) => void;
+		/** the function to call when the input changes */
+		onChange: (value: boolean) => void;
 
-	/** the styles to apply the control */
-	styles?: styles;
+		/** the styles to apply the control */
+		styles?: styles;
 
-	/** the label to show on the field */
-	label: string;
+		/** the label to show on the field */
+		label: string;
 
-	/** the error message to show beneath the input */
-	error?: string;
-
-	/** the caption to show beneath the input */
-	caption?: string;
-
-	/** should the input have an icon to the left side */
-	hasIcon?: boolean;
-};
+		/** should the input have an icon to the left side */
+		hasIcon?: boolean;
+	};
 
 export const FormSwitch = ({
 	value,
@@ -68,21 +74,24 @@ export const FormSwitch = ({
 				}}
 			>
 				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						flexWrap: 'nowrap',
-						alignContent: 'center',
-						paddingVertical: 0,
-						paddingHorizontal: 15,
-						gap: 15,
-						borderWidth: 1.5,
-						borderColor: color,
-						borderRadius: 5,
-						backgroundColor: value
-							? theme.colors.primaryContainer
-							: theme.colors.surface,
-					}}
+					style={[
+						{
+							flexDirection: 'row',
+							alignItems: 'center',
+							flexWrap: 'nowrap',
+							alignContent: 'center',
+							paddingVertical: 0,
+							paddingHorizontal: 15,
+							gap: 15,
+							borderWidth: 1.5,
+							borderColor: color,
+							borderRadius: 5,
+							backgroundColor: value
+								? theme.colors.primaryContainer
+								: theme.colors.surface,
+						},
+						styles?.control,
+					]}
 				>
 					{hasIcon ? (
 						<Icon
@@ -94,11 +103,14 @@ export const FormSwitch = ({
 					) : undefined}
 					<Text
 						variant='bodyMedium'
-						style={{
-							fontWeight: '300',
-							color: theme.colors.onPrimaryContainer,
-							flexGrow: 1,
-						}}
+						style={[
+							{
+								fontWeight: '300',
+								color: theme.colors.onPrimaryContainer,
+								flexGrow: 1,
+							},
+							styles?.text,
+						]}
 					>
 						{label}
 					</Text>
@@ -106,11 +118,14 @@ export const FormSwitch = ({
 						ref={switchRef}
 						value={value}
 						disabled={disabled}
-						style={{
-							padding: 0,
-							margin: 0,
-							height: 40,
-						}}
+						style={[
+							{
+								padding: 0,
+								margin: 0,
+								height: 40,
+							},
+							styles?.switch,
+						]}
 						onValueChange={onChange}
 					/>
 				</View>
