@@ -14,6 +14,9 @@ export type FormControlWrapperProps = PropsWithChildren<
 
 		/** is the form control disabled? */
 		disabled?: boolean;
+
+		/** should the helper text only render when there is an error? */
+		onlyRenderHelperOnError?: boolean;
 	}>
 >;
 
@@ -22,18 +25,22 @@ export const FormControlWrapper = ({
 	error,
 	caption,
 	disabled,
+	onlyRenderHelperOnError,
 	children,
 }: FormControlWrapperProps) => {
+	const visible = Boolean(error || caption);
 	return (
 		<View style={style}>
 			{children}
-			<HelperText
-				type={error ? 'error' : 'info'}
-				visible={Boolean(error || caption)}
-				disabled={disabled}
-			>
-				{error || caption}
-			</HelperText>
+			{(visible || !onlyRenderHelperOnError) && (
+				<HelperText
+					type={error ? 'error' : 'info'}
+					visible={visible}
+					disabled={disabled}
+				>
+					{error || caption}
+				</HelperText>
+			)}
 		</View>
 	);
 };
