@@ -53,14 +53,16 @@ const RootLayout = () => {
 
 	if (!fontsLoaded && !fontError) return null;
 
+	const theme = mode.setting === 'dark' ? darkTheme : lightTheme;
+
 	return (
-		<PaperProvider theme={mode.setting === 'dark' ? darkTheme : lightTheme}>
+		<PaperProvider theme={theme}>
 			<AlertProvider>
 				<LoadingProvider>
 					<UpdateCheckerProvider>
 						<StatusBar
-							style='light'
-							backgroundColor='#000000'
+							style={mode.mode === 'dark' ? 'light' : 'dark'}
+							backgroundColor={theme.colors.background}
 						/>
 						<Slot />
 					</UpdateCheckerProvider>
