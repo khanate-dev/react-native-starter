@@ -22,7 +22,6 @@
 		"lint": "eslint . --max-warnings=0 --fix && pnpm format && pnpm spellcheck",
 		"format": "prettier --write --log-level silent .",
 		"spellcheck": "cspell . --quiet",
-		"generate-icons": "node ./scripts/generate-icons.ts",
 		"env:new": "dotenv-vault new",
 		"env:login": "dotenv-vault login",
 		"env:push": "pnpm env:push:development && pnpm env:push:production",

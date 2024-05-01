@@ -6,8 +6,7 @@
 		"multilines",
 		"springify",
 		"textbox",
-		"typecheck",
-		"xlink"
+		"typecheck"
 	],
 	"ignorePaths": [
 		"package-lock.json",
