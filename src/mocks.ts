@@ -43,16 +43,15 @@ export const mockedGet = async <
 >(
 	key: Key,
 	opts?: { id?: ID; noAuth?: boolean },
-): Promise<
-	[ID] extends [never] ? MockData[Key] : MockData[Key][number] | undefined
-> => {
-	if (!config.disableAuth && !opts?.noAuth) getTokenOrThrowAuthError();
+): Promise<[ID] extends [never] ? MockData[Key] : MockData[Key][number]> => {
+	if (!config.disableAuth && !opts?.noAuth) getUserOrThrowAuthError();
 	const list = mockData[key];
 	if (!opts?.id) {
 		await wait(500);
 		return list as never;
 	}
-	const row = list.find((curr) => curr.Id === opts.id);
+	const row = list.find((curr) => curr.id === opts.id);
+	if (!row) throw new Error('Row not found!');
 	await wait(500);
 	return row as never;
 };

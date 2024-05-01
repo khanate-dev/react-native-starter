@@ -69,7 +69,7 @@ export const userMocks: typeof userEndpoints = {
 	},
 	get: async () =>
 		(await mockedGet('user')).map((user) => omit(user, 'password')),
-	getById: async (id) => omit(await mockedGet('user', id), 'password'),
+	getById: async (id) => omit(await mockedGet('user', { id }), 'password'),
 	add: async (body) => omit(await mockedAdd('user', body), 'password'),
 	update: async (id, body) =>
 		omit(await mockedUpdate('user', id, body), 'password'),
