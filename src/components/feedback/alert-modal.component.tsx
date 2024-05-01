@@ -135,8 +135,8 @@ export const AlertModal = ({
 						alignItems: 'center',
 					}}
 				>
-					{isValidElement(title) ? (
-						title
+					{isValidElement(body) ? (
+						body
 					) : (
 						<Text
 							variant='bodyLarge'
