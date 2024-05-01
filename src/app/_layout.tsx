@@ -21,7 +21,7 @@ const UpdateCheckerProvider = (props: PropsWithChildren) => {
 		if (config.env !== 'production' || !isUpdateAvailable) return;
 		addAlert({
 			title: 'Update Available!',
-			text: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',
+			body: 'A New Update Is Available For The App.\nRestart The Application To Apply Updates.',
 			closeLabel: 'Later',
 			noIcon: true,
 			actions: [

@@ -1,3 +1,4 @@
+import { isValidElement } from 'react';
 import { DeviceEventEmitter, Dimensions, ScrollView, View } from 'react-native';
 import { Dialog, Portal, Text } from 'react-native-paper';
 
@@ -7,6 +8,7 @@ import { useI18n } from '../../i18n.ts';
 import { Icon } from '../app/icon.component.tsx';
 import { Button } from '../controls/button.component.tsx';
 
+import type { ReactNode } from 'react';
 import type { DialogProps } from 'react-native-paper';
 import type { ThemeColor } from '../../theme';
 import type { ButtonProps } from '../controls/button.component.tsx';
@@ -16,10 +18,10 @@ export type AlertModalProps = Pick<
 	'dismissable' | 'dismissableBackButton'
 > & {
 	/** the title of the dialog */
-	title?: string;
+	title?: ReactNode;
 
 	/** the text content for the alert */
-	text: string;
+	body: ReactNode;
 
 	/** the type of the alert. @default `error` */
 	type?: ThemeColor;
@@ -39,7 +41,7 @@ export type AlertModalProps = Pick<
 
 export const AlertModal = ({
 	title: passedTitle,
-	text,
+	body,
 	type = 'error',
 	closeLabel,
 	actions: passedActions,
@@ -108,17 +110,21 @@ export const AlertModal = ({
 							color={theme.getColor(type, 'on-normal')}
 						/>
 					)}
-					<Text
-						variant='titleMedium'
-						numberOfLines={1}
-						style={{
-							textAlign: 'center',
-							textTransform: 'capitalize',
-							color: theme.getColor(type, 'on-normal'),
-						}}
-					>
-						{title}
-					</Text>
+					{isValidElement(title) ? (
+						title
+					) : (
+						<Text
+							variant='titleMedium'
+							numberOfLines={1}
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								color: theme.getColor(type, 'on-normal'),
+							}}
+						>
+							{String(title)}
+						</Text>
+					)}
 				</View>
 
 				<ScrollView
@@ -129,17 +135,21 @@ export const AlertModal = ({
 						alignItems: 'center',
 					}}
 				>
-					<Text
-						variant='bodyLarge'
-						style={{
-							textAlign: 'center',
-							fontWeight: 'normal',
-							color: theme.getColor(type, 'on-container'),
-							lineHeight: 25,
-						}}
-					>
-						{text}
-					</Text>
+					{isValidElement(title) ? (
+						title
+					) : (
+						<Text
+							variant='bodyLarge'
+							style={{
+								textAlign: 'center',
+								fontWeight: 'normal',
+								color: theme.getColor(type, 'on-container'),
+								lineHeight: 25,
+							}}
+						>
+							{String(body)}
+						</Text>
+					)}
 				</ScrollView>
 
 				<View

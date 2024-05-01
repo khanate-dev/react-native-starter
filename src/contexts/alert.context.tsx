@@ -16,9 +16,9 @@ export const AlertProvider = ({ children }: PropsWithChildren) => {
 		const addListener = events.listen('addAlert', (data) => {
 			setAlert(
 				typeof data === 'string'
-					? { text: data }
+					? { body: data }
 					: data instanceof Error
-						? { text: data.message }
+						? { body: data.message }
 						: data,
 			);
 		});
