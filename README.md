@@ -10,7 +10,7 @@ React Native Starter using Typescript and Expo
 - `Typescript`
 - `React Native Paper` for theming and components
 - `Sentry` for logging and error reporting
-- `pnp` for package management
+- `pnpm` for package management
 - `dotenv-vault` to share environment variables
 
 ---
